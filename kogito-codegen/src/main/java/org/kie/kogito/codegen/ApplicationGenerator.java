@@ -180,7 +180,9 @@ public class ApplicationGenerator {
             ApplicationSection section = generator.section();
             cls.addMember(section.fieldDeclaration());
             cls.addMember(section.factoryMethod());  
-            cls.addMember(section.classDeclaration());
+            if (section.classDeclaration() != null) {
+                cls.addMember(section.classDeclaration());
+            }
         }
         cls.getMembers().sort(new BodyDeclarationComparator());
         return compilationUnit;
