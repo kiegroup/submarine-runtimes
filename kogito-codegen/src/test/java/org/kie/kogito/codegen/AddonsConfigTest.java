@@ -27,6 +27,8 @@ public class AddonsConfigTest {
         assertThat(addonsConfig.useMonitoring()).isFalse();
         assertThat(addonsConfig.useTracing()).isFalse();
         assertThat(addonsConfig.usePersistence()).isFalse();
+        assertThat(addonsConfig.useCloudEvents()).isFalse();
+        assertThat(addonsConfig.useLRA()).isFalse();
     }
 
     @Test
@@ -47,5 +49,8 @@ public class AddonsConfigTest {
 
         assertThat(addonsConfig.useCloudEvents()).isFalse();
         assertThat(addonsConfig.withCloudEvents(true).useCloudEvents()).isTrue();
+
+        assertThat(addonsConfig.useLRA()).isFalse();
+        assertThat(addonsConfig.withLRA(true).useLRA()).isTrue();
     }
 }

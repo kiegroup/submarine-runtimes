@@ -22,6 +22,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -56,6 +58,8 @@ import static org.kie.kogito.codegen.CodegenUtils.interpolateTypes;
  */
 public abstract class AbstractResourceGenerator {
 
+    private static final String METHOD_ADD_METADATA = "addMetadata";
+    private static final String METHOD_ADD_LRA_METADATA = "addLRAMetadata";
     private final String relativePath;
 
     private final GeneratorContext context;
@@ -71,6 +75,7 @@ public abstract class AbstractResourceGenerator {
 
     private boolean startable;
     private boolean dynamic;
+    private boolean useLRA;
     private List<UserTaskModelMetaData> userTasks;
     private Map<String, String> signals;
 
@@ -111,6 +116,11 @@ public abstract class AbstractResourceGenerator {
     public AbstractResourceGenerator withTriggers(boolean startable, boolean dynamic) {
         this.startable = startable;
         this.dynamic = dynamic;
+        return this;
+    }
+
+    public AbstractResourceGenerator withLRA(boolean useLRA) {
+        this.useLRA = useLRA;
         return this;
     }
 
@@ -223,6 +233,8 @@ public abstract class AbstractResourceGenerator {
             }
         }
 
+        configureLRA(template);
+
         template.findAll(StringLiteralExpr.class).forEach(this::interpolateStrings);
         Map<String, String> typeInterpolations = new HashMap<>();
         typeInterpolations.put("$Clazz$", resourceClazzName);
@@ -263,6 +275,8 @@ public abstract class AbstractResourceGenerator {
     protected abstract String getSignalResourceTemplate();
 
     public abstract String getUserTaskResourceTemplate();
+
+    public abstract String getLRAResourceTemplate();
 
     private void securityAnnotated(ClassOrInterfaceDeclaration template) {
         if (useInjection() && process.getMetaData().containsKey("securityRoles")) {
@@ -371,5 +385,31 @@ public abstract class AbstractResourceGenerator {
 
     protected boolean isPublic() {
         return WorkflowProcess.PUBLIC_VISIBILITY.equalsIgnoreCase(process.getVisibility());
+    }
+
+    private void configureLRA(ClassOrInterfaceDeclaration template) {
+        if(!useLRA) {
+            return;
+        }
+        Optional<MethodDeclaration> addMetadataMethod = template.getMethodsByName(METHOD_ADD_METADATA).stream().findFirst();
+        if(!addMetadataMethod.isPresent()) {
+            return;
+        }
+        CompilationUnit lraClazz = parse(this.getClass().getResourceAsStream(getLRAResourceTemplate()));
+        ClassOrInterfaceDeclaration lraTemplate = lraClazz
+                .findFirst(ClassOrInterfaceDeclaration.class)
+                .orElseThrow(() -> new NoSuchElementException("Compilation unit doesn't contain a class or interface declaration!"));
+        lraTemplate.getMethods().forEach(md -> {
+            MethodDeclaration cloned = md.clone();
+            template.addMethod(cloned.getNameAsString(), Keyword.PUBLIC)
+                    .setType(cloned.getType())
+                    .setParameters(cloned.getParameters())
+                    .setBody(cloned.getBody().get())
+                    .setAnnotations(cloned.getAnnotations());
+        });
+        NodeList<Expression> arguments = new NodeList<>();
+        addMetadataMethod.get().getParameters().forEach(p -> arguments.add(new NameExpr(p.getNameAsString())));
+        MethodCallExpr callAddMetadataLRA = new MethodCallExpr(METHOD_ADD_LRA_METADATA).setArguments(arguments);
+        addMetadataMethod.get().getBody().get().addStatement(callAddMetadataLRA);
     }
 }

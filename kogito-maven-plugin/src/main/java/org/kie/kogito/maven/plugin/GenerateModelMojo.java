@@ -240,13 +240,15 @@ public class GenerateModelMojo extends AbstractKieMojo {
         boolean useTracing = hasClassOnClasspath(project, "org.kie.kogito.tracing.decision.DecisionTracingListener");
         boolean useKnativeEventing = hasClassOnClasspath(project, "org.kie.kogito.events.knative.ce.extensions.KogitoProcessExtension");
         boolean useCloudEvents = hasClassOnClasspath(project, "org.kie.kogito.addon.cloudevents.AbstractTopicDiscovery");
+        boolean useLRA = hasClassOnClasspath(project, "org.kie.kogito.lra.KogitoLRA");
 
         AddonsConfig addonsConfig = new AddonsConfig()
                 .withPersistence(usePersistence)
                 .withMonitoring(useMonitoring)
                 .withTracing(useTracing)
                 .withKnativeEventing(useKnativeEventing)
-                .withCloudEvents(useCloudEvents);
+                .withCloudEvents(useCloudEvents)
+                .withLRA(useLRA);
 
         ClassLoader projectClassLoader = MojoUtil.createProjectClassLoader(this.getClass().getClassLoader(),
                                                                            project,

@@ -17,18 +17,14 @@ package org.kie.kogito.codegen;
 
 public class AddonsConfig {
 
-    public static final AddonsConfig DEFAULT = new AddonsConfig()
-            .withPersistence(false)
-            .withTracing(false)
-            .withMonitoring(false)
-            .withKnativeEventing(false)
-            .withCloudEvents(false);
+    public static final AddonsConfig DEFAULT = new AddonsConfig();
 
     private boolean usePersistence;
     private boolean useTracing;
     private boolean useMonitoring;
     private boolean useKnativeEventing;
     private boolean useCloudEvents;
+    private boolean useLRA;
 
     public AddonsConfig withPersistence(boolean usePersistence) {
         this.usePersistence = usePersistence;
@@ -55,6 +51,11 @@ public class AddonsConfig {
         return this;
     }
 
+    public AddonsConfig withLRA(boolean useLRA) {
+        this.useLRA = useLRA;
+        return this;
+    }
+
     public boolean usePersistence() {
         return usePersistence;
     }
@@ -73,5 +74,9 @@ public class AddonsConfig {
 
     public boolean useCloudEvents() {
         return useCloudEvents;
+    }
+
+    public boolean useLRA() {
+        return useLRA;
     }
 }

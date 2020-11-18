@@ -57,6 +57,11 @@ public class SpringResourceGenerator extends AbstractResourceGenerator {
     }
 
     @Override
+    public String getLRAResourceTemplate() {
+        return "/class-templates/lra/SpringRestResourceLRATemplate.java";
+    }
+
+    @Override
     public List<String> getRestAnnotations() {
         return Arrays.asList("PostMapping", "GetMapping", "PutMapping", "DeleteMapping");
     }

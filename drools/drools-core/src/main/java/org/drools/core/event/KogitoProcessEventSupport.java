@@ -48,11 +48,11 @@ public class KogitoProcessEventSupport extends ProcessEventSupport {
 
     public void fireBeforeProcessStarted(final ProcessInstance instance, KieRuntime kruntime ) {
         final ProcessStartedEvent event = new ProcessStartedEventImpl(instance, kruntime);
-        unitOfWorkManager.currentUnitOfWork().intercept(WorkUnit.create(event, e -> {
+//        unitOfWorkManager.currentUnitOfWork().intercept(WorkUnit.create(event, e -> {
             if ( hasListeners() ) {
                 notifyAllListeners( event, ( l, e1 ) -> l.beforeProcessStarted( e1 ) );
             }
-        }));
+//        }));
     }
 
     public void fireAfterProcessStarted(final ProcessInstance instance, KieRuntime kruntime) {

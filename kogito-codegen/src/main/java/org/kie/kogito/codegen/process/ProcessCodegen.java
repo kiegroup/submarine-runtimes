@@ -330,7 +330,8 @@ public class ProcessCodegen extends AbstractGenerator {
                             .withDependencyInjection(annotator)
                             .withUserTasks(processIdToUserTaskModel.get(workFlowProcess.getId()))
                             .withSignals(metaData.getSignals())
-                            .withTriggers(metaData.isStartable(), metaData.isDynamic()))
+                            .withTriggers(metaData.isStartable(), metaData.isDynamic())
+                            .withLRA(addonsConfig.useLRA()))
                     .ifPresent(rgs::add);
 
             if (metaData.getTriggers() != null) {

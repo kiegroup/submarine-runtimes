@@ -1,10 +1,10 @@
 package com.myspace.demo;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,15 +28,15 @@ import org.jbpm.util.JsonSchemaUtil;
 import org.kie.kogito.Application;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstance;
-import org.kie.kogito.process.ProcessInstanceExecutionException;
-import org.kie.kogito.process.ProcessInstanceNotFoundException;
 import org.kie.kogito.process.ProcessInstanceReadMode;
 import org.kie.kogito.process.WorkItem;
-import org.kie.kogito.process.workitem.Policies;
+import org.kie.kogito.process.impl.AbstractProcessInstance;
 import org.kie.kogito.process.impl.Sig;
+import org.kie.kogito.process.workitem.Policies;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
 import org.kie.kogito.auth.IdentityProvider;
 import org.jbpm.process.instance.impl.humantask.HumanTaskTransition;
+
 
 @Path("/$name$")
 public class $Type$Resource {
@@ -56,14 +56,14 @@ public class $Type$Resource {
             $Type$Input inputModel = resource != null ? resource : new $Type$Input();
             ProcessInstance<$Type$> pi = process.createInstance(businessKey, inputModel.toModel());
             String startFromNode = httpHeaders.getHeaderString("X-KOGITO-StartFromNode");
-
             if (startFromNode != null) {
                 pi.startFrom(startFromNode);
             } else {
                 pi.start();
             }
-            UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().path(pi.id());
-            return Response.created(uriBuilder.build())
+            URI uri = uriInfo.getAbsolutePathBuilder().path(pi.id()).build();
+            addMetadata(pi, httpHeaders, uri);
+            return Response.created(uri)
                     .entity(pi.checkError().variables().toOutput())
                     .build();
         });
@@ -127,6 +127,10 @@ public class $Type$Resource {
                       .findById(id, ProcessInstanceReadMode.READ_ONLY)
                       .map(pi -> pi.workItems(Policies.of(user, groups)))
                       .orElseThrow(() -> new NotFoundException());
+    }
+
+    private void addMetadata(ProcessInstance<$Type$> processInstance, HttpHeaders httpHeaders, URI resourceUri) {
+        // Fill in by add-ons requiring to enrich the process instance metadata
     }
 
 }

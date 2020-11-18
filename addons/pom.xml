@@ -18,6 +18,7 @@
     <module>events</module>
     <module>cloudevents</module>
     <module>jobs</module>
+    <module>lra</module>
     <module>predictions</module>
     <module>process-management</module>
     <module>tracing</module>

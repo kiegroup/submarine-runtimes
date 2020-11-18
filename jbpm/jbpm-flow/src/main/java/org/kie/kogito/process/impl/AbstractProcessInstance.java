@@ -209,8 +209,9 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         ((InternalProcessRuntime) getProcessRuntime()).getProcessInstanceManager().addProcessInstance(this.processInstance);
         this.id = processInstance.getId();
         addCompletionEventListener();
+        ((MutableProcessInstances<T>) process.instances()).create(this.id(), this);
         org.kie.api.runtime.process.ProcessInstance processInstance = getProcessRuntime().startProcessInstance(this.id, trigger);
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).create(pi.id(), pi));
+//        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).create(pi.id(), pi));
         unbind(variables, processInstance.getVariables());
         if (this.processInstance != null) {
             this.status = this.processInstance.getState();

@@ -50,6 +50,11 @@ public class ResourceGenerator extends AbstractResourceGenerator {
     }
 
     @Override
+    public String getLRAResourceTemplate() {
+        return "/class-templates/lra/RestResourceLRATemplate.java";
+    }
+
+    @Override
     public List<String> getRestAnnotations() {
         return Arrays.asList("POST", "GET", "PUT", "DELETE");
     }
