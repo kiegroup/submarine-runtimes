@@ -15,24 +15,17 @@
 
 package org.kie.kogito.codegen.rules;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.codegen.metadata.ImageMetaData.LABEL_PREFIX;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.OptionalInt;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.TypeParameter;
 import org.drools.modelcompiler.builder.QueryModel;
 import org.kie.internal.ruleunit.RuleUnitDescription;
 import org.kie.kogito.codegen.AddonsConfig;
@@ -46,11 +39,18 @@ import org.kie.kogito.rules.RuleUnitConfig;
 import org.kie.kogito.rules.units.GeneratedRuleUnitDescription;
 import org.kie.kogito.rules.units.impl.AbstractRuleUnit;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.codegen.metadata.ImageMetaData.LABEL_PREFIX;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.TypeParameter;
 
 public class RuleUnitGenerator implements FileGenerator {
 
@@ -97,6 +97,13 @@ public class RuleUnitGenerator implements FileGenerator {
         return queries.stream()
                 .filter(query -> !query.hasParameters())
                 .map(query -> new QueryEndpointGenerator(ruleUnit, query, annotator, addonsConfig))
+                .collect(toList());
+    }
+
+    public List<QueryRequestHandlerGenerator> queriesAsRequests() {
+        return queries.stream()
+                .filter(query -> !query.hasParameters())
+                .map(query -> new QueryRequestHandlerGenerator(ruleUnit, query, annotator, addonsConfig))
                 .collect(toList());
     }
 
