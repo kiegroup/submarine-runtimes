@@ -85,7 +85,8 @@ public abstract class AbstractProtobufProcessInstanceMarshaller
     public JBPMMessages.ProcessInstance writeProcessInstance(MarshallerWriteContext context,
                                                              ProcessInstance processInstance) throws IOException {
         WorkflowProcessInstanceImpl workFlow = (WorkflowProcessInstanceImpl) processInstance;
-        
+
+        Date startDate = workFlow.getStartDate();
         JBPMMessages.ProcessInstance.Builder _instance = JBPMMessages.ProcessInstance.newBuilder()
                 .setId( workFlow.getId() )
                 .setProcessId( workFlow.getProcessId() )
@@ -93,7 +94,7 @@ public abstract class AbstractProtobufProcessInstanceMarshaller
                 .setProcessType( workFlow.getProcess().getType() )                
                 .setSignalCompletion(workFlow.isSignalCompletion())
                 .setSlaCompliance(workFlow.getSlaCompliance())
-                .setStartDate(workFlow.getStartDate().getTime());
+                .setStartDate(startDate == null ? -1 : startDate.getTime());
         if (workFlow.getProcessXml() != null) {
             _instance.setProcessXml( workFlow.getProcessXml());
         }
