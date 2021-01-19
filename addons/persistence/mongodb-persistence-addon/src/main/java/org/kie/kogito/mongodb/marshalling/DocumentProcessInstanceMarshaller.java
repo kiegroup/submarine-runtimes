@@ -68,7 +68,7 @@ public class DocumentProcessInstanceMarshaller {
         try {
             WorkflowProcessInstance pi = ((AbstractProcessInstance<?>) processInstance).internalGetProcessInstance();
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                KogitoProcessMarshallerWriteContext context = new KogitoProcessMarshallerWriteContext(baos, null, null, null, null, env);
+                KogitoProcessMarshallerWriteContext context = new KogitoProcessMarshallerWriteContext(baos, env);
                 org.jbpm.marshalling.impl.ProcessInstanceMarshaller marshaller = ProcessMarshallerRegistry.INSTANCE.getMarshaller(pi.getProcess().getType());
                 JBPMMessages.ProcessInstance instance = (JBPMMessages.ProcessInstance) marshaller.writeProcessInstance(context, pi);
                 ProcessInstanceDocument document = new ProcessInstanceDocumentMapper().apply(context, instance);
@@ -85,7 +85,7 @@ public class DocumentProcessInstanceMarshaller {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(getDummyByteArray())) {
             MarshallerReaderContext context = new KogitoMarshallerReaderContext(bais,
                                                                                 Collections.singletonMap(process.id(), ((AbstractProcess<?>) process).process()),
-                                                                                null, null, null, env);
+                                                                                env);
             JBPMMessages.ProcessInstance instance = new ProcessInstanceMessageMapper().apply(context, doc);
             context.setParameterObject( instance );
             org.jbpm.marshalling.impl.ProcessInstanceMarshaller marshaller = ProcessMarshallerRegistry.INSTANCE.getMarshaller(instance.getProcessType());

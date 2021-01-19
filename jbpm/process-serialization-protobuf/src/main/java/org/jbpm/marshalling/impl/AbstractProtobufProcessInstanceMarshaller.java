@@ -35,7 +35,6 @@ import org.drools.core.marshalling.impl.MarshallerWriteContext;
 import org.drools.serialization.protobuf.ProtobufMessages.Header;
 import org.drools.core.process.instance.KogitoWorkItem;
 import org.drools.core.process.instance.impl.KogitoWorkItemImpl;
-import org.drools.serialization.protobuf.PersisterHelper;
 import org.jbpm.marshalling.impl.JBPMMessages.ProcessInstance.NodeInstanceContent;
 import org.jbpm.marshalling.impl.JBPMMessages.ProcessInstance.NodeInstanceContent.RuleSetNode.TextMapEntry;
 import org.jbpm.marshalling.impl.JBPMMessages.ProcessInstance.NodeInstanceType;
