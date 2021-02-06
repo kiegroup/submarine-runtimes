@@ -1867,8 +1867,8 @@ public class ActivityTest extends JbpmBpmn2TestCase {
     
     @Test
     @RequirePersistence(false)
-    public void testBusinessRuleTaskWithExpressionsForIO() throws Exception {
-        KieBase kbase = createKnowledgeBaseWithoutDumper("BPMN2-BusinessRuleTaskWithDataInputIOExpression.bpmn2",
+    public void testBusinessRuleTaskWithOutputExpressionsForIO() throws Exception {
+        KieBase kbase = createKnowledgeBaseWithoutDumper("BPMN2-BusinessRuleTaskWithDataOutputIOExpression.bpmn2",
                 "BPMN2-BusinessRuleTaskWithDataInput.drl");
         ksession = createKnowledgeSession(kbase);
         ksession.addEventListener(new RuleAwareProcessEventListener());
@@ -1884,6 +1884,30 @@ public class ActivityTest extends JbpmBpmn2TestCase {
         
         Account account = (Account) (( org.jbpm.workflow.instance.WorkflowProcessInstance ) processInstance).getVariables().get("account");
         assertNotNull(account.getPerson());
+    }
+
+    @Test
+    @RequirePersistence(false)
+    public void testBusinessRuleTaskWithInputExpressionsForIO() throws Exception {
+        KieBase kbase = createKnowledgeBaseWithoutDumper("BPMN2-BusinessRuleTaskWithDataInputIOExpression.bpmn2",
+                "BPMN2-BusinessRuleTaskWithDataInput.drl");
+        ksession = createKnowledgeSession(kbase);
+        ksession.addEventListener(new RuleAwareProcessEventListener());
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        //params.put("person", new Person(null));
+        Account account = new Account();
+        account.setPerson(new Person(null));
+        params.put("account", new Account());
+        ProcessInstance processInstance = ksession
+                .startProcess("BPMN2-BusinessRuleTask", params);
+        assertProcessInstanceFinished(processInstance, ksession);
+    
+        account = (Account) processInstance.getVariables().get("account");
+        assertNotNull(account.getPerson());
+
+        Person person = account.getPerson();
+        assertEquals("john", person.getName());
     }
     
     @Test
