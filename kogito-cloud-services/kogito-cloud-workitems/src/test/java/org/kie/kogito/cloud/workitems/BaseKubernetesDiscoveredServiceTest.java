@@ -32,7 +32,7 @@ import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
  */
 public abstract class BaseKubernetesDiscoveredServiceTest {
 
-    public KubernetesServer server = new KubernetesServer(true, true);
+    public KubernetesServer server = new KubernetesServer(false, true);
 
     public static final String MOCK_NAMESPACE = "mock-namespace";
 

@@ -41,7 +41,7 @@ public class PackageBuilderTest extends AbstractBaseTest {
 
     @Test
     public void testRuleFlow() throws Exception {
-        InputStream in = this.getClass().getResourceAsStream("/org/jbpm/integrationtests/ruleflow.rfm");
+        InputStream in = this.getClass().getResourceAsStream("/org/jbpm/componenttests/ruleflow.rfm");
         assertNotNull(in);
 
         builder.addPackage(new PackageDescr("com.sample"));
@@ -79,7 +79,7 @@ public class PackageBuilderTest extends AbstractBaseTest {
         System.setProperty("drools.ruleflow.port",
                 "true");
 
-        InputStream in = this.getClass().getResourceAsStream("/org/jbpm/integrationtests/ruleflow40.rfm");
+        InputStream in = this.getClass().getResourceAsStream("/org/jbpm/componenttests/ruleflow40.rfm");
         assertNotNull(in);
 
         builder.addPackage(new PackageDescr("com.sample"));
