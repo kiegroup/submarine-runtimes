@@ -27,7 +27,6 @@ import javax.lang.model.SourceVersion;
 
 import org.drools.compiler.compiler.io.memory.MemoryFileSystem;
 import org.drools.core.util.KieFunctions;
-import org.drools.core.util.StringUtils;
 import org.jbpm.compiler.canonical.ProcessMetaData;
 import org.jbpm.compiler.canonical.TriggerMetaData;
 import org.jbpm.process.core.datatype.impl.type.ObjectDataType;
@@ -60,7 +59,6 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
@@ -157,12 +155,13 @@ public class ProcessGenerator {
                         .setType(processInstanceFQCN)
                         .setArguments(NodeList.nodeList(
                                 new ThisExpr(),
-                                new NameExpr("value"),
+                                new CastExpr().setType(modelTypeName)
+                                        .setExpression(new NameExpr("value")),
                                 createProcessRuntime())));
 
         methodDeclaration.setName("createInstance")
                 .addModifier(Modifier.Keyword.PUBLIC)
-                .addParameter(modelTypeName, "value")
+                .addParameter(Model.class.getCanonicalName(), "value")
                 .setType(processInstanceFQCN)
                 .addAnnotation(Override.class)
                 .setBody(new BlockStmt()
@@ -178,49 +177,50 @@ public class ProcessGenerator {
                         .setType(processInstanceFQCN)
                         .setArguments(NodeList.nodeList(
                                 new ThisExpr(),
-                                new NameExpr("value"),
+                                new CastExpr().setType(modelTypeName)
+                                        .setExpression(new NameExpr("value")),
                                 new NameExpr(BUSINESS_KEY),
                                 createProcessRuntime())));
 
         methodDeclaration.setName("createInstance")
                 .addModifier(Modifier.Keyword.PUBLIC)
                 .addParameter(String.class.getCanonicalName(), BUSINESS_KEY)
-                .addParameter(modelTypeName, "value")
-                .setType(processInstanceFQCN)
-                .setBody(new BlockStmt().addStatement(returnStmt));
-        return methodDeclaration;
-    }
-
-    private MethodDeclaration createInstanceGenericMethod(String processInstanceFQCN) {
-        MethodDeclaration methodDeclaration = new MethodDeclaration();
-
-        ReturnStmt returnStmt = new ReturnStmt(
-                new MethodCallExpr(new ThisExpr(), "createInstance").addArgument(new CastExpr(new ClassOrInterfaceType(null, modelTypeName), new NameExpr("value"))));
-
-        methodDeclaration.setName("createInstance")
-                .addModifier(Modifier.Keyword.PUBLIC)
                 .addParameter(Model.class.getCanonicalName(), "value")
                 .setType(processInstanceFQCN)
                 .setBody(new BlockStmt().addStatement(returnStmt));
         return methodDeclaration;
     }
-
-    private MethodDeclaration createInstanceGenericWithBusinessKeyMethod(String processInstanceFQCN) {
-        MethodDeclaration methodDeclaration = new MethodDeclaration();
-
-        ReturnStmt returnStmt = new ReturnStmt(
-                new MethodCallExpr(new ThisExpr(), "createInstance")
-                        .addArgument(new NameExpr(BUSINESS_KEY))
-                        .addArgument(new CastExpr(new ClassOrInterfaceType(null, modelTypeName), new NameExpr("value"))));
-
-        methodDeclaration.setName("createInstance")
-                .addModifier(Modifier.Keyword.PUBLIC)
-                .addParameter(String.class.getCanonicalName(), BUSINESS_KEY)
-                .addParameter(Model.class.getCanonicalName(), "value")
-                .setType(processInstanceFQCN)
-                .setBody(new BlockStmt().addStatement(returnStmt));
-        return methodDeclaration;
-    }
+    //
+    //    private MethodDeclaration createInstanceGenericMethod(String processInstanceFQCN) {
+    //        MethodDeclaration methodDeclaration = new MethodDeclaration();
+    //
+    //        ReturnStmt returnStmt = new ReturnStmt(
+    //                new MethodCallExpr(new ThisExpr(), "createInstance").addArgument(new CastExpr(new ClassOrInterfaceType(null, modelTypeName), new NameExpr("value"))));
+    //
+    //        methodDeclaration.setName("createInstance")
+    //                .addModifier(Modifier.Keyword.PUBLIC)
+    //                .addParameter(Model.class.getCanonicalName(), "value")
+    //                .setType(processInstanceFQCN)
+    //                .setBody(new BlockStmt().addStatement(returnStmt));
+    //        return methodDeclaration;
+    //    }
+    //
+    //    private MethodDeclaration createInstanceGenericWithBusinessKeyMethod(String processInstanceFQCN) {
+    //        MethodDeclaration methodDeclaration = new MethodDeclaration();
+    //
+    //        ReturnStmt returnStmt = new ReturnStmt(
+    //                new MethodCallExpr(new ThisExpr(), "createInstance")
+    //                        .addArgument(new NameExpr(BUSINESS_KEY))
+    //                        .addArgument(new CastExpr(new ClassOrInterfaceType(null, modelTypeName), new NameExpr("value"))));
+    //
+    //        methodDeclaration.setName("createInstance")
+    //                .addModifier(Modifier.Keyword.PUBLIC)
+    //                .addParameter(String.class.getCanonicalName(), BUSINESS_KEY)
+    //                .addParameter(Model.class.getCanonicalName(), "value")
+    //                .setType(processInstanceFQCN)
+    //                .setBody(new BlockStmt().addStatement(returnStmt));
+    //        return methodDeclaration;
+    //    }
 
     private MethodDeclaration createInstanceGenericWithWorkflowInstanceMethod(String processInstanceFQCN) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
@@ -334,8 +334,7 @@ public class ProcessGenerator {
     }
 
     public static ClassOrInterfaceType abstractProcessType(String canonicalName) {
-        return new ClassOrInterfaceType(null, AbstractProcess.class.getCanonicalName())
-                .setTypeArguments(new ClassOrInterfaceType(null, canonicalName));
+        return new ClassOrInterfaceType(null, AbstractProcess.class.getCanonicalName());
     }
 
     public ClassOrInterfaceDeclaration classDeclaration() {
@@ -439,8 +438,8 @@ public class ProcessGenerator {
                                 .addStatement(new ReturnStmt(new ObjectCreationExpr(null,
                                         new ClassOrInterfaceType(null, modelTypeName),
                                         NodeList.nodeList())))))
-                .addMember(createInstanceGenericMethod(processInstanceFQCN))
-                .addMember(createInstanceGenericWithBusinessKeyMethod(processInstanceFQCN))
+                //                .addMember(createInstanceGenericMethod(processInstanceFQCN))
+                //                .addMember(createInstanceGenericWithBusinessKeyMethod(processInstanceFQCN))
                 .addMember(createInstanceGenericWithWorkflowInstanceMethod(processInstanceFQCN))
                 .addMember(createReadOnlyInstanceGenericWithWorkflowInstanceMethod(processInstanceFQCN))
                 .addMember(process(processMetaData));
@@ -454,12 +453,11 @@ public class ProcessGenerator {
                 FieldDeclaration subprocessFieldDeclaration = new FieldDeclaration();
 
                 String fieldName = "process" + subProcess.getKey();
-                ClassOrInterfaceType modelType = new ClassOrInterfaceType(null, new SimpleName(org.kie.kogito.process.Process.class.getCanonicalName()),
-                        NodeList.nodeList(new ClassOrInterfaceType(null, StringUtils.ucFirst(subProcess.getKey() + "Model"))));
+                ClassOrInterfaceType modelType = new ClassOrInterfaceType(null, org.kie.kogito.process.Process.class.getCanonicalName());
                 if (context.hasDI()) {
                     subprocessFieldDeclaration
                             .addVariable(new VariableDeclarator(modelType, fieldName));
-                    context.getDependencyInjectionAnnotator().withInjection(subprocessFieldDeclaration);
+                    context.getDependencyInjectionAnnotator().withNamedInjection(subprocessFieldDeclaration, subProcess.getValue());
                 } else {
                     // app.get(org.kie.kogito.process.Processes.class).processById()
                     MethodCallExpr initSubProcessField = new MethodCallExpr(
@@ -468,7 +466,7 @@ public class ProcessGenerator {
                             "processById").addArgument(new StringLiteralExpr(subProcess.getKey()));
 
                     subprocessFieldDeclaration.addVariable(new VariableDeclarator(modelType, fieldName));
-                    constructor.getBody().addStatement(new AssignExpr(new FieldAccessExpr(new ThisExpr(), fieldName), new CastExpr(modelType, initSubProcessField), Operator.ASSIGN));
+                    constructor.getBody().addStatement(new AssignExpr(new FieldAccessExpr(new ThisExpr(), fieldName), initSubProcessField, Operator.ASSIGN));
 
                 }
 

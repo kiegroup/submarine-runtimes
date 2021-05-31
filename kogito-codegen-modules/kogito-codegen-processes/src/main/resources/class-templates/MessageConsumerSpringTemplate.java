@@ -28,7 +28,7 @@ public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $Data
     @org.springframework.beans.factory.annotation.Autowired()
     $Type$MessageConsumer(
             Application application,
-            @org.springframework.beans.factory.annotation.Qualifier("$ProcessName$") Process<$Type$> process,
+            @org.springframework.beans.factory.annotation.Qualifier("$ProcessName$") Process process,
             ConfigBean configBean,
             EventReceiver eventReceiver) {
         super(application,

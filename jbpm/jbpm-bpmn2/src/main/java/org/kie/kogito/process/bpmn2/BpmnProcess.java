@@ -26,10 +26,9 @@ import org.kie.api.io.Resource;
 import org.kie.api.runtime.process.WorkflowProcessInstance;
 import org.kie.kogito.Model;
 import org.kie.kogito.process.ProcessConfig;
-import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.process.impl.AbstractProcess;
 
-public class BpmnProcess extends AbstractProcess<BpmnVariables> {
+public class BpmnProcess extends AbstractProcess {
 
     private static BpmnProcessCompiler COMPILER = new BpmnProcessCompiler();
 
@@ -45,37 +44,30 @@ public class BpmnProcess extends AbstractProcess<BpmnVariables> {
     }
 
     @Override
-    public ProcessInstance<BpmnVariables> createInstance(Model m) {
+    public BpmnProcessInstance createInstance(Model m) {
         BpmnVariables variables = createModel();
         variables.fromMap(m.toMap());
         return new BpmnProcessInstance(this, variables, this.createProcessRuntime());
     }
 
-    public ProcessInstance<BpmnVariables> createInstance() {
+    public BpmnProcessInstance createInstance() {
         return new BpmnProcessInstance(this, createModel(), this.createProcessRuntime());
     }
 
     @Override
-    public ProcessInstance<BpmnVariables> createInstance(String businessKey, BpmnVariables variables) {
+    public BpmnProcessInstance createInstance(String businessKey, Model variables) {
         BpmnVariables variablesModel = createModel();
         variablesModel.fromMap(variables.toMap());
         return new BpmnProcessInstance(this, variablesModel, businessKey, this.createProcessRuntime());
     }
 
     @Override
-    public ProcessInstance<BpmnVariables> createInstance(BpmnVariables variables) {
-        BpmnVariables variablesModel = createModel();
-        variablesModel.fromMap(variables.toMap());
-        return new BpmnProcessInstance(this, variablesModel, this.createProcessRuntime());
-    }
-
-    @Override
-    public ProcessInstance<BpmnVariables> createInstance(WorkflowProcessInstance wpi) {
+    public BpmnProcessInstance createInstance(WorkflowProcessInstance wpi) {
         return new BpmnProcessInstance(this, createModel(), this.createProcessRuntime(), wpi);
     }
 
     @Override
-    public ProcessInstance<BpmnVariables> createReadOnlyInstance(WorkflowProcessInstance wpi) {
+    public BpmnProcessInstance createReadOnlyInstance(WorkflowProcessInstance wpi) {
         return new BpmnProcessInstance(this, createModel(), wpi);
     }
 

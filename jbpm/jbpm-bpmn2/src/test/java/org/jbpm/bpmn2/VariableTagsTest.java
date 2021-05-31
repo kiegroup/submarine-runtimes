@@ -118,16 +118,17 @@ public class VariableTagsTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<>();
         params.put("approver", "john");
 
-        org.kie.kogito.process.ProcessInstance<BpmnVariables> instance = process.createInstance(BpmnVariables.create(params));
+        org.kie.kogito.process.ProcessInstance instance = process.createInstance(BpmnVariables.create(params));
         instance.start();
 
         assertEquals(STATE_ACTIVE, instance.status());
 
-        assertThat(instance.variables().toMap()).hasSize(1);
-        assertThat(instance.variables().toMap(BpmnVariables.OUTPUTS_ONLY)).hasSize(0);
-        assertThat(instance.variables().toMap(BpmnVariables.INPUTS_ONLY)).hasSize(0);
-        assertThat(instance.variables().toMap(BpmnVariables.INTERNAL_ONLY)).hasSize(0);
-        assertThat(instance.variables().toMap(v -> v.hasTag("onlyAdmin"))).hasSize(1).containsEntry("approver", "john");
+        BpmnVariables variables = (BpmnVariables) instance.variables();
+        assertThat(variables.toMap()).hasSize(1);
+        assertThat(variables.toMap(BpmnVariables.OUTPUTS_ONLY)).hasSize(0);
+        assertThat(variables.toMap(BpmnVariables.INPUTS_ONLY)).hasSize(0);
+        assertThat(variables.toMap(BpmnVariables.INTERNAL_ONLY)).hasSize(0);
+        assertThat(variables.toMap(v -> v.hasTag("onlyAdmin"))).hasSize(1).containsEntry("approver", "john");
 
         instance.abort();
 

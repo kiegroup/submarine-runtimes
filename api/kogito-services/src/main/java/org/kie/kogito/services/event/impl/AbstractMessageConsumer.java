@@ -33,7 +33,7 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractMessageConsumer.class);
 
-    private Process<M> process;
+    private Process process;
     private Application application;
     private String trigger;
     private EventConsumer<M> eventConsumer;
@@ -45,7 +45,7 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
     }
 
     public AbstractMessageConsumer(Application application,
-            Process<M> process,
+            Process process,
             String trigger,
             EventConsumerFactory eventConsumerFactory,
             EventReceiver eventReceiver,
@@ -56,7 +56,7 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
     }
 
     public void init(Application application,
-            Process<M> process,
+            Process process,
             String trigger,
             EventConsumerFactory eventConsumerFactory,
             EventReceiver eventReceiver,

@@ -36,7 +36,7 @@ public class ProcessIT {
 
     @Inject
     @Named("tests")
-    Process<? extends Model> process;
+    Process process;
 
     @Test
     public void testProcess() throws Exception {
@@ -45,7 +45,7 @@ public class ProcessIT {
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = process.createInstance(m);
+        ProcessInstance processInstance = process.createInstance(m);
         processInstance.start();
         assertEquals(KogitoProcessInstance.STATE_COMPLETED, processInstance.status());
     }

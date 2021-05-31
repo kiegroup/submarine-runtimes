@@ -35,8 +35,8 @@ class CompensationIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("compensation/compensateFirst.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("compensateFirst");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("compensateFirst");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
         assertState(processInstance, ProcessInstance.STATE_COMPLETED);
 
@@ -50,8 +50,8 @@ class CompensationIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("compensation/compensateSecond.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("compensateSecond");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("compensateSecond");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
         assertState(processInstance, ProcessInstance.STATE_COMPLETED);
 
@@ -65,8 +65,8 @@ class CompensationIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("compensation/compensateAll.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("compensateAll");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("compensateAll");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
         assertState(processInstance, ProcessInstance.STATE_COMPLETED);
 
@@ -80,8 +80,8 @@ class CompensationIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("compensation/BPMN2-Compensation-ThrowSpecificForSubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("CompensationSpecificSubProcess");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("CompensationSpecificSubProcess");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         Model model = (Model) processInstance.variables();

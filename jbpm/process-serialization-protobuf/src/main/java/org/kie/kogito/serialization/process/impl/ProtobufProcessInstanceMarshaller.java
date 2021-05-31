@@ -33,25 +33,25 @@ import org.kie.kogito.serialization.process.ProcessInstanceMarshaller;
 public class ProtobufProcessInstanceMarshaller implements ProcessInstanceMarshaller {
 
     @Override
-    public void writeProcessInstance(MarshallerWriterContext context, ProcessInstance<?> processInstance) throws IOException {
-        RuleFlowProcessInstance pi = (RuleFlowProcessInstance) ((AbstractProcessInstance<?>) processInstance).internalGetProcessInstance();
+    public void writeProcessInstance(MarshallerWriterContext context, ProcessInstance processInstance) throws IOException {
+        RuleFlowProcessInstance pi = (RuleFlowProcessInstance) ((AbstractProcessInstance) processInstance).internalGetProcessInstance();
         ProtobufProcessInstanceWriter writer = new ProtobufProcessInstanceWriter(context);
         writer.writeProcessInstance(pi, context.output());
         pi.disconnect();
     }
 
     @Override
-    public ProcessInstance<?> readProcessInstance(MarshallerReaderContext context) throws IOException {
+    public ProcessInstance readProcessInstance(MarshallerReaderContext context) throws IOException {
         ProtobufProcessInstanceReader reader = new ProtobufProcessInstanceReader(context);
         boolean readOnly = context.get(MarshallerContextName.MARSHALLER_INSTANCE_READ_ONLY);
-        AbstractProcess<?> process = (AbstractProcess<?>) context.get(MarshallerContextName.MARSHALLER_PROCESS);
+        AbstractProcess process = (AbstractProcess) context.get(MarshallerContextName.MARSHALLER_PROCESS);
         return readOnly ? process.createReadOnlyInstance(reader.read(context.input())) : process.createInstance(reader.read(context.input()));
     }
 
     @Override
-    public void reloadProcessInstance(MarshallerReaderContext context, ProcessInstance<?> processInstance) throws IOException {
+    public void reloadProcessInstance(MarshallerReaderContext context, ProcessInstance processInstance) throws IOException {
         ProtobufProcessInstanceReader reader = new ProtobufProcessInstanceReader(context);
-        ((AbstractProcessInstance<?>) processInstance).internalSetProcessInstance(reader.read(context.input()));
+        ((AbstractProcessInstance) processInstance).internalSetProcessInstance(reader.read(context.input()));
     }
 
 }

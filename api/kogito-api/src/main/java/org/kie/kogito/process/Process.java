@@ -17,21 +17,17 @@ package org.kie.kogito.process;
 
 import org.kie.kogito.Model;
 
-public interface Process<T> {
+public interface Process {
 
-    ProcessInstance<T> createInstance(T workingMemory);
+    ProcessInstance createInstance(Model workingMemory);
 
-    ProcessInstance<T> createInstance(String businessKey, T workingMemory);
+    ProcessInstance createInstance(String businessKey, Model workingMemory);
 
-    ProcessInstances<T> instances();
+    ProcessInstances instances();
 
     <S> void send(Signal<S> sig);
 
-    T createModel();
-
-    ProcessInstance<? extends Model> createInstance(Model m);
-
-    ProcessInstance<? extends Model> createInstance(String businessKey, Model m);
+    Model createModel();
 
     String id();
 

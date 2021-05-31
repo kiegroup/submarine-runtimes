@@ -115,7 +115,7 @@ public class ProtobufProcessInstanceReader {
     private RuleFlowProcessInstance buildWorkflow(KogitoProcessInstanceProtobuf.ProcessInstance processInstanceProtobuf) {
 
         RuleFlowProcessInstance processInstance = ruleFlowProcessInstance;
-        processInstance.setProcess(((AbstractProcess<?>) context.get(MarshallerContextName.MARSHALLER_PROCESS)).process());
+        processInstance.setProcess(((AbstractProcess) context.get(MarshallerContextName.MARSHALLER_PROCESS)).process());
 
         processInstance.setId(processInstanceProtobuf.getId());
         processInstance.setProcessId(processInstanceProtobuf.getProcessId());

@@ -40,12 +40,12 @@ public class SplitGatewayIT extends AbstractCodegenIT {
         Application app = generateCode(resourcesTypeMap);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("SplitMultilineExpression");
+        Process p = app.get(Processes.class).processById("SplitMultilineExpression");
 
         Model m = p.createModel();
         m.fromMap(singletonMap("valid", false));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

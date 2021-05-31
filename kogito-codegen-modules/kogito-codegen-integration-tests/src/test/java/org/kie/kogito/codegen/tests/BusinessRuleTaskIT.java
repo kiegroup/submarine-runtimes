@@ -53,12 +53,12 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
         Application app = generateCode(resourcesTypeMap);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -83,12 +83,12 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
             }
 
         });
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -119,12 +119,12 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -145,7 +145,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("decision/models/dmnprocess.bpmn2"));
         resourcesTypeMap.put(TYPE.DECISION, Collections.singletonList("decision/models/vacationDaysAlt/vacationDaysAlt.dmn"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> p =
+        Process p =
                 app.get(Processes.class)
                         .processById("DmnProcess");
 
@@ -157,7 +157,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
             vars.put("yearsOfService", 1);
             m.fromMap(vars);
 
-            ProcessInstance<? extends Model> processInstance = p.createInstance(m);
+            ProcessInstance processInstance = p.createInstance(m);
             processInstance.start();
 
             assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -176,7 +176,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
             vars.put("yearsOfService", 20);
             m.fromMap(vars);
 
-            ProcessInstance<? extends Model> processInstance = p.createInstance(m);
+            ProcessInstance processInstance = p.createInstance(m);
             processInstance.start();
 
             assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -195,7 +195,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
             vars.put("yearsOfService", 30);
             m.fromMap(vars);
 
-            ProcessInstance<? extends Model> processInstance = p.createInstance(m);
+            ProcessInstance processInstance = p.createInstance(m);
             processInstance.start();
 
             assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -215,7 +215,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
         Application app = generateCode(resourcesTypeMap);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         Map<String, Object> params = new HashMap<>();
@@ -223,7 +223,7 @@ public class BusinessRuleTaskIT extends AbstractCodegenIT {
         params.put("account", new Account());
         m.fromMap(params);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

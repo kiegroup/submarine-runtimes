@@ -34,9 +34,9 @@ class WorkItemParamsIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/WorkItemParams.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("WorkItemParamsTest");
+        Process p = app.get(Processes.class).processById("WorkItemParamsTest");
 
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         assertThat(processInstance.startDate()).isNotNull();

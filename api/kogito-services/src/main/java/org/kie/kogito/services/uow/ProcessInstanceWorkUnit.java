@@ -20,25 +20,25 @@ import java.util.function.Consumer;
 import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.uow.WorkUnit;
 
-public class ProcessInstanceWorkUnit<T> implements WorkUnit<ProcessInstance<T>> {
+public class ProcessInstanceWorkUnit<T> implements WorkUnit<ProcessInstance> {
 
-    private ProcessInstance<T> data;
+    private ProcessInstance data;
     private Consumer<Object> action;
     private Consumer<Object> compensation;
 
-    public ProcessInstanceWorkUnit(ProcessInstance<T> data, Consumer<Object> action) {
+    public ProcessInstanceWorkUnit(ProcessInstance data, Consumer<Object> action) {
         this.data = data;
         this.action = action;
     }
 
-    public ProcessInstanceWorkUnit(ProcessInstance<T> data, Consumer<Object> action, Consumer<Object> compensation) {
+    public ProcessInstanceWorkUnit(ProcessInstance data, Consumer<Object> action, Consumer<Object> compensation) {
         this.data = data;
         this.action = action;
         this.compensation = compensation;
     }
 
     @Override
-    public ProcessInstance<T> data() {
+    public ProcessInstance data() {
         return data;
     }
 

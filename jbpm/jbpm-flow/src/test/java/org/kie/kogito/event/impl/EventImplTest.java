@@ -113,9 +113,9 @@ public class EventImplTest {
         marshaller = new DefaultEventMarshaller();
     }
 
-    private Process<DummyModel> process;
-    private ProcessInstance<DummyModel> processInstance;
-    private ProcessInstances<DummyModel> processInstances;
+    private Process process;
+    private ProcessInstance processInstance;
+    private ProcessInstances processInstances;
     private Application application;
 
     @BeforeEach

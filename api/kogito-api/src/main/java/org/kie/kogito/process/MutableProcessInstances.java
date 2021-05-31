@@ -15,17 +15,17 @@
  */
 package org.kie.kogito.process;
 
-public interface MutableProcessInstances<T> extends ProcessInstances<T> {
+public interface MutableProcessInstances extends ProcessInstances {
 
     boolean exists(String id);
 
-    void create(String id, ProcessInstance<T> instance);
+    void create(String id, ProcessInstance instance);
 
-    void update(String id, ProcessInstance<T> instance);
+    void update(String id, ProcessInstance instance);
 
     void remove(String id);
 
-    default boolean isActive(ProcessInstance<T> instance) {
+    default boolean isActive(ProcessInstance instance) {
         return instance.status() == ProcessInstance.STATE_ACTIVE || instance.status() == ProcessInstance.STATE_ERROR;
     }
 

@@ -27,10 +27,10 @@ import org.kie.kogito.persistence.KogitoProcessInstancesFactory;
 import org.kie.kogito.persistence.postgresql.PostgreProcessInstances;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessConfig;
-import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.process.ProcessInstanceReadMode;
 import org.kie.kogito.process.WorkItem;
 import org.kie.kogito.process.bpmn2.BpmnProcess;
+import org.kie.kogito.process.bpmn2.BpmnProcessInstance;
 import org.kie.kogito.process.bpmn2.BpmnVariables;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -82,7 +82,7 @@ class PostgreProcessInstancesIT {
     @Test
     void testBasicFlow() {
         BpmnProcess process = createProcess(null, "BPMN2-UserTask.bpmn2");
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        BpmnProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -93,7 +93,8 @@ class PostgreProcessInstancesIT {
         assertThat(processInstances.exists(processInstance.id())).isTrue();
         verify(processInstances).create(any(), any());
 
-        String testVar = (String) processInstance.variables().get("test");
+        BpmnVariables variables = processInstance.variables();
+        String testVar = (String) variables.get("test");
         assertThat(testVar).isEqualTo("test");
 
         assertThat(processInstance.description()).isEqualTo("User Task");
@@ -120,7 +121,7 @@ class PostgreProcessInstancesIT {
         }
 
         @Override
-        public PostgreProcessInstances createProcessInstances(Process<?> process) {
+        public PostgreProcessInstances createProcessInstances(Process process) {
             PostgreProcessInstances instances = spy(super.createProcessInstances(process));
             return instances;
         }

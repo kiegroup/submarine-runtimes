@@ -100,7 +100,7 @@ public class ProcessInstanceMarshallerService {
         }
     }
 
-    public byte[] marshallProcessInstance(ProcessInstance<?> processInstance) {
+    public byte[] marshallProcessInstance(ProcessInstance processInstance) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             MarshallerWriterContext context = processInstanceMarshallerFactory.newWriterContext(baos);
             setupEnvironment(context);
@@ -112,28 +112,28 @@ public class ProcessInstanceMarshallerService {
         }
     }
 
-    public ProcessInstance<?> unmarshallProcessInstance(byte[] data, Process<?> process, boolean readOnly) {
+    public ProcessInstance unmarshallProcessInstance(byte[] data, Process process, boolean readOnly) {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(data)) {
             MarshallerReaderContext context = processInstanceMarshallerFactory.newReaderContext(bais);
             context.set(MarshallerContextName.MARSHALLER_PROCESS, process);
             context.set(MarshallerContextName.MARSHALLER_INSTANCE_READ_ONLY, readOnly);
             setupEnvironment(context);
             org.kie.kogito.serialization.process.ProcessInstanceMarshaller marshaller = processInstanceMarshallerFactory.newKogitoProcessInstanceMarshaller();
-            return (ProcessInstance<?>) marshaller.readProcessInstance(context);
+            return (ProcessInstance) marshaller.readProcessInstance(context);
         } catch (Exception e) {
             throw new ProcessInstanceMarshallerException("Error while unmarshalling process instance", e);
         }
     }
 
-    public ProcessInstance<?> unmarshallProcessInstance(byte[] data, Process<?> process) {
+    public ProcessInstance unmarshallProcessInstance(byte[] data, Process process) {
         return unmarshallProcessInstance(data, process, false);
     }
 
-    public ProcessInstance<?> unmarshallReadOnlyProcessInstance(byte[] data, Process<?> process) {
+    public ProcessInstance unmarshallReadOnlyProcessInstance(byte[] data, Process process) {
         return unmarshallProcessInstance(data, process, true);
     }
 
-    public Consumer<AbstractProcessInstance<?>> createdReloadFunction(Supplier<byte[]> dataSupplier) {
+    public Consumer<AbstractProcessInstance> createdReloadFunction(Supplier<byte[]> dataSupplier) {
         return (processInstance) -> {
             byte[] data = dataSupplier.get();
             if (data == null) {

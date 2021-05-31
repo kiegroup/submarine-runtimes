@@ -57,15 +57,15 @@ public class CallbackJobsServiceResource {
             return Response.status(Status.BAD_REQUEST).entity("Process id and Process instance id must be given").build();
         }
 
-        Process<?> process = processes.processById(processId);
+        Process process = processes.processById(processId);
         if (process == null) {
             return Response.status(Status.NOT_FOUND).entity("Process with id " + processId + " not found").build();
         }
 
         return UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> {
-            Optional<? extends ProcessInstance<?>> processInstanceFound = process.instances().findById(processInstanceId);
+            Optional<? extends ProcessInstance> processInstanceFound = process.instances().findById(processInstanceId);
             if (processInstanceFound.isPresent()) {
-                ProcessInstance<?> processInstance = processInstanceFound.get();
+                ProcessInstance processInstance = processInstanceFound.get();
                 String[] ids = timerId.split("_");
                 processInstance.send(Sig.of("timerTriggered", TimerInstance.with(Long.parseLong(ids[1]), timerId, limit)));
             } else {

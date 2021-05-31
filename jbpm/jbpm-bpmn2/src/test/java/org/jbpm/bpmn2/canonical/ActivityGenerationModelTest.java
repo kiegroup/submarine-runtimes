@@ -82,7 +82,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         classData.put("com.sample.MinimalProcess", content);
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.emptyMap());
-        ProcessInstance<BpmnVariables> processInstance = processes.get("Minimal").createInstance();
+        ProcessInstance processInstance = processes.get("Minimal").createInstance();
 
         processInstance.start();
 
@@ -128,7 +128,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         TestWorkItemHandler workItemHandler = new TestWorkItemHandler();
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("Human Task", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("UserTask").createInstance();
+        ProcessInstance processInstance = processes.get("UserTask").createInstance();
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
@@ -155,7 +155,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         TestWorkItemHandler workItemHandler = new TestWorkItemHandler();
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("Human Task", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("UserTask").createInstance();
+        ProcessInstance processInstance = processes.get("UserTask").createInstance();
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
@@ -180,7 +180,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         classData.put("org.drools.bpmn2.SubProcessProcess", content);
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.emptyMap());
-        ProcessInstance<BpmnVariables> processInstance = processes.get("SubProcess").createInstance();
+        ProcessInstance processInstance = processes.get("SubProcess").createInstance();
 
         processInstance.start();
 
@@ -205,7 +205,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("x", "First");
         params.put("y", "Second");
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
 
@@ -231,7 +231,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("x", "First1");
         params.put("y", "Second1");
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
 
@@ -266,7 +266,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.emptyMap());
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("x", 15);
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
 
@@ -289,7 +289,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.emptyMap());
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("test", "c");
-        ProcessInstance<BpmnVariables> processInstance = processes.get("InclusiveGatewayWithDefault").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("InclusiveGatewayWithDefault").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
 
@@ -311,7 +311,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.emptyMap());
         Map<String, Object> params = new HashMap<String, Object>();
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
 
@@ -334,7 +334,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("x", 15);
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("Human Task", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
@@ -374,12 +374,12 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("x", 15);
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("Human Task", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("com.sample.test").createInstance(businessKey, BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("com.sample.test").createInstance(businessKey, BpmnVariables.create(params));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
 
-        ProcessInstance<BpmnVariables> loadedProcessInstance = processes.get("com.sample.test").instances().findById(processInstance.id()).orElse(null);
+        ProcessInstance loadedProcessInstance = processes.get("com.sample.test").instances().findById(processInstance.id()).orElse(null);
         assertThat(loadedProcessInstance).isNotNull();
         assertThat(loadedProcessInstance.businessKey()).isEqualTo(businessKey);
 
@@ -405,7 +405,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("s", "john");
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("org.jbpm.bpmn2.objects.HelloService_hello_2_Handler", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("ServiceProcess").createInstance(BpmnVariables.create(params));
+        ProcessInstance processInstance = processes.get("ServiceProcess").createInstance(BpmnVariables.create(params));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
@@ -459,7 +459,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         TestWorkItemHandler workItemHandler = new TestWorkItemHandler();
 
         Map<String, BpmnProcess> processes = createProcesses(classData, Collections.singletonMap("Human Task", workItemHandler));
-        ProcessInstance<BpmnVariables> processInstance = processes.get("UserTask").createInstance(BpmnVariables.create(Collections.singletonMap("s", "test")));
+        ProcessInstance processInstance = processes.get("UserTask").createInstance(BpmnVariables.create(Collections.singletonMap("s", "test")));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
@@ -469,7 +469,7 @@ public class ActivityGenerationModelTest extends JbpmBpmn2TestCase {
         byte[] data = marshaller.marshallProcessInstance(processInstance);
         assertNotNull(data);
 
-        processInstance = (ProcessInstance<BpmnVariables>) marshaller.unmarshallProcessInstance(data, process);
+        processInstance = (ProcessInstance) marshaller.unmarshallProcessInstance(data, process);
 
         KogitoWorkItem workItem = workItemHandler.getWorkItem();
         assertNotNull(workItem);

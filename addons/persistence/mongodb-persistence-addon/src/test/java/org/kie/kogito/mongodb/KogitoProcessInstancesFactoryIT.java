@@ -37,10 +37,10 @@ class KogitoProcessInstancesFactoryIT extends TestHelper {
         };
         assertNotNull(factory);
         assertThat(factory.dbName()).isEqualTo(DB_NAME);
-        Process<?> process = mock(Process.class);
+        Process process = mock(Process.class);
         lenient().when(process.id()).thenReturn(PROCESS_NAME);
         lenient().when(process.name()).thenReturn(PROCESS_NAME);
-        MongoDBProcessInstances<?> instance = factory.createProcessInstances(process);
+        MongoDBProcessInstances instance = factory.createProcessInstances(process);
         assertNotNull(instance);
     }
 }

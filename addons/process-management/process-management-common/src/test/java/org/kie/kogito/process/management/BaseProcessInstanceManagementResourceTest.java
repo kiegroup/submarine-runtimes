@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.Application;
+import org.kie.kogito.Model;
 import org.kie.kogito.auth.SecurityPolicy;
 import org.kie.kogito.internal.process.runtime.KogitoWorkflowProcess;
 import org.kie.kogito.process.ProcessError;
@@ -86,7 +87,7 @@ class BaseProcessInstanceManagementResourceTest {
     private Node node;
 
     @Mock
-    private Object variables;
+    private Model variables;
 
     @BeforeEach
     void setUp() {

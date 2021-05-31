@@ -112,7 +112,7 @@ public class HumanTaskHelper {
         return attachments.remove(id) != null;
     }
 
-    public static HumanTaskWorkItem findTask(ProcessInstance<?> pi, String taskId, Policy<?>... policies) {
+    public static HumanTaskWorkItem findTask(ProcessInstance pi, String taskId, Policy<?>... policies) {
         return pi.findNodes(ni -> isSearchWorkItem(ni, taskId,
                 policies)).stream().findFirst().map(wi -> (HumanTaskWorkItem) ((WorkItemNodeInstance) wi).getWorkItem())
                 .orElseThrow(() -> new WorkItemNotFoundException(taskId));

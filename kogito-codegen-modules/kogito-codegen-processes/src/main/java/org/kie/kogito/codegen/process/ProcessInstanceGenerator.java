@@ -21,6 +21,7 @@ import org.drools.compiler.compiler.io.memory.MemoryFileSystem;
 import org.jbpm.compiler.canonical.ModelMetaData;
 import org.kie.api.runtime.process.ProcessRuntime;
 import org.kie.api.runtime.process.WorkflowProcessInstance;
+import org.kie.kogito.Model;
 import org.kie.kogito.codegen.core.BodyDeclarationComparator;
 import org.kie.kogito.process.impl.AbstractProcessInstance;
 
@@ -29,8 +30,8 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -88,8 +89,7 @@ public class ProcessInstanceGenerator {
                 .addModifier(Modifier.Keyword.PUBLIC);
         classDecl
                 .addExtendedType(
-                        new ClassOrInterfaceType(null, AbstractProcessInstance.class.getCanonicalName())
-                                .setTypeArguments(new ClassOrInterfaceType(null, model.getModelClassSimpleName())))
+                        new ClassOrInterfaceType(null, AbstractProcessInstance.class.getCanonicalName()))
                 .addMember(constructorDecl())
                 .addMember(constructorWithBusinessKeyDecl())
                 .addMember(constructorWithWorkflowInstanceAndRuntimeDecl())
@@ -101,13 +101,12 @@ public class ProcessInstanceGenerator {
     }
 
     private MethodDeclaration bind() {
-        String modelName = model.getModelClassSimpleName();
         BlockStmt body = new BlockStmt()
                 .addStatement(new ReturnStmt(model.toMap("variables")));
         return new MethodDeclaration()
                 .setModifiers(Modifier.Keyword.PROTECTED)
                 .setName("bind")
-                .addParameter(modelName, "variables")
+                .addParameter(Model.class.getCanonicalName(), "variables")
                 .setType(new ClassOrInterfaceType()
                         .setName("java.util.Map")
                         .setTypeArguments(new ClassOrInterfaceType().setName("String"),
@@ -118,14 +117,22 @@ public class ProcessInstanceGenerator {
 
     private MethodDeclaration unbind() {
         String modelName = model.getModelClassSimpleName();
+        // $modelName variables = ($modelName) variables_
+        AssignExpr variables = new AssignExpr(
+                new VariableDeclarationExpr()
+                        .addVariable(new VariableDeclarator()
+                                .setType(modelName).setName("variables")),
+                new CastExpr().setType(modelName).setExpression(new NameExpr("variables_")),
+                AssignExpr.Operator.ASSIGN);
         BlockStmt body = new BlockStmt()
+                .addStatement(variables)
                 .addStatement(model.fromMap("variables", "vmap"));
 
         return new MethodDeclaration()
                 .setModifiers(Modifier.Keyword.PROTECTED)
                 .setName("unbind")
                 .setType(new VoidType())
-                .addParameter(modelName, "variables")
+                .addParameter(Model.class.getCanonicalName(), "variables_")
                 .addParameter(new ClassOrInterfaceType()
                         .setName("java.util.Map")
                         .setTypeArguments(new ClassOrInterfaceType().setName("String"),

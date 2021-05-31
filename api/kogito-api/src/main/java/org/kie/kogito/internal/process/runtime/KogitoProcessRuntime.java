@@ -42,7 +42,7 @@ public interface KogitoProcessRuntime {
      * be used is referenced by the given process id.
      *
      * @param processId The id of the process that should be started
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcess(String processId);
 
@@ -54,7 +54,7 @@ public interface KogitoProcessRuntime {
      *
      * @param processId the id of the process that should be started
      * @param parameters the process variables that should be set when starting the process instance
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcess(String processId, Map<String, Object> parameters);
 
@@ -68,7 +68,7 @@ public interface KogitoProcessRuntime {
      *
      * @param processId the id of the process that should be started
      * @param parameters the process variables that should be set when creating the process instance
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was created (but not yet started)
+     * @return the <code>ProcessInstance that represents the instance of the process that was created (but not yet started)
      */
     KogitoProcessInstance createProcessInstance(String processId, Map<String, Object> parameters);
 
@@ -78,7 +78,7 @@ public interface KogitoProcessRuntime {
      *
      * @param processId The id of the process that should be started
      * @param agendaFilter filters the Matches that may fire
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcess(String processId, AgendaFilter agendaFilter);
 
@@ -91,7 +91,7 @@ public interface KogitoProcessRuntime {
      * @param processId the id of the process that should be started
      * @param parameters the process variables that should be set when starting the process instance
      * @param agendaFilter filters the Matches that may fire
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcess(String processId, Map<String, Object> parameters, AgendaFilter agendaFilter);
 
@@ -102,7 +102,7 @@ public interface KogitoProcessRuntime {
      * process instance before actually starting it. Otherwise, use startProcess.
      *
      * @param processInstanceId the id of the process instance that needs to be started
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcessInstance(String processInstanceId);
 
@@ -114,7 +114,7 @@ public interface KogitoProcessRuntime {
      *
      * @param processInstanceId the id of the process instance that needs to be started
      * @param trigger - type of trigger to locate proper start event, can be null
-     * @return the <code>ProcessInstance</code> that represents the instance of the process that was started
+     * @return the <code>ProcessInstance that represents the instance of the process that was started
      */
     KogitoProcessInstance startProcessInstance(String processInstanceId, String trigger);
 

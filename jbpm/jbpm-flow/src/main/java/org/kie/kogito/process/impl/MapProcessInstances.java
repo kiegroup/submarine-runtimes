@@ -24,9 +24,9 @@ import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.process.ProcessInstanceDuplicatedException;
 import org.kie.kogito.process.ProcessInstanceReadMode;
 
-class MapProcessInstances<T> implements MutableProcessInstances<T> {
+class MapProcessInstances implements MutableProcessInstances {
 
-    private final ConcurrentHashMap<String, ProcessInstance<T>> instances = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ProcessInstance> instances = new ConcurrentHashMap<>();
 
     @Override
     public Integer size() {
@@ -34,19 +34,19 @@ class MapProcessInstances<T> implements MutableProcessInstances<T> {
     }
 
     @Override
-    public Optional<ProcessInstance<T>> findById(String id, ProcessInstanceReadMode mode) {
+    public Optional<ProcessInstance> findById(String id, ProcessInstanceReadMode mode) {
         return Optional.ofNullable(instances.get(id));
     }
 
     @Override
-    public Collection<ProcessInstance<T>> values(ProcessInstanceReadMode mode) {
+    public Collection<ProcessInstance> values(ProcessInstanceReadMode mode) {
         return instances.values();
     }
 
     @Override
-    public void create(String id, ProcessInstance<T> instance) {
+    public void create(String id, ProcessInstance instance) {
         if (isActive(instance)) {
-            ProcessInstance<T> existing = instances.putIfAbsent(id, instance);
+            ProcessInstance existing = instances.putIfAbsent(id, instance);
             if (existing != null) {
                 throw new ProcessInstanceDuplicatedException(id);
             }
@@ -54,7 +54,7 @@ class MapProcessInstances<T> implements MutableProcessInstances<T> {
     }
 
     @Override
-    public void update(String id, ProcessInstance<T> instance) {
+    public void update(String id, ProcessInstance instance) {
         if (isActive(instance)) {
             instances.put(id, instance);
         }

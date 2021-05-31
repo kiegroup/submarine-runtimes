@@ -21,6 +21,6 @@ import org.kie.kogito.process.Process;
 
 public interface EventConsumer<T extends Model> {
 
-    void consume(Application application, Process<T> process, Object payload, String trigger);
+    void consume(Application application, Process process, Object payload, String trigger);
 
 }

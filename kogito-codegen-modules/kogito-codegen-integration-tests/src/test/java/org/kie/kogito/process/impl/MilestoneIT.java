@@ -52,8 +52,8 @@ class MilestoneIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/milestones/SimpleMilestone.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.SimpleMilestone");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("TestCase.SimpleMilestone");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         assertState(processInstance, ProcessInstance.STATE_PENDING);
 
         Collection<Milestone> expected = new ArrayList<>();
@@ -67,7 +67,7 @@ class MilestoneIT extends AbstractCodegenIT {
         expected = expected.stream().map(m -> Milestone.builder().withId(m.getId()).withName(m.getName()).withStatus(COMPLETED).build()).collect(Collectors.toList());
         assertMilestones(expected, processInstance.milestones());
 
-        RuleFlowProcessInstance legacyProcessInstance = (RuleFlowProcessInstance) ((AbstractProcessInstance<?>) processInstance).processInstance;
+        RuleFlowProcessInstance legacyProcessInstance = (RuleFlowProcessInstance) ((AbstractProcessInstance) processInstance).processInstance;
         assertThat(legacyProcessInstance.getNodeInstances()).isEmpty();
         assertThat(legacyProcessInstance.getNodeIdInError()).isNullOrEmpty();
         Optional<String> milestoneId = Stream.of(legacyProcessInstance.getNodeContainer().getNodes())
@@ -83,12 +83,12 @@ class MilestoneIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/milestones/ConditionalMilestone.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.ConditionalMilestone");
+        Process p = app.get(Processes.class).processById("TestCase.ConditionalMilestone");
         Model model = p.createModel();
         Map<String, Object> params = new HashMap<>();
         params.put("favouriteColour", "orange");
         model.fromMap(params);
-        ProcessInstance<?> processInstance = p.createInstance(model);
+        ProcessInstance processInstance = p.createInstance(model);
         assertState(processInstance, ProcessInstance.STATE_PENDING);
 
         Collection<Milestone> expected = new ArrayList<>();

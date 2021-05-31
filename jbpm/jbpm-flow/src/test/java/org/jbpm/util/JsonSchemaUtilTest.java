@@ -106,10 +106,10 @@ public class JsonSchemaUtilTest {
         Policy<T>[] policies = new Policy[0];
         Map<String, Object> schemaMap = JsonSchemaUtil.load(in);
         in.close();
-        Process<T> process = mock(Process.class);
-        ProcessInstances<T> processInstances = mock(ProcessInstances.class);
+        Process process = mock(Process.class);
+        ProcessInstances processInstances = mock(ProcessInstances.class);
         when(process.instances()).thenReturn(processInstances);
-        ProcessInstance<T> processInstance = mock(ProcessInstance.class);
+        ProcessInstance processInstance = mock(ProcessInstance.class);
         when(processInstances.findById("pepe", ProcessInstanceReadMode.READ_ONLY)).thenReturn((Optional) Optional.of(processInstance));
         WorkItem task = mock(WorkItem.class);
         when(processInstance.workItem("task", policies)).thenReturn(task);

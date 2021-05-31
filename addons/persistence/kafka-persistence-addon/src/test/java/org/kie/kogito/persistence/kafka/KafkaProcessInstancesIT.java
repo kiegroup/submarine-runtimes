@@ -93,10 +93,10 @@ public class KafkaProcessInstancesIT {
         process.configure();
         listener.getKafkaStreams().start();
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isZero();
 
-        ProcessInstance<BpmnVariables> mutablePi = process.createInstance(BpmnVariables.create(singletonMap("var", "value")));
+        ProcessInstance mutablePi = process.createInstance(BpmnVariables.create(singletonMap("var", "value")));
 
         mutablePi.start();
         assertThat(mutablePi.status()).isEqualTo(STATE_ERROR);
@@ -108,10 +108,10 @@ public class KafkaProcessInstancesIT {
 
         await().until(() -> instances.values().size() == 1);
 
-        ProcessInstance<BpmnVariables> pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
 
-        ProcessInstance<BpmnVariables> readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThat(readOnlyPi.status()).isEqualTo(STATE_ERROR);
         assertThat(readOnlyPi.error()).hasValueSatisfying(error -> {
             assertThat(error.errorMessage()).endsWith("java.lang.NullPointerException - null");
@@ -132,16 +132,16 @@ public class KafkaProcessInstancesIT {
         process.configure();
         listener.getKafkaStreams().start();
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isZero();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(singletonMap("test", "test")));
 
         processInstance.start();
 
         await().until(() -> instances.values().size() == 1);
 
-        ProcessInstance<BpmnVariables> pi = instances.values().stream().findFirst().get();
+        ProcessInstance pi = instances.values().stream().findFirst().get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
         instances.values(ProcessInstanceReadMode.MUTABLE).stream().findFirst().get().abort();
         assertThat(instances.size()).isZero();
@@ -155,10 +155,10 @@ public class KafkaProcessInstancesIT {
         process.configure();
         listener.getKafkaStreams().start();
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isZero();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(singletonMap("test", "test")));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());

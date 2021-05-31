@@ -52,7 +52,7 @@ import org.kie.kogito.auth.IdentityProvider;
 @Path("/$name$")
 public class $Type$ReactiveResource {
 
-    Process<$Type$> process;
+    Process process;
 
     Application application;
 
@@ -65,12 +65,12 @@ public class $Type$ReactiveResource {
         return CompletableFuture
                 .supplyAsync(
                         () -> {
-                            ProcessInstance<$Type$> pi = processService.createProcessInstance(process,
+                            ProcessInstance pi = processService.createProcessInstance(process,
                                                                                               businessKey,
                                                                                               Optional.ofNullable(resource).orElse(new $Type$Input()).toModel(),
                                                                                               httpHeaders.getHeaderString("X-KOGITO-StartFromNode"));
                             return Response.created(uriInfo.getAbsolutePathBuilder().path(pi.id()).build())
-                                    .entity(pi.checkError().variables().toModel())
+                                    .entity(($Type$Output) (($Type$)pi.checkError().variables()).toModel())
                                     .build();
                         });
     }

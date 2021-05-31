@@ -17,7 +17,6 @@ package org.kie.kogito.process.impl;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.Application;
-import org.kie.kogito.Model;
 import org.kie.kogito.codegen.AbstractCodegenIT;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstance;
@@ -35,8 +34,8 @@ class BusinessKeyIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/ActivationAdHoc.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.ActivationAdHoc");
-        ProcessInstance<?> processInstance = p.createInstance(businessKey, p.createModel());
+        Process p = app.get(Processes.class).processById("TestCase.ActivationAdHoc");
+        ProcessInstance processInstance = p.createInstance(businessKey, p.createModel());
         assertState(processInstance, ProcessInstance.STATE_PENDING);
         assertEquals(businessKey, processInstance.businessKey());
     }

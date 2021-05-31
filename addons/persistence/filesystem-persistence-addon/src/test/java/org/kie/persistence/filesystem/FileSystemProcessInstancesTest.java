@@ -34,6 +34,7 @@ import org.kie.kogito.process.ProcessInstanceReadMode;
 import org.kie.kogito.process.ProcessInstances;
 import org.kie.kogito.process.WorkItem;
 import org.kie.kogito.process.bpmn2.BpmnProcess;
+import org.kie.kogito.process.bpmn2.BpmnProcessInstance;
 import org.kie.kogito.process.bpmn2.BpmnVariables;
 import org.kie.kogito.process.impl.DefaultProcessEventListenerConfig;
 import org.kie.kogito.process.impl.DefaultWorkItemHandlerConfig;
@@ -82,7 +83,7 @@ class FileSystemProcessInstancesTest {
             }
         }
 
-        ProcessInstance<BpmnVariables> mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
+        ProcessInstance mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
 
         mutablePi.start();
         assertThat(mutablePi.status()).isEqualTo(STATE_ERROR);
@@ -92,12 +93,12 @@ class FileSystemProcessInstancesTest {
         });
         assertThat(mutablePi.variables().toMap()).containsExactly(entry("var", "value"));
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isOne();
-        ProcessInstance<BpmnVariables> pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
 
-        ProcessInstance<BpmnVariables> readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThat(readOnlyPi.status()).isEqualTo(STATE_ERROR);
         assertThat(readOnlyPi.error()).hasValueSatisfying(error -> {
             assertThat(error.errorMessage()).contains("java.lang.NullPointerException");
@@ -113,12 +114,12 @@ class FileSystemProcessInstancesTest {
     @Test
     void testValuesReadMode() {
         BpmnProcess process = createProcess(null, "BPMN2-UserTask.bpmn2");
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
         processInstance.start();
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isOne();
-        ProcessInstance<BpmnVariables> pi = instances.values().stream().findFirst().get();
+        ProcessInstance pi = instances.values().stream().findFirst().get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
         instances.values(ProcessInstanceReadMode.MUTABLE).stream().findFirst().get().abort();
         assertThat(instances.size()).isZero();
@@ -127,7 +128,7 @@ class FileSystemProcessInstancesTest {
     @Test
     void testBasicFlow() {
         BpmnProcess process = createProcess(null, "BPMN2-UserTask.bpmn2");
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        BpmnProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -161,7 +162,7 @@ class FileSystemProcessInstancesTest {
     @Test
     void testBasicFlowWithStartFrom() {
         BpmnProcess process = createProcess(null, "BPMN2-UserTask.bpmn2");
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        BpmnProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
         processInstance.startFrom("_2");
 
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -194,7 +195,7 @@ class FileSystemProcessInstancesTest {
         process.setProcessInstancesFactory(new FileSystemProcessInstancesFactory());
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        BpmnProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         UnitOfWork uow = uowManager.newUnitOfWork();
         uow.start();
@@ -235,7 +236,7 @@ class FileSystemProcessInstancesTest {
     private class FileSystemProcessInstancesFactory extends KogitoProcessInstancesFactory {
 
         @Override
-        public FileSystemProcessInstances createProcessInstances(Process<?> process) {
+        public FileSystemProcessInstances createProcessInstances(Process process) {
             FileSystemProcessInstances instances = spy(super.createProcessInstances(process));
             return instances;
         }

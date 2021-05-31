@@ -50,7 +50,7 @@ public class TaskManagementService implements TaskManagementOperations {
             TaskInfo taskInfo,
             boolean shouldReplace,
             Policy<?>... policies) {
-        ProcessInstance<?> pi = getProcessInstance(processId, processInstanceId, taskId);
+        ProcessInstance pi = getProcessInstance(processId, processInstanceId, taskId);
         KogitoWorkItem workItem = UnitOfWorkExecutor.executeInUnitOfWork(processConfig.unitOfWorkManager(),
                 () -> pi.updateWorkItem(taskId,
                         wi -> {
@@ -105,7 +105,7 @@ public class TaskManagementService implements TaskManagementOperations {
                 humanTask.getAdminGroups(), humanTask.getParameters());
     }
 
-    private ProcessInstance<?> getProcessInstance(String processId, String processInstanceId, String taskId) {
+    private ProcessInstance getProcessInstance(String processId, String processInstanceId, String taskId) {
         if (processId == null) {
             throw new IllegalArgumentException("Process id must be given");
         }
@@ -115,7 +115,7 @@ public class TaskManagementService implements TaskManagementOperations {
         if (taskId == null) {
             throw new IllegalArgumentException("Task id must be given");
         }
-        Process<?> process = processes.processById(processId);
+        Process process = processes.processById(processId);
         if (process == null) {
             throw new IllegalArgumentException(String.format("Process with id %s not found", processId));
         }

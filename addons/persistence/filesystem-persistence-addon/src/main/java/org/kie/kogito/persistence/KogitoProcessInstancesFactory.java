@@ -27,7 +27,7 @@ import org.kie.kogito.process.ProcessInstancesFactory;
  */
 public abstract class KogitoProcessInstancesFactory implements ProcessInstancesFactory {
 
-    public FileSystemProcessInstances createProcessInstances(Process<?> process) {
+    public FileSystemProcessInstances createProcessInstances(Process process) {
         return new FileSystemProcessInstances(process, Paths.get(path()));
     }
 

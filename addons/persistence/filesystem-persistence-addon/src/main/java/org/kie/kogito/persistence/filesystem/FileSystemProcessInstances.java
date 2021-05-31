@@ -48,16 +48,16 @@ public class FileSystemProcessInstances implements MutableProcessInstances {
     public static final String PI_DESCRIPTION = "ProcessInstanceDescription";
     public static final String PI_STATUS = "ProcessInstanceStatus";
 
-    private Process<?> process;
+    private Process process;
     private Path storage;
 
     private ProcessInstanceMarshallerService marshaller;
 
-    public FileSystemProcessInstances(Process<?> process, Path storage) {
+    public FileSystemProcessInstances(Process process, Path storage) {
         this(process, storage, ProcessInstanceMarshallerService.newBuilder().withDefaultObjectMarshallerStrategies().build());
     }
 
-    public FileSystemProcessInstances(Process<?> process, Path storage, ProcessInstanceMarshallerService marshaller) {
+    public FileSystemProcessInstances(Process process, Path storage, ProcessInstanceMarshallerService marshaller) {
         this.process = process;
         this.storage = Paths.get(storage.toString(), process.id());
         this.marshaller = marshaller;
@@ -141,7 +141,7 @@ public class FileSystemProcessInstances implements MutableProcessInstances {
         }
     }
 
-    protected void storeProcessInstance(Path processInstanceStorage, ProcessInstance<?> instance) {
+    protected void storeProcessInstance(Path processInstanceStorage, ProcessInstance instance) {
         try {
             byte[] data = marshaller.marshallProcessInstance(instance);
             Files.write(processInstanceStorage, data);
@@ -164,7 +164,7 @@ public class FileSystemProcessInstances implements MutableProcessInstances {
 
     protected void disconnect(Path processInstanceStorage, ProcessInstance instance) {
         Supplier<byte[]> supplier = () -> readBytesFromFile(processInstanceStorage);
-        ((AbstractProcessInstance<?>) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
+        ((AbstractProcessInstance) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
     }
 
     public String getMetadata(Path file, String key) {

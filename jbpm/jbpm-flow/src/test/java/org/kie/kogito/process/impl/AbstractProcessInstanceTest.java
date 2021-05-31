@@ -57,14 +57,14 @@ public class AbstractProcessInstanceTest {
     @Mock
     private UnitOfWork unitOfWork;
 
-    private AbstractProcessInstance<TestModel> processInstance;
+    private AbstractProcessInstance processInstance;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     private void setup() {
         MockitoAnnotations.initMocks(this);
 
-        AbstractProcess<TestModel> process = mock(AbstractProcess.class);
+        AbstractProcess process = mock(AbstractProcess.class);
         when(process.process()).thenReturn(mock(Process.class));
         InternalProcessRuntime pr = mock(InternalProcessRuntime.class);
         when(pr.createProcessInstance(any(), any(), any())).thenReturn(wpi);
@@ -120,9 +120,9 @@ public class AbstractProcessInstanceTest {
         return nodeInstance;
     }
 
-    static class TestProcessInstance extends AbstractProcessInstance<TestModel> {
+    static class TestProcessInstance extends AbstractProcessInstance {
 
-        public TestProcessInstance(AbstractProcess<TestModel> process, TestModel variables, InternalProcessRuntime rt) {
+        public TestProcessInstance(AbstractProcess process, TestModel variables, InternalProcessRuntime rt) {
             super(process, variables, rt);
         }
     }

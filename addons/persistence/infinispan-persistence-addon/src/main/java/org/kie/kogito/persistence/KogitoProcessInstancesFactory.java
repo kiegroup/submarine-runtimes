@@ -32,7 +32,7 @@ public abstract class KogitoProcessInstancesFactory implements ProcessInstancesF
         this.cacheManager = cacheManager;
     }
 
-    public CacheProcessInstances createProcessInstances(Process<?> process) {
+    public CacheProcessInstances createProcessInstances(Process process) {
         return new CacheProcessInstances(process, cacheManager, template());
     }
 

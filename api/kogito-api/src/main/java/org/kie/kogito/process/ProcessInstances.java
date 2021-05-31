@@ -18,19 +18,19 @@ package org.kie.kogito.process;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface ProcessInstances<T> {
+public interface ProcessInstances {
 
-    default Optional<ProcessInstance<T>> findById(String id) {
+    default Optional<ProcessInstance> findById(String id) {
         return findById(id, ProcessInstanceReadMode.MUTABLE);
     }
 
-    Optional<ProcessInstance<T>> findById(String id, ProcessInstanceReadMode mode);
+    Optional<ProcessInstance> findById(String id, ProcessInstanceReadMode mode);
 
-    default Collection<ProcessInstance<T>> values() {
+    default Collection<ProcessInstance> values() {
         return values(ProcessInstanceReadMode.READ_ONLY);
     }
 
-    Collection<ProcessInstance<T>> values(ProcessInstanceReadMode mode);
+    Collection<ProcessInstance> values(ProcessInstanceReadMode mode);
 
     Integer size();
 }

@@ -72,7 +72,7 @@ public class JsonSchemaUtil {
         });
     }
 
-    public static <T> Map<String, Object> addPhases(Process<T> process,
+    public static <T> Map<String, Object> addPhases(Process process,
             KogitoWorkItemHandler workItemHandler,
             String processInstanceId,
             String workItemId,

@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 public class $Type$Resource {
 
-    Process<$Type$> process;
+    Process process;
 
     @PostMapping(value = "/{id}/$signalPath$", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public $Type$Output signal(@PathVariable("id") final String id, final @RequestBody(required = false) $signalType$ data) {
-        return processService.signalProcessInstance(process, id, data, "$signalName$")
+        return processService.signalProcessInstance(process, id, data, "$signalName$", $Type$Output.class)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

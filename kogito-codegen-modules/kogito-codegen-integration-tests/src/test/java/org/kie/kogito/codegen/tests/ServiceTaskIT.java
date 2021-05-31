@@ -41,14 +41,14 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcess");
+        Process p = app.get(Processes.class).processById("ServiceProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("s", "john");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.startDate()).isNotNull();
@@ -64,14 +64,14 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcessDifferentOperations.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
+        Process p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("s", "john");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.startDate()).isNotNull();
@@ -87,14 +87,14 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcessDifferentOperations.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
+        Process p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("s", "john");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.startFrom("_A1EE8114-BF7B-4DAF-ABD7-62EEDCFAEFD4");
 
         assertThat(processInstance.startDate()).isNotNull();
@@ -110,14 +110,14 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcessSameOperations.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcessSameOperations");
+        Process p = app.get(Processes.class).processById("ServiceProcessSameOperations");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("s", "john");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -132,7 +132,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcessMI.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcess");
+        Process p = app.get(Processes.class).processById("ServiceProcess");
 
         List<String> list = new ArrayList<String>();
         list.add("first");
@@ -145,7 +145,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         parameters.put("listOut", listOut);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -173,7 +173,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/MultiParamServiceProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcess");
+        Process p = app.get(Processes.class).processById("ServiceProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -181,7 +181,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         parameters.put("x", "doe");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -196,7 +196,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/MultiParamServiceProcessConstant.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcess");
+        Process p = app.get(Processes.class).processById("ServiceProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -204,7 +204,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         parameters.put("x", "doe");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -219,7 +219,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/MultiParamServiceProcessNoOutput.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("MultiParamServiceProcessNoOutput");
+        Process p = app.get(Processes.class).processById("MultiParamServiceProcessNoOutput");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -227,7 +227,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         parameters.put("age", 35);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -242,7 +242,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/MultiParamCustomResultServiceTask.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("services");
+        Process p = app.get(Processes.class).processById("services");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -250,7 +250,7 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         parameters.put("age", 35);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -267,8 +267,8 @@ public class ServiceTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceProcessOverloaded.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcessOverloaded");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("ServiceProcessOverloaded");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

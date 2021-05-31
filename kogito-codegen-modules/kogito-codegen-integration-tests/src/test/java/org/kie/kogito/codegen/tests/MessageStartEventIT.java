@@ -36,14 +36,14 @@ public class MessageStartEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messagestartevent/MessageStartEvent.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("MessageStartEvent");
+        Process p = app.get(Processes.class).processById("MessageStartEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("customerId", "CUS-00998877");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start("customers", null);
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -58,14 +58,14 @@ public class MessageStartEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messagestartevent/MessageStartAndEndEvent.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("MessageStartEvent");
+        Process p = app.get(Processes.class).processById("MessageStartEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("customerId", "CUS-00998877");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start("customers", null);
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -80,14 +80,14 @@ public class MessageStartEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messagestartevent/NoneAndMessageStartEvent.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("MessageStartEvent");
+        Process p = app.get(Processes.class).processById("MessageStartEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("customerId", "CUS-00998877");
         m.fromMap(parameters);
         // first start it via none start event
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

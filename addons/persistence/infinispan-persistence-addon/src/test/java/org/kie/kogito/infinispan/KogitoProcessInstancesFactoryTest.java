@@ -45,20 +45,25 @@ class KogitoProcessInstancesFactoryTest {
         KogitoProcessInstancesFactory factory = new KogitoProcessInstancesFactory(cacheManager) {
 
         };
-        Process<?> myProcess = new MyProcessImpl();
+        Process myProcess = new MyProcessImpl();
         CacheProcessInstances instances = factory.createProcessInstances(myProcess);
         assertNotNull(instances);
     }
 
-    private static class MyProcessImpl extends AbstractProcess<Model> {
+    private static class MyProcessImpl extends AbstractProcess {
 
         @Override
-        public ProcessInstance<Model> createInstance(WorkflowProcessInstance wpi) {
+        public ProcessInstance createInstance(WorkflowProcessInstance wpi) {
             return null;
         }
 
         @Override
-        public ProcessInstance<Model> createReadOnlyInstance(WorkflowProcessInstance wpi) {
+        public ProcessInstance createInstance(String businessKey, Model workingMemory) {
+            return null;
+        }
+
+        @Override
+        public ProcessInstance createReadOnlyInstance(WorkflowProcessInstance wpi) {
             return null;
         }
 
@@ -68,9 +73,10 @@ class KogitoProcessInstancesFactoryTest {
         }
 
         @Override
-        public ProcessInstance<Model> createInstance(Model workingMemory) {
+        public ProcessInstance createInstance(Model workingMemory) {
             return null;
         }
+
     }
 
     List<BaseMarshaller<?>> getMarshallers() {

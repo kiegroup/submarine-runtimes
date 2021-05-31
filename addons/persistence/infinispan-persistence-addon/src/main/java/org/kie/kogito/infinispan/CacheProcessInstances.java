@@ -37,9 +37,9 @@ public class CacheProcessInstances implements MutableProcessInstances {
 
     private final RemoteCache<String, byte[]> cache;
     private ProcessInstanceMarshallerService marshaller;
-    private org.kie.kogito.process.Process<?> process;
+    private org.kie.kogito.process.Process process;
 
-    public CacheProcessInstances(Process<?> process, RemoteCacheManager cacheManager, String templateName) {
+    public CacheProcessInstances(Process process, RemoteCacheManager cacheManager, String templateName) {
         this.process = process;
         this.cache = cacheManager.administration().getOrCreateCache(process.id() + "_store", ignoreNullOrEmpty(templateName));
         this.marshaller = ProcessInstanceMarshallerService.newBuilder().withDefaultObjectMarshallerStrategies().build();
@@ -51,7 +51,7 @@ public class CacheProcessInstances implements MutableProcessInstances {
     }
 
     @Override
-    public Optional<? extends ProcessInstance> findById(String id, ProcessInstanceReadMode mode) {
+    public Optional<ProcessInstance> findById(String id, ProcessInstanceReadMode mode) {
         byte[] data = cache.get(id);
         if (data == null) {
             return Optional.empty();
@@ -61,7 +61,7 @@ public class CacheProcessInstances implements MutableProcessInstances {
     }
 
     @Override
-    public Collection<? extends ProcessInstance> values(ProcessInstanceReadMode mode) {
+    public Collection<ProcessInstance> values(ProcessInstanceReadMode mode) {
         return cache.values()
                 .parallelStream()
                 .map(data -> mode == MUTABLE ? marshaller.unmarshallProcessInstance(data, process) : marshaller.unmarshallReadOnlyProcessInstance(data, process))
@@ -105,7 +105,7 @@ public class CacheProcessInstances implements MutableProcessInstances {
                 cache.put(id, data);
             }
             Supplier<byte[]> supplier = () -> cache.get(id);
-            ((AbstractProcessInstance<?>) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
+            ((AbstractProcessInstance) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
         }
     }
 

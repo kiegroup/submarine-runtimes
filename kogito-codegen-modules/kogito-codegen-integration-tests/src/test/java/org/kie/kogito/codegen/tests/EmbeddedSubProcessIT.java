@@ -40,13 +40,13 @@ public class EmbeddedSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/EmbeddedSubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("SubProcess");
+        Process p = app.get(Processes.class).processById("SubProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -58,14 +58,14 @@ public class EmbeddedSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/EmbeddedSubProcessWithUserTask.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("embeddedWithUserTask");
+        Process p = app.get(Processes.class).processById("embeddedWithUserTask");
         Person person = new Person("john", 25);
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("person", person);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);

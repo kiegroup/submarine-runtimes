@@ -38,6 +38,7 @@ import org.kie.kogito.process.ProcessInstanceReadMode;
 import org.kie.kogito.process.ProcessInstances;
 import org.kie.kogito.process.WorkItem;
 import org.kie.kogito.process.bpmn2.BpmnProcess;
+import org.kie.kogito.process.bpmn2.BpmnProcessInstance;
 import org.kie.kogito.process.bpmn2.BpmnVariables;
 import org.kie.kogito.services.identity.StaticIdentityProvider;
 import org.kie.kogito.testcontainers.KogitoMongoDBContainer;
@@ -108,13 +109,13 @@ class MongoDBProcessInstancesIT {
         testMap.put("2", "string");
         testMap.put("map", map);
         parameters.put("testMap", testMap);
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(parameters));
+        BpmnProcessInstance processInstance = process.createInstance(BpmnVariables.create(parameters));
 
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
         assertThat(processInstance.description()).isEqualTo("User Task");
 
-        Collection<? extends ProcessInstance<BpmnVariables>> values = process.instances().values();
+        Collection<? extends ProcessInstance> values = process.instances().values();
         assertThat(values).hasSize(1);
 
         String testVar = (String) processInstance.variables().get("test");
@@ -150,7 +151,7 @@ class MongoDBProcessInstancesIT {
         process.setProcessInstancesFactory(new MongoDBProcessInstancesFactory(mongoClient));
         process.configure();
 
-        ProcessInstance<BpmnVariables> mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
+        ProcessInstance mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
 
         mutablePi.start();
         assertThat(mutablePi.status()).isEqualTo(STATE_ERROR);
@@ -160,12 +161,12 @@ class MongoDBProcessInstancesIT {
         });
         assertThat(mutablePi.variables().toMap()).containsExactly(entry("var", "value"));
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isOne();
-        ProcessInstance<BpmnVariables> pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
 
-        ProcessInstance<BpmnVariables> readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThat(readOnlyPi.status()).isEqualTo(STATE_ERROR);
         assertThat(readOnlyPi.error()).hasValueSatisfying(error -> {
             assertThat(error.errorMessage()).endsWith("java.lang.NullPointerException - null");
@@ -184,13 +185,13 @@ class MongoDBProcessInstancesIT {
         process.setProcessInstancesFactory(new MongoDBProcessInstancesFactory(mongoClient));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         processInstance.start();
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isOne();
-        ProcessInstance<BpmnVariables> pi = instances.values().stream().findFirst().get();
+        ProcessInstance pi = instances.values().stream().findFirst().get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
         instances.values(ProcessInstanceReadMode.MUTABLE).stream().findFirst().get().abort();
         assertThat(instances.size()).isZero();

@@ -79,13 +79,13 @@ public class UserTaskIT extends AbstractCodegenIT {
             }
         });
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(KogitoProcessInstance.STATE_ACTIVE);
@@ -113,13 +113,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -152,13 +152,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -205,13 +205,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -272,13 +272,13 @@ public class UserTaskIT extends AbstractCodegenIT {
             }
         });
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -327,13 +327,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -391,13 +391,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/approval.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertEquals(KogitoProcessInstance.STATE_ACTIVE, processInstance.status());
 
@@ -432,13 +432,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/approval.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertEquals(KogitoProcessInstance.STATE_ACTIVE, processInstance.status());
 
@@ -472,13 +472,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -525,13 +525,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -577,13 +577,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -663,7 +663,7 @@ public class UserTaskIT extends AbstractCodegenIT {
         assertThat(approverField).isNotNull();
         assertThat(approverField.getType().getCanonicalName()).isEqualTo(String.class.getCanonicalName());
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -697,13 +697,13 @@ public class UserTaskIT extends AbstractCodegenIT {
         // internal variables are not exposed on the model
         assertThrows(NoSuchFieldException.class, () -> resourceClazz.getDeclaredField("approver"));
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertEquals(KogitoProcessInstance.STATE_ACTIVE, processInstance.status());
 
@@ -718,14 +718,14 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/approval-with-required-variable-tags.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
         assertThrows(VariableViolationException.class, () -> {
-            ProcessInstance<?> processInstance = p.createInstance(m);
+            ProcessInstance processInstance = p.createInstance(m);
             processInstance.start();
         });
     }
@@ -753,14 +753,14 @@ public class UserTaskIT extends AbstractCodegenIT {
         assertNotNull(outputModelClazz.getDeclaredField("id"));
         assertThrows(NoSuchFieldException.class, () -> outputModelClazz.getDeclaredField("approver"));
 
-        Process<? extends Model> p = app.get(Processes.class).processById("approvals");
+        Process p = app.get(Processes.class).processById("approvals");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("approver", "mary");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertEquals(KogitoProcessInstance.STATE_ACTIVE, processInstance.status());
 
@@ -775,14 +775,14 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTaskWithIOexpression.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTask");
+        Process p = app.get(Processes.class).processById("UserTask");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("person", new Person("john", 0));
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -806,7 +806,7 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -814,7 +814,7 @@ public class UserTaskIT extends AbstractCodegenIT {
 
         // assign custom business key for process instance
         String businessKey = "business key";
-        ProcessInstance<?> processInstance = p.createInstance(businessKey, m);
+        ProcessInstance processInstance = p.createInstance(businessKey, m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -822,7 +822,7 @@ public class UserTaskIT extends AbstractCodegenIT {
         assertThat(processInstance.businessKey()).isEqualTo(businessKey);
 
         // find the process instance by ID and verify business key
-        Optional<? extends ProcessInstance<? extends Model>> processInstanceByBussinesKey = p.instances().findById(processInstance.id());
+        Optional<? extends ProcessInstance> processInstanceByBussinesKey = p.instances().findById(processInstance.id());
         assertThat(processInstanceByBussinesKey.isPresent()).isTrue();
         assertThat(processInstanceByBussinesKey.get().businessKey()).isEqualTo(businessKey);
 
@@ -847,7 +847,7 @@ public class UserTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -855,7 +855,7 @@ public class UserTaskIT extends AbstractCodegenIT {
 
         // assign custom business key for process instance
         String businessKey = "business key";
-        ProcessInstance<?> processInstance = p.createInstance(businessKey, m);
+        ProcessInstance processInstance = p.createInstance(businessKey, m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -863,7 +863,7 @@ public class UserTaskIT extends AbstractCodegenIT {
         assertThat(processInstance.businessKey()).isEqualTo(businessKey);
 
         // start another process instance with assigned duplicated business key of already active instance
-        ProcessInstance<? extends Model> otherProcessInstance = p.createInstance(businessKey, m);
+        ProcessInstance otherProcessInstance = p.createInstance(businessKey, m);
         assertThat(otherProcessInstance.id()).isNotEqualTo(processInstance.id());
         assertThat(otherProcessInstance.businessKey()).isEqualTo(processInstance.businessKey()).isEqualTo(businessKey);
     }

@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.kie.kogito.Model;
 import org.kie.kogito.internal.process.runtime.KogitoNodeInstance;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItem;
 import org.kie.kogito.process.flexible.AdHocFragment;
@@ -31,7 +32,7 @@ import org.kie.kogito.process.flexible.Milestone;
 import org.kie.kogito.process.workitem.Policy;
 import org.kie.kogito.process.workitem.Transition;
 
-public interface ProcessInstance<T> {
+public interface ProcessInstance {
 
     int STATE_PENDING = 0;
     int STATE_ACTIVE = 1;
@@ -45,7 +46,7 @@ public interface ProcessInstance<T> {
      *
      * @return process definition of this process instance
      */
-    Process<T> process();
+    Process process();
 
     /**
      * Starts process instance
@@ -92,12 +93,12 @@ public interface ProcessInstance<T> {
      *
      * @return variables of the process instance
      */
-    T variables();
+    Model variables();
 
     /**
      * Updates process variables of this process instance
      */
-    T updateVariables(T updates);
+    Model updateVariables(Model updates);
 
     /**
      * Returns current status of this process instance
@@ -201,7 +202,7 @@ public interface ProcessInstance<T> {
      */
     Optional<ProcessError> error();
 
-    default ProcessInstance<T> checkError() {
+    default ProcessInstance checkError() {
         Optional<ProcessError> error = error();
         if (error.isPresent()) {
             throw new ProcessInstanceExecutionException(id(), error.get().failedNodeId(), error.get().errorMessage());

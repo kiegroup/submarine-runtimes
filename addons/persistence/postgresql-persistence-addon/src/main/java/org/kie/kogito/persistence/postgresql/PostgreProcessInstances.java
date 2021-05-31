@@ -54,13 +54,13 @@ public class PostgreProcessInstances implements MutableProcessInstances {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgreProcessInstances.class);
 
-    private final Process<?> process;
+    private final Process process;
     private final PgPool client;
     private final ProcessInstanceMarshallerService marshaller;
     private final boolean autoDDL;
     private final Long queryTimeoutMillis;
 
-    public PostgreProcessInstances(Process<?> process, PgPool client, boolean autoDDL, Long queryTimeoutMillis) {
+    public PostgreProcessInstances(Process process, PgPool client, boolean autoDDL, Long queryTimeoutMillis) {
         this.process = process;
         this.client = client;
         this.autoDDL = autoDDL;
@@ -108,7 +108,7 @@ public class PostgreProcessInstances implements MutableProcessInstances {
 
     private void disconnect(ProcessInstance instance) {
         Supplier<byte[]> supplier = () -> findByIdInternal(UUID.fromString(instance.id())).get();
-        ((AbstractProcessInstance<?>) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
+        ((AbstractProcessInstance) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
     }
 
     private boolean insertInternal(UUID id, byte[] payload) {

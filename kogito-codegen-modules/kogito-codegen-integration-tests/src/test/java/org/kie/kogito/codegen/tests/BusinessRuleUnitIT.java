@@ -70,12 +70,12 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         Application app = generateCode(resourcesTypeMap);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleUnit");
+        Process p = app.get(Processes.class).processById("BusinessRuleUnit");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -101,12 +101,12 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
             }
 
         });
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleUnit");
+        Process p = app.get(Processes.class).processById("BusinessRuleUnit");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -138,12 +138,12 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleUnit");
+        Process p = app.get(Processes.class).processById("BusinessRuleUnit");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -164,7 +164,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleP.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Example.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleP");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleP");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -174,7 +174,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 
@@ -205,7 +205,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleGenerated.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Generated.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -215,7 +215,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 
@@ -238,7 +238,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleGenerated.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Generated.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -246,7 +246,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 
@@ -270,7 +270,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleGenerated.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Generated.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleGenerated");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -278,7 +278,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 
@@ -313,7 +313,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleP.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Example.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleP");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleP");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -322,7 +322,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 
@@ -343,7 +343,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
         resourcesTypeMap.put(TYPE.PROCESS, Collections.singletonList("ruletask/ExampleP.bpmn"));
         resourcesTypeMap.put(TYPE.RULES, Collections.singletonList("ruletask/Example.drl"));
         Application app = generateCode(resourcesTypeMap);
-        Process<? extends Model> process = app.get(Processes.class).processById("ruletask.ExampleP");
+        Process process = app.get(Processes.class).processById("ruletask.ExampleP");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("singleString", "hello");
@@ -352,7 +352,7 @@ public class BusinessRuleUnitIT extends AbstractCodegenIT {
 
         Model model = process.createModel();
         model.fromMap(map);
-        ProcessInstance<? extends Model> instance = process.createInstance(model);
+        ProcessInstance instance = process.createInstance(model);
         Model variables = instance.variables();
         Map<String, Object> result = variables.toMap();
 

@@ -31,10 +31,10 @@ import org.kie.kogito.process.ProcessInstance;
 
 public interface ProcessInstanceMarshaller {
 
-    void writeProcessInstance(MarshallerWriterContext context, ProcessInstance<?> processInstance) throws IOException;
+    void writeProcessInstance(MarshallerWriterContext context, ProcessInstance processInstance) throws IOException;
 
-    ProcessInstance<?> readProcessInstance(MarshallerReaderContext context) throws IOException;
+    ProcessInstance readProcessInstance(MarshallerReaderContext context) throws IOException;
 
-    void reloadProcessInstance(MarshallerReaderContext context, ProcessInstance<?> processInstance) throws IOException;
+    void reloadProcessInstance(MarshallerReaderContext context, ProcessInstance processInstance) throws IOException;
 
 }

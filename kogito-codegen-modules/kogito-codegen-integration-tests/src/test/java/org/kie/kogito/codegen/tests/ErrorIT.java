@@ -22,7 +22,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.kie.api.event.process.ProcessNodeLeftEvent;
 import org.kie.kogito.Application;
-import org.kie.kogito.Model;
 import org.kie.kogito.codegen.AbstractCodegenIT;
 import org.kie.kogito.internal.process.event.DefaultKogitoProcessEventListener;
 import org.kie.kogito.internal.process.event.KogitoProcessEventListener;
@@ -44,8 +43,8 @@ public class ErrorIT extends AbstractCodegenIT {
 
         List<String> completedNodesNames = completedNodesListener(app);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("EndError");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("EndError");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         assertState(processInstance, ProcessInstance.STATE_PENDING);
 
         processInstance.start();
@@ -83,8 +82,8 @@ public class ErrorIT extends AbstractCodegenIT {
 
         List<String> completedNames = completedNodesListener(app);
 
-        Process<? extends Model> p = app.get(Processes.class).processById(processId);
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById(processId);
+        ProcessInstance processInstance = p.createInstance(p.createModel());
 
         assertState(processInstance, ProcessInstance.STATE_PENDING);
 

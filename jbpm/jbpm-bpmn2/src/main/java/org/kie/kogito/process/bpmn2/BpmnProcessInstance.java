@@ -19,29 +19,35 @@ import java.util.Map;
 
 import org.jbpm.process.instance.InternalProcessRuntime;
 import org.kie.api.runtime.process.WorkflowProcessInstance;
+import org.kie.kogito.Model;
 import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.process.impl.AbstractProcessInstance;
 
-public class BpmnProcessInstance extends AbstractProcessInstance<BpmnVariables> {
+public class BpmnProcessInstance extends AbstractProcessInstance {
 
-    public BpmnProcessInstance(AbstractProcess<BpmnVariables> process, BpmnVariables variables, InternalProcessRuntime rt) {
+    public BpmnProcessInstance(AbstractProcess process, BpmnVariables variables, InternalProcessRuntime rt) {
         super(process, variables, rt);
     }
 
-    public BpmnProcessInstance(AbstractProcess<BpmnVariables> process, BpmnVariables variables, WorkflowProcessInstance wpi) {
+    public BpmnProcessInstance(AbstractProcess process, BpmnVariables variables, WorkflowProcessInstance wpi) {
         super(process, variables, wpi);
     }
 
-    public BpmnProcessInstance(AbstractProcess<BpmnVariables> process, BpmnVariables variables, InternalProcessRuntime rt, WorkflowProcessInstance wpi) {
+    public BpmnProcessInstance(AbstractProcess process, BpmnVariables variables, InternalProcessRuntime rt, WorkflowProcessInstance wpi) {
         super(process, variables, rt, wpi);
     }
 
-    public BpmnProcessInstance(AbstractProcess<BpmnVariables> process, BpmnVariables variables, String businessKey, InternalProcessRuntime rt) {
+    public BpmnProcessInstance(AbstractProcess process, BpmnVariables variables, String businessKey, InternalProcessRuntime rt) {
         super(process, variables, businessKey, rt);
     }
 
     @Override
-    protected Map<String, Object> bind(BpmnVariables variables) {
+    public BpmnVariables variables() {
+        return (BpmnVariables) super.variables();
+    }
+
+    @Override
+    protected Map<String, Object> bind(Model variables) {
         if (variables == null) {
             return null;
         }
@@ -49,7 +55,7 @@ public class BpmnProcessInstance extends AbstractProcessInstance<BpmnVariables> 
     }
 
     @Override
-    protected void unbind(BpmnVariables variables, Map<String, Object> vmap) {
+    protected void unbind(Model variables, Map<String, Object> vmap) {
         if (variables == null || vmap == null) {
             return;
         }

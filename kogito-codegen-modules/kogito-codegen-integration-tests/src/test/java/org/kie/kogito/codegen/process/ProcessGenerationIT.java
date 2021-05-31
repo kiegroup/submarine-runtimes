@@ -64,7 +64,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.kie.api.definition.process.Connection;
 import org.kie.api.definition.process.Node;
 import org.kie.kogito.Application;
-import org.kie.kogito.Model;
 import org.kie.kogito.codegen.AbstractCodegenIT;
 import org.kie.kogito.process.Processes;
 import org.kie.kogito.process.impl.AbstractProcess;
@@ -129,7 +128,7 @@ public class ProcessGenerationIT extends AbstractCodegenIT {
         RuleFlowProcess expected = (RuleFlowProcess) processes.get(0);
 
         Application app = generateCodeProcessesOnly(processFile);
-        AbstractProcess<? extends Model> process = (AbstractProcess<? extends Model>) app.get(Processes.class).processById(expected.getId());
+        AbstractProcess process = (AbstractProcess) app.get(Processes.class).processById(expected.getId());
         assertThat(process).isNotNull().isSameAs(app.get(Processes.class).processById(expected.getId()));
 
         RuleFlowProcess current = (RuleFlowProcess) process.process();

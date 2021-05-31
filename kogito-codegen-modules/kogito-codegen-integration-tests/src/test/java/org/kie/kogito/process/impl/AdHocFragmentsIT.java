@@ -47,8 +47,8 @@ class AdHocFragmentsIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/AdHocFragments.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.AdHocFragments");
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("TestCase.AdHocFragments");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         Collection<AdHocFragment> adHocFragments = processInstance.adHocFragments();
         List<AdHocFragment> expected = new ArrayList<>();
         expected.add(new AdHocFragment.Builder(MilestoneNode.class).withName("AdHoc Milestone").withAutoStart(true).build());
@@ -64,8 +64,8 @@ class AdHocFragmentsIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/AdHocFragments.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.AdHocFragments");
-        ProcessInstance<? extends Model> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("TestCase.AdHocFragments");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         Optional<WorkItem> workItem = processInstance.workItems().stream().filter(wi -> wi.getParameters().get("NodeName").equals(taskName)).findFirst();
@@ -85,8 +85,8 @@ class AdHocFragmentsIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/AdHocFragments.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.AdHocFragments");
-        ProcessInstance<? extends Model> processInstance = p.createInstance(p.createModel());
+        Process p = app.get(Processes.class).processById("TestCase.AdHocFragments");
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
         Map<String, Object> params = new HashMap<>();
         params.put("user", "Juan");
@@ -103,13 +103,13 @@ class AdHocFragmentsIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/AdHocProcess.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("AdHocProcess");
+        Process p = app.get(Processes.class).processById("AdHocProcess");
         Model model = p.createModel();
         Map<String, Object> params = new HashMap<>();
         params.put("var1", "Pablo");
         params.put("var2", "Luis");
         model.fromMap(params);
-        ProcessInstance<? extends Model> processInstance = p.createInstance(model);
+        ProcessInstance processInstance = p.createInstance(model);
 
         processInstance.start();
 

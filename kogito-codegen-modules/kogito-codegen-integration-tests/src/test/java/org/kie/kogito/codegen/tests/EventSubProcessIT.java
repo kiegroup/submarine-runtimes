@@ -38,13 +38,13 @@ public class EventSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("event-subprocess/EventSubprocessSignal.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("EventSubprocessSignal");
+        Process p = app.get(Processes.class).processById("EventSubprocessSignal");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -60,13 +60,13 @@ public class EventSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("event-subprocess/EventSubprocessSignalWithData.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("EventSubprocessSignal");
+        Process p = app.get(Processes.class).processById("EventSubprocessSignal");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);

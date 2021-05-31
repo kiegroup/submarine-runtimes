@@ -37,21 +37,21 @@ public class SubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/SubProcess.bpmn", "subprocess/ParentProcess.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> parent = app.get(Processes.class).processById("parent");
-        Process<? extends Model> subProcess = app.get(Processes.class).processById("subprocess");
+        Process parent = app.get(Processes.class).processById("parent");
+        Process subProcess = app.get(Processes.class).processById("subprocess");
 
         Model m = parent.createModel();
         m.fromMap(Collections.singletonMap("name", "test"));
 
-        ProcessInstance<? extends Model> processInstance = parent.createInstance(m);
+        ProcessInstance processInstance = parent.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
 
-        Collection<? extends ProcessInstance<? extends Model>> instances = subProcess.instances().values();
+        Collection<? extends ProcessInstance> instances = subProcess.instances().values();
         assertThat(instances).hasSize(1);
 
-        ProcessInstance<? extends Model> subProcessInstance = instances.iterator().next();
+        ProcessInstance subProcessInstance = instances.iterator().next();
         assertThat(subProcessInstance.variables().toMap()).hasSize(3).contains(
                 entry("constant", "aString"), entry("name", "test"), entry("review", null));
 

@@ -43,12 +43,12 @@ class PersistentProcessInstancesIT extends TestHelper {
         process.setProcessInstancesFactory(new MongoDBProcessInstancesFactory(getMongoClient()));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         processInstance.start();
         assertEquals(STATE_ACTIVE, processInstance.status());
 
-        MongoDBProcessInstances<?> mongodbInstance = new MongoDBProcessInstances<>(getMongoClient(), process, DB_NAME);
+        MongoDBProcessInstances mongodbInstance = new MongoDBProcessInstances(getMongoClient(), process, DB_NAME);
 
         assertThat(mongodbInstance.size()).isOne();
         assertThat(mongodbInstance.size()).isEqualTo(process.instances().size());
@@ -62,7 +62,7 @@ class PersistentProcessInstancesIT extends TestHelper {
         assertThat(mongodbInstance.exists(processInstance.id())).isTrue();
         assertThat(mongodbInstance.values().size()).isOne();
 
-        ProcessInstance<?> readOnlyPI = mongodbInstance.findById(processInstance.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance readOnlyPI = mongodbInstance.findById(processInstance.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertNotNull(readOnlyPI, "ProcessInstanceDocument cannot be null");
         assertThat(mongodbInstance.values(ProcessInstanceReadMode.READ_ONLY).size()).isOne();
 

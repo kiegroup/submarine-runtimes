@@ -187,7 +187,7 @@ public class InMemoryJobService implements JobsService {
 
         private Integer limit;
 
-        private StartProcessOnExpiredTimer(String id, org.kie.kogito.process.Process<?> process, boolean removeAtExecution, Integer limit) {
+        private StartProcessOnExpiredTimer(String id, org.kie.kogito.process.Process process, boolean removeAtExecution, Integer limit) {
             this.id = id;
             this.process = process;
             this.removeAtExecution = removeAtExecution;
@@ -200,7 +200,7 @@ public class InMemoryJobService implements JobsService {
             try {
                 LOGGER.debug("Job {} started", id);
                 UnitOfWorkExecutor.executeInUnitOfWork(unitOfWorkManager, () -> {
-                    org.kie.kogito.process.ProcessInstance<?> pi = process.createInstance(process.createModel());
+                    org.kie.kogito.process.ProcessInstance pi = process.createInstance(process.createModel());
                     if (pi != null) {
                         pi.start(TRIGGER, null);
                     }

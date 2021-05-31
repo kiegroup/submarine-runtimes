@@ -107,7 +107,7 @@ public class MockCacheProcessInstancesTest {
         process.setProcessInstancesFactory(new CacheProcessInstancesFactory(cacheManager));
         process.configure();
 
-        ProcessInstance<BpmnVariables> mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
+        ProcessInstance mutablePi = process.createInstance(BpmnVariables.create(Collections.singletonMap("var", "value")));
 
         mutablePi.start();
         assertThat(mutablePi.status()).isEqualTo(STATE_ERROR);
@@ -117,12 +117,12 @@ public class MockCacheProcessInstancesTest {
         });
         assertThat(mutablePi.variables().toMap()).containsExactly(entry("var", "value"));
 
-        ProcessInstances<BpmnVariables> instances = process.instances();
+        ProcessInstances instances = process.instances();
         assertThat(instances.size()).isOne();
-        ProcessInstance<BpmnVariables> pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance pi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> pi.abort());
 
-        ProcessInstance<BpmnVariables> readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
+        ProcessInstance readOnlyPi = instances.findById(mutablePi.id(), ProcessInstanceReadMode.READ_ONLY).get();
         assertThat(readOnlyPi.status()).isEqualTo(STATE_ERROR);
         assertThat(readOnlyPi.error()).hasValueSatisfying(error -> {
             assertThat(error.errorMessage()).contains("java.lang.NullPointerException");
@@ -141,7 +141,7 @@ public class MockCacheProcessInstancesTest {
         process.setProcessInstancesFactory(new CacheProcessInstancesFactory(cacheManager));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -159,7 +159,7 @@ public class MockCacheProcessInstancesTest {
         process.setProcessInstancesFactory(new CacheProcessInstancesFactory(cacheManager));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -181,7 +181,7 @@ public class MockCacheProcessInstancesTest {
         process.setProcessInstancesFactory(new CacheProcessInstancesFactory(cacheManager));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create(Collections.singletonMap("test", "test")));
 
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(STATE_ACTIVE);
@@ -189,7 +189,7 @@ public class MockCacheProcessInstancesTest {
 
         assertThatThrownBy(() -> processInstance.workItems().get(0)).isInstanceOf(ProcessInstanceNotFoundException.class);
 
-        Optional<? extends ProcessInstance<BpmnVariables>> loaded = process.instances().findById(processInstance.id());
+        Optional<? extends ProcessInstance> loaded = process.instances().findById(processInstance.id());
         assertThat(loaded).isNotPresent();
     }
 
@@ -209,7 +209,7 @@ public class MockCacheProcessInstancesTest {
         });
     }
 
-    private void testBasicFlowWithError(Consumer<ProcessInstance<BpmnVariables>> op) {
+    private void testBasicFlowWithError(Consumer<ProcessInstance> op) {
         BpmnProcess process = BpmnProcess.from(new ClassPathResource("BPMN2-UserTask-Script.bpmn2")).get(0);
         // workaround as BpmnProcess does not compile the scripts but just reads the xml
         for (Node node : ((WorkflowProcess) process.process()).getNodes()) {
@@ -225,7 +225,7 @@ public class MockCacheProcessInstancesTest {
         process.setProcessInstancesFactory(new CacheProcessInstancesFactory(cacheManager));
         process.configure();
 
-        ProcessInstance<BpmnVariables> processInstance = process.createInstance(BpmnVariables.create());
+        ProcessInstance processInstance = process.createInstance(BpmnVariables.create());
 
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(STATE_ERROR);

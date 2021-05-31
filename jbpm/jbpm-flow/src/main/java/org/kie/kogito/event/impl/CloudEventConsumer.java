@@ -40,7 +40,7 @@ public class CloudEventConsumer<D, M extends Model, T extends AbstractProcessDat
     }
 
     @Override
-    public void consume(Application application, Process<M> process, Object object, String trigger) {
+    public void consume(Application application, Process process, Object object, String trigger) {
         T cloudEvent = (T) object;
         M model = function.apply(cloudEvent.getData());
         String simpleName = cloudEvent.getClass().getSimpleName();
@@ -58,7 +58,7 @@ public class CloudEventConsumer<D, M extends Model, T extends AbstractProcessDat
                 logger.debug("Received message with reference id '{}' going to use it to send signal '{}'",
                         cloudEvent.getKogitoReferenceId(),
                         trigger);
-                Optional<ProcessInstance<M>> instance = process.instances().findById(cloudEvent.getKogitoReferenceId());
+                Optional<ProcessInstance> instance = process.instances().findById(cloudEvent.getKogitoReferenceId());
                 if (instance.isPresent()) {
                     instance.get().send(Sig.of("Message-" + trigger,
                             cloudEvent.getData(),
@@ -71,7 +71,7 @@ public class CloudEventConsumer<D, M extends Model, T extends AbstractProcessDat
             } else {
                 logger.debug("Received message without reference id, starting new process instance with trigger '{}'",
                         trigger);
-                ProcessInstance<M> pi = process.createInstance(model);
+                ProcessInstance pi = process.createInstance(model);
                 if (cloudEvent.getKogitoStartFromNode() != null && !cloudEvent.getKogitoStartFromNode().isEmpty()) {
                     pi.startFrom(cloudEvent.getKogitoStartFromNode(), cloudEvent.getKogitoProcessinstanceId());
                 } else {

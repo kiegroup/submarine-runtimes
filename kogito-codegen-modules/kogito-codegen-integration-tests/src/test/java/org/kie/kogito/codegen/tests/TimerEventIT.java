@@ -45,13 +45,13 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("timer", 3);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("IntermediateCatchEvent");
+        Process p = app.get(Processes.class).processById("IntermediateCatchEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -72,13 +72,13 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("timer", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("IntermediateCatchEvent");
+        Process p = app.get(Processes.class).processById("IntermediateCatchEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -96,7 +96,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("timer", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("IntermediateCatchEvent");
+        Process p = app.get(Processes.class).processById("IntermediateCatchEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -104,7 +104,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         parameters.put("date", plusTwoSeconds.toString());
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -122,13 +122,13 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("TimerEvent", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TimerBoundaryEvent");
+        Process p = app.get(Processes.class).processById("TimerBoundaryEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -146,13 +146,13 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("TimerEvent", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TimerBoundaryEvent");
+        Process p = app.get(Processes.class).processById("TimerBoundaryEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -170,7 +170,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("TimerEvent", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TimerBoundaryEvent");
+        Process p = app.get(Processes.class).processById("TimerBoundaryEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -178,7 +178,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         parameters.put("date", plusTwoSeconds.toString());
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -196,13 +196,13 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("TimerEvent", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TimerBoundaryEvent");
+        Process p = app.get(Processes.class).processById("TimerBoundaryEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -220,7 +220,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("timer fired", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("defaultPackage.TimerProcess");
+        Process p = app.get(Processes.class).processById("defaultPackage.TimerProcess");
         // activate to schedule timers
         p.activate();
 
@@ -230,7 +230,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         Collection<?> instances = p.instances().values(ProcessInstanceReadMode.MUTABLE);
         assertThat(instances).hasSize(1);
 
-        ProcessInstance<?> processInstance = (ProcessInstance<?>) instances.iterator().next();
+        ProcessInstance processInstance = (ProcessInstance) instances.iterator().next();
         assertThat(processInstance).isNotNull();
 
         assertThat(processInstance.status()).isEqualTo(KogitoProcessInstance.STATE_ACTIVE);
@@ -249,7 +249,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("timer fired", 2);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("defaultPackage.TimerProcess");
+        Process p = app.get(Processes.class).processById("defaultPackage.TimerProcess");
         // activate to schedule timers
         p.activate();
 
@@ -259,7 +259,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         Collection<?> instances = p.instances().values(ProcessInstanceReadMode.MUTABLE);
         assertThat(instances).hasSize(2);
 
-        ProcessInstance<?> processInstance = (ProcessInstance<?>) instances.iterator().next();
+        ProcessInstance processInstance = (ProcessInstance) instances.iterator().next();
         assertThat(processInstance).isNotNull();
 
         assertThat(processInstance.status()).isEqualTo(KogitoProcessInstance.STATE_ACTIVE);
@@ -274,7 +274,7 @@ public class TimerEventIT extends AbstractCodegenIT {
         instances = p.instances().values(ProcessInstanceReadMode.MUTABLE);
         assertThat(instances).hasSize(2);
         // clean up by aborting all instances
-        instances.forEach(i -> ((ProcessInstance<?>) i).abort());
+        instances.forEach(i -> ((ProcessInstance) i).abort());
         assertThat(p.instances().size()).isZero();
     }
 }

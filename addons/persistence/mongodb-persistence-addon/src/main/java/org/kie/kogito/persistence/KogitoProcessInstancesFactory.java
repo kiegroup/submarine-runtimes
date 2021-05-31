@@ -37,7 +37,7 @@ public abstract class KogitoProcessInstancesFactory implements ProcessInstancesF
     public abstract String dbName();
 
     @Override
-    public MongoDBProcessInstances<?> createProcessInstances(Process<?> process) {
-        return new MongoDBProcessInstances<>(mongoClient, process, dbName());
+    public MongoDBProcessInstances createProcessInstances(Process process) {
+        return new MongoDBProcessInstances(mongoClient, process, dbName());
     }
 }

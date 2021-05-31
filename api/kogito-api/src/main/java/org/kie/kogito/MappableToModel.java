@@ -15,7 +15,7 @@
  */
 package org.kie.kogito;
 
-public interface MappableToModel<T> extends Model {
+public interface MappableToModel extends Model {
 
-    T toModel();
+    Model toModel();
 }

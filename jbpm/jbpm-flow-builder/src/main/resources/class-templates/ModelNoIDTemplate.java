@@ -22,7 +22,7 @@ import org.kie.kogito.MappableToModel;
 import org.kie.kogito.Model;
 
 public class XXXModel implements Model,
-                                 MappableToModel<$modelClass$> {
+                                 MappableToModel {
     
     @Override
     public Map<String, Object> toMap() {

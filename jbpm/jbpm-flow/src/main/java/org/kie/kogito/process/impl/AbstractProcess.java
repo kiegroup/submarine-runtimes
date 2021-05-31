@@ -22,11 +22,7 @@ import java.util.List;
 
 import org.jbpm.process.core.timer.DateTimeUtils;
 import org.jbpm.process.core.timer.Timer;
-import org.jbpm.process.instance.InternalProcessRuntime;
-import org.jbpm.process.instance.LightProcessRuntime;
-import org.jbpm.process.instance.LightProcessRuntimeContext;
-import org.jbpm.process.instance.LightProcessRuntimeServiceProvider;
-import org.jbpm.process.instance.ProcessRuntimeServiceProvider;
+import org.jbpm.process.instance.*;
 import org.jbpm.workflow.core.impl.WorkflowProcessImpl;
 import org.jbpm.workflow.core.node.StartNode;
 import org.kie.api.runtime.process.EventListener;
@@ -41,21 +37,16 @@ import org.kie.kogito.jobs.DurationExpirationTime;
 import org.kie.kogito.jobs.ExactExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
 import org.kie.kogito.jobs.ProcessJobDescription;
-import org.kie.kogito.process.MutableProcessInstances;
+import org.kie.kogito.process.*;
 import org.kie.kogito.process.Process;
-import org.kie.kogito.process.ProcessConfig;
 import org.kie.kogito.process.ProcessInstance;
-import org.kie.kogito.process.ProcessInstanceReadMode;
-import org.kie.kogito.process.ProcessInstances;
-import org.kie.kogito.process.ProcessInstancesFactory;
-import org.kie.kogito.process.Signal;
 
 @SuppressWarnings("unchecked")
-public abstract class AbstractProcess<T extends Model> implements Process<T> {
+public abstract class AbstractProcess implements Process {
 
     protected final ProcessRuntimeServiceProvider services;
     protected ProcessInstancesFactory processInstancesFactory;
-    protected MutableProcessInstances<T> instances;
+    protected MutableProcessInstances instances;
     protected CompletionEventListener completionEventListener = new CompletionEventListener();
 
     protected Application app;
@@ -87,7 +78,7 @@ public abstract class AbstractProcess<T extends Model> implements Process<T> {
 
     protected AbstractProcess(ProcessRuntimeServiceProvider services, Collection<KogitoWorkItemHandler> handlers, ProcessInstancesFactory factory) {
         this.services = services;
-        this.instances = new MapProcessInstances<>();
+        this.instances = new MapProcessInstances();
         this.processInstancesFactory = factory;
         KogitoWorkItemManager workItemManager = services.getKogitoWorkItemManager();
         for (KogitoWorkItemHandler handler : handlers) {
@@ -105,21 +96,16 @@ public abstract class AbstractProcess<T extends Model> implements Process<T> {
     }
 
     @Override
-    public T createModel() {
+    public Model createModel() {
         return null;
     }
 
-    @Override
-    public ProcessInstance<T> createInstance(String businessKey, Model m) {
-        return createInstance(businessKey, m);
-    }
+    public abstract ProcessInstance createInstance(WorkflowProcessInstance wpi);
 
-    public abstract ProcessInstance<T> createInstance(WorkflowProcessInstance wpi);
-
-    public abstract ProcessInstance<T> createReadOnlyInstance(WorkflowProcessInstance wpi);
+    public abstract ProcessInstance createReadOnlyInstance(WorkflowProcessInstance wpi);
 
     @Override
-    public ProcessInstances<T> instances() {
+    public ProcessInstances instances() {
         return instances;
     }
 
@@ -128,11 +114,11 @@ public abstract class AbstractProcess<T extends Model> implements Process<T> {
         instances().values(ProcessInstanceReadMode.MUTABLE).forEach(pi -> pi.send(signal));
     }
 
-    public Process<T> configure() {
+    public Process configure() {
 
         registerListeners();
         if (isProcessFactorySet()) {
-            this.instances = (MutableProcessInstances<T>) processInstancesFactory.createProcessInstances(this);
+            this.instances = processInstancesFactory.createProcessInstances(this);
         }
 
         return this;

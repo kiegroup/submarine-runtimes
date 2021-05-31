@@ -44,21 +44,21 @@ public class KafkaProcessInstances implements MutableProcessInstances {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProcessInstances.class);
 
-    private Process<?> process;
+    private Process process;
     private KafkaProducer<String, byte[]> producer;
     private String topic;
     private ReadOnlyKeyValueStore<String, byte[]> store;
     private ProcessInstanceMarshallerService marshaller;
     private CountDownLatch latch = new CountDownLatch(1);
 
-    public KafkaProcessInstances(Process<?> process, KafkaProducer<String, byte[]> producer) {
+    public KafkaProcessInstances(Process process, KafkaProducer<String, byte[]> producer) {
         this.process = process;
         this.topic = topicName(process.id());
         this.producer = producer;
         setMarshaller(ProcessInstanceMarshallerService.newBuilder().withDefaultObjectMarshallerStrategies().build());
     }
 
-    protected Process<?> getProcess() {
+    protected Process getProcess() {
         return process;
     }
 
@@ -168,6 +168,6 @@ public class KafkaProcessInstances implements MutableProcessInstances {
 
     protected void disconnect(ProcessInstance instance) {
         Supplier<byte[]> supplier = () -> getStore().get(instance.id());
-        ((AbstractProcessInstance<?>) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
+        ((AbstractProcessInstance) instance).internalRemoveProcessInstance(marshaller.createdReloadFunction(supplier));
     }
 }

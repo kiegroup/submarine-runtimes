@@ -35,14 +35,14 @@ public class VariableIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("servicetask/ServiceTaskWithReservedNameVariable.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("test");
+        Process p = app.get(Processes.class).processById("test");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("package", "john");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

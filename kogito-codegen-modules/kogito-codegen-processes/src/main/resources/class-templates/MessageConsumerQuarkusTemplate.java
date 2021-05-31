@@ -29,7 +29,7 @@ public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $Data
     Application application;
 
     @javax.inject.Inject
-    @javax.inject.Named("$ProcessName$") Process<$Type$> process;
+    @javax.inject.Named("$ProcessName$") Process process;
 
     @javax.inject.Inject
     ConfigBean configBean;

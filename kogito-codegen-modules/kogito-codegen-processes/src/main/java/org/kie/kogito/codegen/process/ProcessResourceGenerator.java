@@ -263,8 +263,8 @@ public class ProcessResourceGenerator {
         template.findAll(MethodDeclaration.class).forEach(this::interpolateMethods);
 
         if (context.hasDI()) {
-            template.findAll(FieldDeclaration.class,
-                    CodegenUtils::isProcessField).forEach(fd -> context.getDependencyInjectionAnnotator().withNamedInjection(fd, processId));
+            //            template.findAll(FieldDeclaration.class,
+            //                    CodegenUtils::isProcessField).forEach(fd -> context.getDependencyInjectionAnnotator().withNamedInjection(fd, processId));
         } else {
             template.findAll(FieldDeclaration.class,
                     CodegenUtils::isProcessField).forEach(this::initializeProcessField);

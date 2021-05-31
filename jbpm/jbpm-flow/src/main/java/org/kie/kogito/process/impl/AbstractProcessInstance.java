@@ -65,12 +65,12 @@ import org.kie.kogito.process.workitem.Policy;
 import org.kie.kogito.process.workitem.Transition;
 import org.kie.kogito.services.uow.ProcessInstanceWorkUnit;
 
-public abstract class AbstractProcessInstance<T extends Model> implements ProcessInstance<T> {
+public abstract class AbstractProcessInstance implements ProcessInstance {
 
     private static final String KOGITO_PROCESS_INSTANCE = "KogitoProcessInstance";
 
-    protected final T variables;
-    protected final AbstractProcess<T> process;
+    protected final Model variables;
+    protected final AbstractProcess process;
     protected InternalProcessRuntime rt;
     protected WorkflowProcessInstance processInstance;
 
@@ -81,15 +81,15 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
 
     protected ProcessError processError;
 
-    protected Consumer<AbstractProcessInstance<?>> reloadSupplier;
+    protected Consumer<AbstractProcessInstance> reloadSupplier;
 
     protected CompletionEventListener completionEventListener;
 
-    public AbstractProcessInstance(AbstractProcess<T> process, T variables, ProcessRuntime rt) {
+    public AbstractProcessInstance(AbstractProcess process, Model variables, ProcessRuntime rt) {
         this(process, variables, null, rt);
     }
 
-    public AbstractProcessInstance(AbstractProcess<T> process, T variables, String businessKey, ProcessRuntime rt) {
+    public AbstractProcessInstance(AbstractProcess process, Model variables, String businessKey, ProcessRuntime rt) {
         this.process = process;
         this.rt = (InternalProcessRuntime) rt;
         this.variables = variables;
@@ -109,14 +109,14 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
      * @param variables
      * @param wpi
      */
-    public AbstractProcessInstance(AbstractProcess<T> process, T variables, org.kie.api.runtime.process.WorkflowProcessInstance wpi) {
+    public AbstractProcessInstance(AbstractProcess process, Model variables, org.kie.api.runtime.process.WorkflowProcessInstance wpi) {
         this.process = process;
         this.variables = variables;
         syncProcessInstance((WorkflowProcessInstance) wpi);
         unbind(variables, processInstance.getVariables());
     }
 
-    public AbstractProcessInstance(AbstractProcess<T> process, T variables, ProcessRuntime rt, org.kie.api.runtime.process.WorkflowProcessInstance wpi) {
+    public AbstractProcessInstance(AbstractProcess process, Model variables, ProcessRuntime rt, org.kie.api.runtime.process.WorkflowProcessInstance wpi) {
         this.process = process;
         this.rt = (InternalProcessRuntime) rt;
         this.variables = variables;
@@ -186,7 +186,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         this.processInstance = processInstance;
     }
 
-    public void internalRemoveProcessInstance(Consumer<AbstractProcessInstance<?>> reloadSupplier) {
+    public void internalRemoveProcessInstance(Consumer<AbstractProcessInstance> reloadSupplier) {
         this.reloadSupplier = reloadSupplier;
         this.status = processInstance.getState();
         if (this.status == STATE_ERROR) {
@@ -219,7 +219,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         this.id = processInstance.getStringId();
         addCompletionEventListener();
         KogitoProcessInstance processInstance = getProcessRuntime().getKogitoProcessRuntime().startProcessInstance(this.id, trigger);
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).create(pi.id(), pi));
+        addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).create(pi.id(), pi));
         unbind(variables, processInstance.getVariables());
         if (this.processInstance != null) {
             this.status = this.processInstance.getState();
@@ -227,7 +227,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected void addToUnitOfWork(Consumer<ProcessInstance<T>> action) {
+    protected void addToUnitOfWork(Consumer<ProcessInstance> action) {
         getProcessRuntime().getUnitOfWorkManager().currentUnitOfWork().intercept(new ProcessInstanceWorkUnit(this, action));
     }
 
@@ -237,7 +237,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         unbind(variables, processInstance().getVariables());
         getProcessRuntime().getKogitoProcessRuntime().abortProcessInstance(pid);
         this.status = processInstance.getState();
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).remove(pi.id()));
+        addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).remove(pi.id()));
     }
 
     private InternalProcessRuntime getProcessRuntime() {
@@ -258,12 +258,12 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
     }
 
     @Override
-    public Process<T> process() {
+    public Process process() {
         return process;
     }
 
     @Override
-    public T variables() {
+    public Model variables() {
         return variables;
     }
 
@@ -293,14 +293,14 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
     }
 
     @Override
-    public T updateVariables(T updates) {
+    public Model updateVariables(Model updates) {
         Map<String, Object> map = bind(updates);
 
         for (Entry<String, Object> entry : map.entrySet()) {
             processInstance().setVariable(entry.getKey(), entry.getValue());
         }
         this.variables.update(map);
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).update(pi.id(), pi));
+        addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).update(pi.id(), pi));
         return variables;
     }
 
@@ -350,7 +350,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
 
         nodeInstanceContainerNode.getNodeInstance(node).trigger(null, Node.CONNECTION_DEFAULT_TYPE);
 
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).update(pi.id(), pi));
+        addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).update(pi.id(), pi));
     }
 
     @Override
@@ -442,7 +442,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
     public <R> R updateWorkItem(String id, Function<KogitoWorkItem, R> updater, Policy<?>... policies) {
         R result = getProcessRuntime().getKogitoProcessRuntime().getKogitoWorkItemManager().updateWorkItem(id, updater,
                 policies);
-        addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).update(pi.id(), pi));
+        addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).update(pi.id(), pi));
         return result;
     }
 
@@ -477,16 +477,16 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         if (processInstance.getState() != KogitoProcessInstance.STATE_ACTIVE && processInstance.getState() != KogitoProcessInstance.STATE_ERROR) {
             removeCompletionListener();
             syncProcessInstance(processInstance);
-            addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).remove(pi.id()));
+            addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).remove(pi.id()));
         } else {
-            addToUnitOfWork(pi -> ((MutableProcessInstances<T>) process.instances()).update(pi.id(), pi));
+            addToUnitOfWork(pi -> ((MutableProcessInstances) process.instances()).update(pi.id(), pi));
         }
         unbind(this.variables, processInstance().getVariables());
         this.status = processInstance.getState();
     }
 
     // this must be overridden at compile time
-    protected Map<String, Object> bind(T variables) {
+    protected Map<String, Object> bind(Model variables) {
         HashMap<String, Object> vmap = new HashMap<>();
         if (variables == null) {
             return vmap;
@@ -504,7 +504,7 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
         return vmap;
     }
 
-    protected void unbind(T variables, Map<String, Object> vmap) {
+    protected void unbind(Model variables, Map<String, Object> vmap) {
         if (vmap == null) {
             return;
         }

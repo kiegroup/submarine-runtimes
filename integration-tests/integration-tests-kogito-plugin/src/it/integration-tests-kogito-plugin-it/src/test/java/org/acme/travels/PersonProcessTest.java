@@ -39,7 +39,7 @@ public class PersonProcessTest {
 
     @Inject
     @Named("persons")
-    Process<? extends Model> personProcess;
+    Process personProcess;
 
     @Test
     public void testAdult() {
@@ -49,7 +49,7 @@ public class PersonProcessTest {
         parameters.put("person", new Person("John Doe", 20));
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = personProcess.createInstance(m);
+        ProcessInstance processInstance = personProcess.createInstance(m);
         processInstance.start();
 
         assertEquals(ProcessInstance.STATE_COMPLETED, processInstance.status());
@@ -65,7 +65,7 @@ public class PersonProcessTest {
         parameters.put("person", new Person("Jenny Quark", 14));
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = personProcess.createInstance(m);
+        ProcessInstance processInstance = personProcess.createInstance(m);
         processInstance.start();
 
         assertEquals(ProcessInstance.STATE_ACTIVE, processInstance.status());

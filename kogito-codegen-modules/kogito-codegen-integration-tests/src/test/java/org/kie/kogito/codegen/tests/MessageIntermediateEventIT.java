@@ -46,10 +46,10 @@ public class MessageIntermediateEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messageevent/MessageEndEvent.bpmn2");
         ProcessEventListener listener = mock(KogitoProcessEventListener.class);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
-        Process<? extends Model> p = app.get(Processes.class).processById("MessageEndEvent");
+        Process p = app.get(Processes.class).processById("MessageEndEvent");
         Model m = p.createModel();
         m.update(Collections.singletonMap("x", "Javierito"));
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
         ArgumentCaptor<MessageEvent> messageEvent = ArgumentCaptor.forClass(MessageEvent.class);
@@ -63,10 +63,10 @@ public class MessageIntermediateEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messageevent/IntermediateThrowEventMessage.bpmn2");
         ProcessEventListener listener = mock(KogitoProcessEventListener.class);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
-        Process<? extends Model> p = app.get(Processes.class).processById("MessageIntermediateEvent");
+        Process p = app.get(Processes.class).processById("MessageIntermediateEvent");
         Model m = p.createModel();
         m.update(Collections.singletonMap("customerId", "Javierito"));
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
         ArgumentCaptor<MessageEvent> messageEvent = ArgumentCaptor.forClass(MessageEvent.class);
@@ -81,13 +81,13 @@ public class MessageIntermediateEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messageevent/IntermediateCatchEventMessage.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("IntermediateCatchEvent");
+        Process p = app.get(Processes.class).processById("IntermediateCatchEvent");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -106,13 +106,13 @@ public class MessageIntermediateEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("messageevent/BoundaryMessageEventOnTask.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BoundaryMessageOnTask");
+        Process p = app.get(Processes.class).processById("BoundaryMessageOnTask");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);

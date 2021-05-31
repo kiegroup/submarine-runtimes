@@ -37,13 +37,13 @@ public class DataEventConsumer<D, M extends Model> implements EventConsumer<M> {
     }
 
     @Override
-    public void consume(Application application, Process<M> process, Object eventData, String trigger) {
+    public void consume(Application application, Process process, Object eventData, String trigger) {
         M model = function.apply((D) eventData);
         UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> {
             logger.debug(
                     "Received message without reference id, staring new process instance with trigger '{}'",
                     trigger);
-            ProcessInstance<M> pi = process.createInstance(model);
+            ProcessInstance pi = process.createInstance(model);
             pi.start(trigger, null);
             return null;
         });

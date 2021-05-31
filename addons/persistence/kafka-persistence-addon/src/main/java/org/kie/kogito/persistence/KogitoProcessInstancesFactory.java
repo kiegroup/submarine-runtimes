@@ -59,7 +59,7 @@ public abstract class KogitoProcessInstancesFactory implements ProcessInstancesF
         }
     }
 
-    public KafkaProcessInstances createProcessInstances(Process<?> process) {
+    public KafkaProcessInstances createProcessInstances(Process process) {
         try {
             LOGGER.info("Creating KafkaProcessInstances for process: {}", process.id());
             KafkaProcessInstances pi = new KafkaProcessInstances(process, producer);

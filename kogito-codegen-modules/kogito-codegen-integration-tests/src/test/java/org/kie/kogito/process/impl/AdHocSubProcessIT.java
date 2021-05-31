@@ -38,12 +38,12 @@ class AdHocSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/ActivationAdHoc.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.ActivationAdHoc");
+        Process p = app.get(Processes.class).processById("TestCase.ActivationAdHoc");
         Model model = p.createModel();
         Map<String, Object> params = new HashMap<>();
         params.put("favouriteColour", "yellow");
         model.fromMap(params);
-        ProcessInstance<?> processInstance = p.createInstance(model);
+        ProcessInstance processInstance = p.createInstance(model);
         assertState(processInstance, ProcessInstance.STATE_PENDING);
         processInstance.start();
 
@@ -64,12 +64,12 @@ class AdHocSubProcessIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("cases/CompletionAdHoc.bpmn");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.CompletionAdHoc");
+        Process p = app.get(Processes.class).processById("TestCase.CompletionAdHoc");
         Model model = p.createModel();
         Map<String, Object> params = new HashMap<>();
         params.put("favouriteColour", "yellow");
         model.fromMap(params);
-        ProcessInstance<?> processInstance = p.createInstance(model);
+        ProcessInstance processInstance = p.createInstance(model);
         assertState(processInstance, ProcessInstance.STATE_PENDING);
         processInstance.start();
 

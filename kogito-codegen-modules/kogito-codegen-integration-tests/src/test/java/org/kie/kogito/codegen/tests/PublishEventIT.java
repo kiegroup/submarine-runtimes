@@ -65,9 +65,9 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("TestCase.SimpleMilestone");
+        Process p = app.get(Processes.class).processById("TestCase.SimpleMilestone");
 
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -109,12 +109,12 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -160,9 +160,9 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("compensateAll");
+        Process p = app.get(Processes.class).processById("compensateAll");
 
-        ProcessInstance<?> processInstance = p.createInstance(p.createModel());
+        ProcessInstance processInstance = p.createInstance(p.createModel());
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -201,7 +201,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -214,7 +214,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         uow.end();
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -271,7 +271,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("usertask/UserTasksProcessWithSecurityRoles.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("UserTasksProcess");
+        Process p = app.get(Processes.class).processById("UserTasksProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -284,7 +284,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
         uow.end();
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -305,7 +305,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivity.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -320,7 +320,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         uow.end();
@@ -382,12 +382,12 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -412,7 +412,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ExclusiveSplit");
+        Process p = app.get(Processes.class).processById("ExclusiveSplit");
 
         Map<String, Object> params = new HashMap<>();
         params.put("x", "First");
@@ -420,7 +420,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         Model m = p.createModel();
         m.fromMap(params);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -461,7 +461,7 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
+        Process p = app.get(Processes.class).processById("ServiceProcessDifferentOperations");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -532,12 +532,12 @@ public class PublishEventIT extends AbstractCodegenIT {
         UnitOfWork uow = app.unitOfWorkManager().newUnitOfWork();
         uow.start();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("BusinessRuleTask");
+        Process p = app.get(Processes.class).processById("BusinessRuleTask");
 
         Model m = p.createModel();
         m.fromMap(Collections.singletonMap("person", new Person("john", 25)));
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

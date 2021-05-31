@@ -62,7 +62,7 @@ public class $Type$Resource {
                                      @RequestParam("user") final String user,
                                      @RequestParam("group") final List<String> groups,
                                      @RequestBody(required = false) final $TaskOutput$ model) {
-        return processService.completeTask(process, id, taskId, phase, user, groups, model)
+        return processService.completeTask(process, id, taskId, phase, user, groups, model, $Type$Output.class)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -87,7 +87,7 @@ public class $Type$Resource {
                                        @RequestParam(value = "group",
                                                required = false) final List<String> groups,
                                        @RequestBody(required = false) final $TaskOutput$ model) {
-        return processService.taskTransition(process, id, taskId, phase, user, groups, model)
+        return processService.taskTransition(process, id, taskId, phase, user, groups, model, $Type$Output.class)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -97,7 +97,7 @@ public class $Type$Resource {
                                @RequestParam(value = "user", required = false) final String user,
                                @RequestParam(value = "group",
                                        required = false) final List<String> groups) {
-        return processService.getTask(process, id, taskId, user, groups, $TaskModel$::from)
+        return processService.<$TaskModel$>getTask(process, id, taskId, user, groups, wi-> ($TaskModel$) $TaskModel$.from(wi))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -109,7 +109,7 @@ public class $Type$Resource {
                                   @RequestParam(value = "user", required = false) final String user,
                                   @RequestParam(value = "group",
                                           required = false) final List<String> groups) {
-        return processService.abortTask(process, id, taskId, phase, user, groups)
+        return processService.abortTask(process, id, taskId, phase, user, groups, $Type$Output.class)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

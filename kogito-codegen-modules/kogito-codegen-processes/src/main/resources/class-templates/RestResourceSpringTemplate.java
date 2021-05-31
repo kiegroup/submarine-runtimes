@@ -35,6 +35,7 @@ import org.kie.kogito.process.workitem.TaskModel;
 import org.kie.kogito.auth.IdentityProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,7 +60,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/$name$")
 public class $Type$Resource {
 
-    Process<$Type$> process;
+    @Autowired
+    @Qualifier("$id$")
+    Process process;
 
     @Autowired
     ProcessService processService;
@@ -69,33 +72,33 @@ public class $Type$Resource {
                                                               @RequestParam(value = "businessKey", required = false) String businessKey,
                                                               @RequestBody(required = false) $Type$Input resource,
                                                               UriComponentsBuilder uriComponentsBuilder) {
-        ProcessInstance<$Type$> pi = processService.createProcessInstance(process,
+        ProcessInstance pi = processService.createProcessInstance(process,
                                                                           businessKey,
                                                                           Optional.ofNullable(resource).orElse(new $Type$Input()).toModel(),
                                                                           httpHeaders.getOrEmpty("X-KOGITO-StartFromNode").stream().findFirst().orElse(null));
         return ResponseEntity.created(uriComponentsBuilder.path("/$name$/{id}").buildAndExpand(pi.id()).toUri())
-                .body(pi.checkError().variables().toModel());
+                .body(($Type$Output) (($Type$)pi.checkError().variables()).toModel());
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<$Type$Output> getResources_$name$() {
-        return processService.getProcessInstanceOutput(process);
+        return processService.getProcessInstanceOutput(process, $Type$Output.class);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public $Type$Output getResource_$name$(@PathVariable("id") String id) {
-        return processService.findById(process, id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return processService.findById(process, id, $Type$Output.class).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public $Type$Output deleteResource_$name$(@PathVariable("id") final String id) {
-        return processService.delete(process, id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return processService.delete(process, id, $Type$Output.class).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public $Type$Output updateModel_$name$(@PathVariable("id") String id, @RequestBody(required = false) $Type$ resource) {
-        return processService.update(process, id, resource).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return processService.update(process, id, resource, $Type$Output.class).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value = "/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)

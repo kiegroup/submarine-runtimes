@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -58,7 +59,9 @@ import org.kie.kogito.auth.IdentityProvider;
 @Path("/$name$")
 public class $Type$Resource {
 
-    Process<$Type$> process;
+    @Inject
+    @Named("$id$")
+    Process process;
 
     @Inject
     ProcessService processService;
@@ -70,33 +73,33 @@ public class $Type$Resource {
                                           @Context UriInfo uriInfo,
                                           @QueryParam("businessKey") String businessKey,
                                           $Type$Input resource) {
-        ProcessInstance<$Type$> pi = processService.createProcessInstance(process,
+        ProcessInstance pi = processService.createProcessInstance(process,
                                                                           businessKey,
                                                                           Optional.ofNullable(resource).orElse(new $Type$Input()).toModel(),
                                                                           httpHeaders.getHeaderString("X-KOGITO-StartFromNode"));
         return Response.created(uriInfo.getAbsolutePathBuilder().path(pi.id()).build())
-                .entity(pi.checkError().variables().toModel())
+                .entity( (($Type$) pi.checkError().variables() ).toModel() )
                 .build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<$Type$Output> getResources_$name$() {
-        return processService.getProcessInstanceOutput(process);
+        return processService.getProcessInstanceOutput(process, $Type$Output.class);
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public $Type$Output getResource_$name$(@PathParam("id") String id) {
-        return processService.findById(process, id).orElseThrow(NotFoundException::new);
+        return processService.findById(process, id, $Type$Output.class).orElseThrow(NotFoundException::new);
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public $Type$Output deleteResource_$name$(@PathParam("id") final String id) {
-        return processService.delete(process, id).orElseThrow(NotFoundException::new);
+        return processService.delete(process, id, $Type$Output.class).orElseThrow(NotFoundException::new);
     }
 
     @PUT
@@ -104,7 +107,7 @@ public class $Type$Resource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public $Type$Output updateModel_$name$(@PathParam("id") String id, $Type$ resource) {
-        return processService.update(process, id, resource).orElseThrow(NotFoundException::new);
+        return processService.update(process, id, resource, $Type$Output.class).orElseThrow(NotFoundException::new);
     }
 
     @GET

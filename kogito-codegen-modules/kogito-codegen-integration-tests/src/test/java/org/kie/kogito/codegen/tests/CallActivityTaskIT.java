@@ -51,7 +51,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivity.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -59,7 +59,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         parameters.put("y", "b");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -75,7 +75,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivityWithTypeInfo.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -83,7 +83,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         parameters.put("y", "b");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -99,7 +99,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivityMI.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         List<String> list = new ArrayList<String>();
         list.add("first");
@@ -112,7 +112,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         parameters.put("listOut", listOut);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -128,14 +128,14 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivityWithIOexpression.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("person", new Person("john", 0));
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -163,7 +163,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivityWithIOexpressionNested.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -172,7 +172,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         parameters.put("person", pa);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_ACTIVE);
@@ -202,7 +202,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("subprocess/CallActivityVarIOExpression.bpmn2", "subprocess/CallActivitySubProcess.bpmn2");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("ParentProcess");
+        Process p = app.get(Processes.class).processById("ParentProcess");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -210,7 +210,7 @@ public class CallActivityTaskIT extends AbstractCodegenIT {
         parameters.put("y", "b");
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);

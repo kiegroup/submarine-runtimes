@@ -54,7 +54,7 @@ public class $Type$Resource {
                                      @QueryParam("user") final String user,
                                      @QueryParam("group") final List<String> groups,
                                      final $TaskOutput$ model) {
-        return processService.completeTask(process, id, taskId, phase, user, groups, model)
+        return processService.completeTask(process, id, taskId, phase, user, groups, model, $Type$Output.class)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -81,7 +81,7 @@ public class $Type$Resource {
             @QueryParam("user") final String user,
             @QueryParam("group") final List<String> groups,
             final $TaskOutput$ model) {
-        return processService.taskTransition(process, id, taskId, phase, user, groups, model)
+        return processService.taskTransition(process, id, taskId, phase, user, groups, model, $Type$Output.class)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -92,7 +92,7 @@ public class $Type$Resource {
                                @PathParam("taskId") String taskId,
                                @QueryParam("user") final String user,
                                @QueryParam("group") final List<String> groups) {
-        return processService.getTask(process, id, taskId, user, groups, $TaskModel$::from)
+        return processService.getTask(process, id, taskId, user, groups, wi-> ($TaskModel$) $TaskModel$.from(wi))
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -104,7 +104,7 @@ public class $Type$Resource {
                                   @QueryParam("phase") @DefaultValue("abort") final String phase,
                                   @QueryParam("user") final String user,
                                   @QueryParam("group") final List<String> groups) {
-        return processService.abortTask(process, id, taskId, phase, user, groups)
+        return processService.abortTask(process, id, taskId, phase, user, groups, $Type$Output.class)
                 .orElseThrow(() -> new NotFoundException());
     }
 

@@ -81,9 +81,9 @@ public class LambdaSubProcessNodeInstance extends StateBasedNodeInstance impleme
         context.setNodeInstance(this);
         SubProcessFactory subProcessFactory = getSubProcessNode().getSubProcessFactory();
         Object o = subProcessFactory.bind(context);
-        org.kie.kogito.process.ProcessInstance<?> processInstance = subProcessFactory.createInstance(o);
+        org.kie.kogito.process.ProcessInstance processInstance = subProcessFactory.createInstance(o);
 
-        org.kie.api.runtime.process.ProcessInstance pi = ((AbstractProcessInstance<?>) processInstance).internalGetProcessInstance();
+        org.kie.api.runtime.process.ProcessInstance pi = ((AbstractProcessInstance) processInstance).internalGetProcessInstance();
         ((ProcessInstanceImpl) pi).setMetaData("ParentProcessInstanceId", getProcessInstance().getStringId());
         ((ProcessInstanceImpl) pi).setMetaData("ParentNodeInstanceId", getUniqueId());
         ((ProcessInstanceImpl) pi).setMetaData("ParentNodeId", getSubProcessNode().getUniqueId());
@@ -193,7 +193,7 @@ public class LambdaSubProcessNodeInstance extends StateBasedNodeInstance impleme
         SubProcessFactory subProcessFactory = getSubProcessNode().getSubProcessFactory();
         KogitoProcessContextImpl context = new KogitoProcessContextImpl(getProcessInstance().getKnowledgeRuntime());
         context.setNodeInstance(this);
-        org.kie.kogito.process.ProcessInstance<?> pi = ((org.kie.kogito.process.ProcessInstance<?>) processInstance.getMetaData().get("KogitoProcessInstance"));
+        org.kie.kogito.process.ProcessInstance pi = ((org.kie.kogito.process.ProcessInstance) processInstance.getMetaData().get("KogitoProcessInstance"));
         if (pi != null) {
             subProcessFactory.unbind(context, pi.variables());
         }

@@ -25,7 +25,7 @@ import org.kie.kogito.event.impl.DefaultEventConsumerFactory;
 
 public class $Type$MessageConsumer {
 
-    Process<$Type$> process;
+    Process process;
 
     Application application;
 

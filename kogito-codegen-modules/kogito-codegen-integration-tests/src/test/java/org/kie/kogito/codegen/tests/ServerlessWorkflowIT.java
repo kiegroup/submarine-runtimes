@@ -44,13 +44,13 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("function");
+        Process p = app.get(Processes.class).processById("function");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -66,13 +66,13 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         NodeLeftCountDownProcessEventListener listener = new NodeLeftCountDownProcessEventListener("SmallDelay", 1);
         app.config().get(ProcessConfig.class).processEventListeners().listeners().add(listener);
 
-        Process<? extends Model> p = app.get(Processes.class).processById("function");
+        Process p = app.get(Processes.class).processById("function");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         boolean completed = listener.waitTillCompleted(5000);
@@ -88,13 +88,13 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("function");
+        Process p = app.get(Processes.class).processById("function");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -107,13 +107,13 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("noactions");
+        Process p = app.get(Processes.class).processById("noactions");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -126,13 +126,13 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("function");
+        Process p = app.get(Processes.class).processById("function");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -145,7 +145,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("singleservice");
+        Process p = app.get(Processes.class).processById("singleservice");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -160,7 +160,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -181,7 +181,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("singleinject");
+        Process p = app.get(Processes.class).processById("singleinject");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -194,7 +194,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -215,7 +215,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("switchworkflow");
+        Process p = app.get(Processes.class).processById("switchworkflow");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -228,7 +228,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -249,7 +249,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("switchworkflow");
+        Process p = app.get(Processes.class).processById("switchworkflow");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -262,7 +262,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -283,7 +283,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("switchworkflow");
+        Process p = app.get(Processes.class).processById("switchworkflow");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -296,7 +296,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -308,7 +308,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly("serverless/single-subflow.sw.json", "serverless/called-subflow.sw.json");
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("singlesubflow");
+        Process p = app.get(Processes.class).processById("singlesubflow");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -321,7 +321,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -344,7 +344,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
             Application app = generateCodeProcessesOnly("serverless/parallel-state.sw.json", "serverless/parallel-state-branch1.sw.json", "serverless/parallel-state-branch2.sw.json");
             assertThat(app).isNotNull();
 
-            Process<? extends Model> p = app.get(Processes.class).processById("parallelworkflow");
+            Process p = app.get(Processes.class).processById("parallelworkflow");
 
             Model m = p.createModel();
             Map<String, Object> parameters = new HashMap<>();
@@ -357,7 +357,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
             parameters.put("workflowdata", jsonParamObj);
             m.fromMap(parameters);
 
-            ProcessInstance<?> processInstance = p.createInstance(m);
+            ProcessInstance processInstance = p.createInstance(m);
             processInstance.start();
 
             assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
@@ -384,7 +384,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         Application app = generateCodeProcessesOnly(processLocation);
         assertThat(app).isNotNull();
 
-        Process<? extends Model> p = app.get(Processes.class).processById("prchecker");
+        Process p = app.get(Processes.class).processById("prchecker");
 
         Model m = p.createModel();
         Map<String, Object> parameters = new HashMap<>();
@@ -397,7 +397,7 @@ public class ServerlessWorkflowIT extends AbstractCodegenIT {
         parameters.put("workflowdata", jsonParamObj);
         m.fromMap(parameters);
 
-        ProcessInstance<?> processInstance = p.createInstance(m);
+        ProcessInstance processInstance = p.createInstance(m);
         processInstance.start();
 
         assertThat(processInstance.status()).isEqualTo(ProcessInstance.STATE_COMPLETED);
