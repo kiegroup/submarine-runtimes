@@ -77,6 +77,7 @@ import org.kie.kogito.serialization.process.protobuf.KogitoTypesProtobuf;
 import org.kie.kogito.serialization.process.protobuf.KogitoTypesProtobuf.WorkflowContext;
 import org.kie.kogito.serialization.process.protobuf.KogitoWorkItemsProtobuf;
 import org.kie.kogito.serialization.process.protobuf.KogitoWorkItemsProtobuf.HumanTaskWorkItemData;
+import org.kie.kogito.transport.TransportConfig;
 
 import com.google.protobuf.Any;
 import com.google.protobuf.util.JsonFormat;
@@ -144,11 +145,15 @@ public class ProtobufProcessInstanceWriter {
         List<Map.Entry<String, Object>> variables = new ArrayList<>(variableScopeInstance.getVariables().entrySet());
         List<Map.Entry<String, Integer>> iterationlevels = new ArrayList<>(workFlow.getIterationLevels().entrySet());
         instance.setContext(buildWorkflowContext(nodeInstances, exclusiveGroupInstances, variables, iterationlevels));
+        if (workFlow.getMetaData().containsKey(TransportConfig.TRANSPORT_CONTEXT)) {
+            Map<String, Object> transportContext = (Map<String, Object>) workFlow.getMetaData().get(TransportConfig.TRANSPORT_CONTEXT);
+            instance.addAllTransportContext(varWriter.buildVariables(new ArrayList<>(transportContext.entrySet())));
+        }
 
         KogitoProcessInstanceProtobuf.ProcessInstance piProtobuf = instance.build();
 
-        String format = (String) this.context.get(MARSHALLER_FORMAT);
-        if (format != null && "json".equals(format)) {
+        String format = this.context.get(MARSHALLER_FORMAT);
+        if ("json".equals(format)) {
             os.write(JsonFormat.printer().usingTypeRegistry(protobufTypeRegistryFactoryInstance().create()).print(piProtobuf).getBytes());
         } else {
             piProtobuf.writeTo(os);
@@ -390,8 +395,8 @@ public class ProtobufProcessInstanceWriter {
         List<ContextInstance> exclusiveGroupInstances = nodeInstance.getContextInstances(ExclusiveGroup.EXCLUSIVE_GROUP);
         VariableScopeInstance variableScopeInstance = (VariableScopeInstance) nodeInstance.getContextInstance(VariableScope.VARIABLE_SCOPE);
         List<Map.Entry<String, Object>> variables = new ArrayList<>(variableScopeInstance.getVariables().entrySet());
-        List<Map.Entry<String, Integer>> iterationlevels = new ArrayList<>(nodeInstance.getIterationLevels().entrySet());
-        return buildWorkflowContext(nodeInstances, exclusiveGroupInstances, variables, iterationlevels);
+        List<Map.Entry<String, Integer>> iterationLevels = new ArrayList<>(nodeInstance.getIterationLevels().entrySet());
+        return buildWorkflowContext(nodeInstances, exclusiveGroupInstances, variables, iterationLevels);
     }
 
     private Any buildWorkItemNodeInstance(WorkItemNodeInstance nodeInstance) {

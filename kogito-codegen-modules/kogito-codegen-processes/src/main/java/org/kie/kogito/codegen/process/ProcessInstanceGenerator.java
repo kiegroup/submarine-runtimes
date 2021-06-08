@@ -49,7 +49,6 @@ public class ProcessInstanceGenerator {
     private final ModelMetaData model;
     private final String canonicalName;
     private final String targetTypeName;
-    private final String targetCanonicalName;
     private final String generatedFilePath;
     private final String completePath;
 
@@ -63,7 +62,7 @@ public class ProcessInstanceGenerator {
         this.model = model;
         this.canonicalName = packageName + "." + typeName;
         this.targetTypeName = typeName + "ProcessInstance";
-        this.targetCanonicalName = packageName + "." + targetTypeName;
+        String targetCanonicalName = packageName + "." + targetTypeName;
         this.generatedFilePath = targetCanonicalName.replace('.', '/') + ".java";
         this.completePath = "src/main/java/" + generatedFilePath;
     }

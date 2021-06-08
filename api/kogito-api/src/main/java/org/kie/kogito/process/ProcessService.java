@@ -34,6 +34,11 @@ public interface ProcessService {
             T model,
             String startFromNodeId);
 
+    <T extends Model> ProcessInstance<T> createProcessInstance(Process<T> process, String businessKey,
+            T model,
+            String startFromNodeId,
+            Map<String, String> transportContext);
+
     <T extends MappableToModel<R>, R> List<R> getProcessInstanceOutput(Process<T> process);
 
     <T extends MappableToModel<R>, R> Optional<R> findById(Process<T> process, String id);

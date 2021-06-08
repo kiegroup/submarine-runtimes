@@ -42,6 +42,7 @@ import org.kie.kogito.process.workitem.Comment;
 import org.kie.kogito.process.workitem.HumanTaskWorkItem;
 import org.kie.kogito.process.workitem.Policies;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
+import org.kie.kogito.transport.TransportConfig;
 
 public class ProcessServiceImpl implements ProcessService {
 
@@ -54,9 +55,13 @@ public class ProcessServiceImpl implements ProcessService {
     @Override
     public <T extends Model> ProcessInstance<T> createProcessInstance(Process<T> process, String businessKey,
             T model,
-            String startFromNodeId) {
+            String startFromNodeId,
+            Map<String, String> transportContext) {
         return UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> {
             ProcessInstance<T> pi = process.createInstance(businessKey, model);
+            if (transportContext != null) {
+                pi.setContextAttr(TransportConfig.TRANSPORT_CONTEXT, transportContext);
+            }
             if (startFromNodeId != null) {
                 pi.startFrom(startFromNodeId);
             } else {
@@ -64,6 +69,13 @@ public class ProcessServiceImpl implements ProcessService {
             }
             return pi;
         });
+    }
+
+    @Override
+    public <T extends Model> ProcessInstance<T> createProcessInstance(Process<T> process, String businessKey,
+            T model,
+            String startFromNodeId) {
+        return createProcessInstance(process, businessKey, model, startFromNodeId, null);
     }
 
     @Override

@@ -25,10 +25,14 @@ public class ConfigBean extends org.kie.kogito.conf.StaticConfigBean {
     @org.eclipse.microprofile.config.inject.ConfigProperty(name = "kogito.messaging.as-cloudevents", defaultValue="true")
     boolean useCloudEvents;
 
+    @javax.inject.Inject
+    javax.enterprise.inject.Instance<org.kie.kogito.transport.TransportFilter> transportFilters;
+
     @javax.annotation.PostConstruct
     protected void init() {
         setServiceUrl(kogitoService.orElse(""));
         setCloudEvents(useCloudEvents);
         setGav($gav$);
+        setTransportConfig(new org.kie.kogito.transport.TransportConfig(transportFilters));
     }
 }

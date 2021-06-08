@@ -39,10 +39,13 @@ public class ProtobufVariableWriter {
     }
 
     public List<KogitoTypesProtobuf.Variable> buildVariables(List<Map.Entry<String, Object>> variables) {
-        Comparator<Map.Entry<String, Object>> comparator = (o1, o2) -> o1.getKey().compareTo(o2.getKey());
+        List<KogitoTypesProtobuf.Variable> variablesProtobuf = new ArrayList<>();
+        if (variables == null) {
+            return variablesProtobuf;
+        }
+        Comparator<Map.Entry<String, Object>> comparator = Comparator.comparing(Map.Entry::getKey);
         Collections.sort(variables, comparator);
 
-        List<KogitoTypesProtobuf.Variable> variablesProtobuf = new ArrayList<>();
         for (Map.Entry<String, Object> entry : variables) {
             KogitoTypesProtobuf.Variable.Builder variableBuilder = KogitoTypesProtobuf.Variable.newBuilder();
             variableBuilder.setName(entry.getKey());

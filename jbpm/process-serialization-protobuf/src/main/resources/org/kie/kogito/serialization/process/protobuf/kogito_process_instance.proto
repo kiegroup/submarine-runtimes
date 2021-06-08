@@ -34,6 +34,7 @@ message ProcessInstance {
 
     optional WorkflowContext context = 18;
     repeated SwimlaneContext swimlane_context = 19;
+    repeated Variable transport_context = 21;
 
     repeated string completedNodeIds = 20;
 

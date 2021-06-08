@@ -318,6 +318,16 @@ public abstract class AbstractProcessInstance<T extends Model> implements Proces
     }
 
     @Override
+    public Object getContextAttr(String name) {
+        return this.processInstance.getMetaData().get(name);
+    }
+
+    @Override
+    public void setContextAttr(String name, Object value) {
+        this.processInstance.setMetaData(name, value);
+    }
+
+    @Override
     public Optional<ProcessError> error() {
         if (this.status == STATE_ERROR) {
             return Optional.of(this.processError != null ? this.processError : buildProcessError());

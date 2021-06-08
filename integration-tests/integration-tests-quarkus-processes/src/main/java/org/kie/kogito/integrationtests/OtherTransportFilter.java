@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.conf;
 
-import java.util.Optional;
+package org.kie.kogito.integrationtests;
 
-import org.kie.kogito.KogitoConfig;
-import org.kie.kogito.KogitoGAV;
-import org.kie.kogito.transport.TransportConfig;
+import java.util.Collection;
+import java.util.Collections;
 
-public interface ConfigBean extends KogitoConfig {
+import javax.enterprise.context.ApplicationScoped;
 
-    boolean useCloudEvents();
+import org.kie.kogito.transport.TransportFilter;
 
-    String getServiceUrl();
+@ApplicationScoped
+public class OtherTransportFilter implements TransportFilter {
 
-    Optional<KogitoGAV> getGav();
-
-    TransportConfig transportConfig();
+    @Override
+    public Collection<String> getValues() {
+        return Collections.singletonList("other");
+    }
 }

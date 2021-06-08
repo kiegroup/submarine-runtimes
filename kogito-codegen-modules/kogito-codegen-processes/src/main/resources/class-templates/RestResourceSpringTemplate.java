@@ -23,21 +23,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jbpm.util.JsonSchemaUtil;
+import org.kie.kogito.auth.IdentityProvider;
+import org.kie.kogito.conf.ConfigBean;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstance;
-import org.kie.kogito.process.WorkItem;
 import org.kie.kogito.process.ProcessService;
+import org.kie.kogito.process.WorkItem;
 import org.kie.kogito.process.workitem.Attachment;
 import org.kie.kogito.process.workitem.AttachmentInfo;
 import org.kie.kogito.process.workitem.Comment;
 import org.kie.kogito.process.workitem.Policies;
 import org.kie.kogito.process.workitem.TaskModel;
-import org.kie.kogito.auth.IdentityProvider;
+import org.kie.kogito.transport.TransportConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +53,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -64,6 +66,9 @@ public class $Type$Resource {
     @Autowired
     ProcessService processService;
 
+    @Autowired
+    ConfigBean configBean;
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<$Type$Output> createResource_$name$(@RequestHeader HttpHeaders httpHeaders,
                                                               @RequestParam(value = "businessKey", required = false) String businessKey,
@@ -72,7 +77,8 @@ public class $Type$Resource {
         ProcessInstance<$Type$> pi = processService.createProcessInstance(process,
                                                                           businessKey,
                                                                           Optional.ofNullable(resource).orElse(new $Type$Input()).toModel(),
-                                                                          httpHeaders.getOrEmpty("X-KOGITO-StartFromNode").stream().findFirst().orElse(null));
+                                                                          httpHeaders.getOrEmpty("X-KOGITO-StartFromNode").stream().findFirst().orElse(null),
+                                                                          configBean.transportConfig().buildContext(httpHeaders));
         return ResponseEntity.created(uriComponentsBuilder.path("/$name$/{id}").buildAndExpand(pi.id()).toUri())
                 .body(pi.checkError().variables().toModel());
     }

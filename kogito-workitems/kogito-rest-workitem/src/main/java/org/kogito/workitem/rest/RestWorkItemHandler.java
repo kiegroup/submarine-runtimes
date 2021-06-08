@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItem;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItemHandler;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItemManager;
+import org.kie.kogito.transport.TransportConfig;
 
 import io.vertx.core.http.HttpMethod;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -93,6 +94,8 @@ public class RestWorkItemHandler implements KogitoWorkItemHandler {
         if (user != null && !user.trim().isEmpty() && password != null && !password.trim().isEmpty()) {
             request.basicAuthentication(user, password);
         }
+        addHeadersFromContext(workItem, request);
+
         HttpResponse<Buffer> response;
         if (method == HttpMethod.POST || method == HttpMethod.PUT) {
             // if parameters is empty at this stage, assume post content is the whole input model
@@ -106,6 +109,17 @@ public class RestWorkItemHandler implements KogitoWorkItemHandler {
         }
         manager.completeWorkItem(workItem.getStringId(), Collections.singletonMap(RESULT, resultHandler.apply(inputModel,
                 response.bodyAsJsonObject())));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addHeadersFromContext(KogitoWorkItem workItem, HttpRequest<Buffer> request) {
+        if (workItem.getProcessInstance() == null) {
+            return;
+        }
+        Map<String, String> transportContext = (Map<String, String>) workItem.getProcessInstance().getMetaData().get(TransportConfig.TRANSPORT_CONTEXT);
+        if (transportContext != null) {
+            transportContext.forEach(request::putHeader);
+        }
     }
 
     @Override

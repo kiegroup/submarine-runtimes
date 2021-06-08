@@ -20,8 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItem;
 import org.kie.kogito.internal.process.runtime.KogitoWorkItemManager;
+import org.kie.kogito.transport.TransportConfig;
 import org.kogito.workitem.rest.jsonpath.functions.JSonPathResultHandler;
 import org.kogito.workitem.rest.jsonpath.functions.JsonPathResolver;
 import org.mockito.ArgumentCaptor;
@@ -41,6 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -143,6 +146,56 @@ public class RestTaskHandlerTest {
         assertTrue(results.containsKey(RestWorkItemHandler.RESULT));
         Object result = results.get(RestWorkItemHandler.RESULT);
         assertTrue(result instanceof ObjectNode);
+        assertEquals(1, ((ObjectNode) result).get("num").asInt());
+    }
+
+    @Test
+    public void testRestTaskHandlerTransportHeaders() {
+        WebClient webClient = mock(WebClient.class);
+        ObjectMapper mapper = new ObjectMapper();
+        HttpRequest<Buffer> request = mock(HttpRequest.class);
+
+        when(webClient.request(HttpMethod.GET, 8080, "localhost", "/results/26/names/pepe"))
+                .thenReturn(request);
+        HttpResponse<Buffer> response = mock(HttpResponse.class);
+        when(request.sendAndAwait()).thenReturn(response);
+        when(response.bodyAsJsonObject()).thenReturn(JsonObject.mapFrom(Collections.singletonMap("num", 1)));
+
+        Map<String, Object> parameters =
+                new HashMap<>();
+        parameters.put("id", new JsonPathResolver("$.id"));
+        parameters.put("name", new JsonPathResolver("$.name"));
+        parameters.put(RestWorkItemHandler.ENDPOINT, "http://localhost:8080/results/{id}/names/{name}");
+        parameters.put(RestWorkItemHandler.METHOD, "GET");
+        parameters.put(RestWorkItemHandler.RESULT_HANDLER, new JSonPathResultHandler());
+        parameters.put(RestWorkItemHandler.PARAMETER, mapper.createObjectNode().put("id", 26).put("name", "pepe"));
+
+        KogitoWorkItem workItem = mock(KogitoWorkItem.class);
+        when(workItem.getStringId()).thenReturn("2");
+        when(workItem.getParameters()).thenReturn(parameters);
+
+        KogitoProcessInstance mockProcessInstance = mock(KogitoProcessInstance.class);
+        Map<String, Object> mockMetaData = new HashMap<>();
+        Map<String, String> transportContext = new HashMap<>();
+        transportContext.put("Foo", "x");
+        transportContext.put("Bar", "y");
+        mockMetaData.put(TransportConfig.TRANSPORT_CONTEXT, transportContext);
+        when(mockProcessInstance.getMetaData()).thenReturn(mockMetaData);
+        when(workItem.getProcessInstance()).thenReturn(mockProcessInstance);
+        KogitoWorkItemManager manager = mock(KogitoWorkItemManager.class);
+
+        ArgumentCaptor<Map<String, Object>> argCaptor = ArgumentCaptor.forClass(Map.class);
+
+        RestWorkItemHandler handler = new RestWorkItemHandler(webClient);
+        handler.executeWorkItem(workItem, manager);
+        verify(manager).completeWorkItem(anyString(), argCaptor.capture());
+        Map<String, Object> results = argCaptor.getValue();
+
+        assertEquals(1, results.size());
+        assertTrue(results.containsKey(RestWorkItemHandler.RESULT));
+        Object result = results.get(RestWorkItemHandler.RESULT);
+        assertTrue(result instanceof ObjectNode);
+        transportContext.forEach((k, v) -> verify(request, times(1)).putHeader(k, v));
         assertEquals(1, ((ObjectNode) result).get("num").asInt());
     }
 }

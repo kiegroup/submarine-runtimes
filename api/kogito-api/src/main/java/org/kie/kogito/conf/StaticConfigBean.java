@@ -18,12 +18,14 @@ package org.kie.kogito.conf;
 import java.util.Optional;
 
 import org.kie.kogito.KogitoGAV;
+import org.kie.kogito.transport.TransportConfig;
 
 public class StaticConfigBean implements ConfigBean {
 
     private String serviceUrl;
     private boolean useCloudEvents = true;
     private KogitoGAV gav;
+    private TransportConfig transportConfig = new TransportConfig();
 
     public StaticConfigBean() {
     }
@@ -46,6 +48,10 @@ public class StaticConfigBean implements ConfigBean {
         this.gav = gav;
     }
 
+    protected void setTransportConfig(TransportConfig transportConfig) {
+        this.transportConfig = transportConfig;
+    }
+
     @Override
     public boolean useCloudEvents() {
         return useCloudEvents;
@@ -59,5 +65,10 @@ public class StaticConfigBean implements ConfigBean {
     @Override
     public Optional<KogitoGAV> getGav() {
         return Optional.ofNullable(gav);
+    }
+
+    @Override
+    public TransportConfig transportConfig() {
+        return transportConfig;
     }
 }
