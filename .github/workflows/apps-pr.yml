@@ -38,9 +38,9 @@ jobs:
       - name: Clone quarkus
         uses: actions/checkout@v2
         with:
-          repository: quarkusio/quarkus
+          repository: aloubyansky/quarkus
           path: quarkus
-          # ref: branch
+          ref: kogito-caps
       - name: Quarkus build + install
         run: mvn -f quarkus/pom.xml clean install -Dquickly 
       - name: Build Chain ${{ matrix.java-version }}
