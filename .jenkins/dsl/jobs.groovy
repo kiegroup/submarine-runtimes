@@ -67,7 +67,6 @@ if (Utils.isMainBranch(this)) {
     setupDroolsJob(nightlyBranchFolder)
 
     setupQuarkusJob(nightlyBranchFolder, 'main')
-    setupQuarkusJob(nightlyBranchFolder, "${QUARKUS_LTS_VERSION}")
 }
 setupSonarCloudJob(nightlyBranchFolder)
 setupNativeJob(nightlyBranchFolder)
@@ -80,6 +79,9 @@ if (!Utils.isMainBranch(this)) {
     setupPromoteJob(releaseBranchFolder, KogitoJobType.RELEASE)
 }
 
+if (Utils.isLTSBranch(this)) {
+    setupQuarkusJob(nightlyBranchFolder, "${QUARKUS_LTS_VERSION}")
+}
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
