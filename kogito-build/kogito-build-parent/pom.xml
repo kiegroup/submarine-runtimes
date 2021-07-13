@@ -127,6 +127,8 @@
 
     <!-- this version property is used in plugins but also in dependencies too -->
     <version.io.quarkus>2.0.0.Final</version.io.quarkus>
+    <!-- non-productized non-bom managed dependency keep in sync with version.io.quarkus -->
+    <version.io.quarkus.test-maven>2.0.0.Final</version.io.quarkus.test-maven>
 
     <!-- dependencies versions -->
     <version.com.fasterxml.jackson>2.12.3</version.com.fasterxml.jackson>
@@ -1111,7 +1113,7 @@ limitations under the License.
                 </excludes>
                 <useDefaultExcludes>false</useDefaultExcludes>
                 <properties>
-                  <license.git.copyrightLastYearMaxCommitsLookup>100</license.git.copyrightLastYearMaxCommitsLookup> 
+                  <license.git.copyrightLastYearMaxCommitsLookup>100</license.git.copyrightLastYearMaxCommitsLookup>
                 </properties>
               </licenseSet>
             </licenseSets>
