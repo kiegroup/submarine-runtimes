@@ -60,6 +60,7 @@
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
       <version>3.0.8</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
