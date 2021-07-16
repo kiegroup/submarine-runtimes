@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.drools.core.io.impl.FileSystemResource;
 import org.drools.core.util.StringUtils;
@@ -43,9 +44,12 @@ import org.jbpm.compiler.canonical.ProcessToExecModelGenerator;
 import org.jbpm.compiler.canonical.TriggerMetaData;
 import org.jbpm.compiler.canonical.UserTaskModelMetaData;
 import org.jbpm.compiler.xml.XmlProcessReader;
+import org.jbpm.process.core.context.variable.Variable;
+import org.jbpm.process.core.context.variable.VariableScope;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.process.WorkflowProcess;
 import org.kie.api.io.Resource;
+import org.kie.kogito.KogitoGAV;
 import org.kie.kogito.codegen.api.ApplicationSection;
 import org.kie.kogito.codegen.api.GeneratedFile;
 import org.kie.kogito.codegen.api.GeneratedFileType;
@@ -54,6 +58,7 @@ import org.kie.kogito.codegen.api.context.KogitoBuildContext;
 import org.kie.kogito.codegen.api.context.impl.QuarkusKogitoBuildContext;
 import org.kie.kogito.codegen.api.io.CollectedResource;
 import org.kie.kogito.codegen.core.AbstractGenerator;
+import org.kie.kogito.codegen.core.DashboardGeneratedFileUtils;
 import org.kie.kogito.codegen.process.config.ProcessConfigGenerator;
 import org.kie.kogito.codegen.process.events.CloudEventMetaFactoryGenerator;
 import org.kie.kogito.codegen.process.events.CloudEventsResourceGenerator;
@@ -68,6 +73,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.grafana.GrafanaConfigurationWriter.buildDashboardName;
+import static org.kie.kogito.grafana.GrafanaConfigurationWriter.generateDomainSpecificProcessDashboard;
+import static org.kie.kogito.grafana.GrafanaConfigurationWriter.generateOperationalDashboard;
 
 /**
  * Entry point to process code generation
@@ -88,6 +96,8 @@ public class ProcessCodegen extends AbstractGenerator {
     private static final String JSON_PARSER = "json";
     public static final String SVG_EXPORT_NAME_EXPRESION = "%s-svg.svg";
     public static final Map<String, String> SUPPORTED_SW_EXTENSIONS;
+    private static final String DOMAIN_DASHBOARD_TEMPLATE = "/grafana-dashboard-template/blank-dashboard.json";
+    private static final String OPERATIONAL_DASHBOARD_TEMPLATE = "/grafana-dashboard-template/operational-dashboard-template.json";
 
     static {
         BPMN_SEMANTIC_MODULES.addSemanticModule(new BPMNSemanticModule());
@@ -465,7 +475,28 @@ public class ProcessCodegen extends AbstractGenerator {
             storeFile(PROCESS_INSTANCE_TYPE, pi.generatedFilePath(), pi.generate());
         }
 
+        // generate dashboards
+        if (context().getAddonsConfig().usePrometheusMonitoring()) {
+            processes.values().forEach(this::generateProcessDashboards);
+        }
+
         return generatedFiles;
+    }
+
+    private void generateProcessDashboards(KogitoWorkflowProcess process) {
+        KogitoGAV gav = context().getGAV().orElse(KogitoGAV.EMPTY_GAV);
+
+        VariableScope scope = (VariableScope) ((org.jbpm.process.core.Process) process).getDefaultContext(VariableScope.VARIABLE_SCOPE);
+        Map<String, String> variables = scope.getVariables().stream().collect(Collectors.toMap(
+                Variable::getName,
+                variable -> variable.getType().getClass().getSimpleName()));
+
+        String dbName = buildDashboardName(context().getGAV(), process.getId());
+        String opsDbJson = generateOperationalDashboard(OPERATIONAL_DASHBOARD_TEMPLATE, dbName, process.getId(), gav, false);
+        String domDbJson = generateDomainSpecificProcessDashboard(DOMAIN_DASHBOARD_TEMPLATE, dbName, process.getId(), gav, variables, false);
+
+        generatedFiles.addAll(DashboardGeneratedFileUtils.operational(opsDbJson, dbName + ".json"));
+        generatedFiles.addAll(DashboardGeneratedFileUtils.domain(domDbJson, dbName + ".json"));
     }
 
     private void storeFile(GeneratedFileType type, String path, String source) {

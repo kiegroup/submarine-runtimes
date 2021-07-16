@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -35,6 +36,7 @@ import org.kie.kogito.grafana.dmn.SupportedDecisionTypes;
 import org.kie.kogito.grafana.model.functions.GrafanaFunction;
 import org.kie.kogito.grafana.model.functions.Label;
 import org.kie.kogito.grafana.model.panel.PanelType;
+import org.kie.kogito.grafana.process.SupportedProcessTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,6 +120,37 @@ public class GrafanaConfigurationWriter {
         template = customizeTemplate(template, endpoint, gav.getArtifactId(), gav.getVersion());
 
         JGrafana jgrafana = initialize(template, String.format("%s - Domain Dashboard", dashboardName), generateAuditLink);
+
+        return serialize(jgrafana);
+    }
+
+    /**
+     * Generates domain specific dashboard from a given dashboard template.
+     *
+     * @return: The customized template containing also specific panels for the process input variables specified.
+     */
+    public static String generateDomainSpecificProcessDashboard(String templatePath, String dashboardName, String processId, KogitoGAV gav, Map<String, String> variables, boolean generateAuditLink) {
+        String template = readStandardDashboard(templatePath);
+        template = customizeTemplate(template, processId, gav.getArtifactId(), gav.getVersion());
+
+        JGrafana jgrafana = initialize(template, String.format("%s - Domain Dashboard", dashboardName), generateAuditLink);
+
+        variables.forEach((varName, varType) -> {
+            if (SupportedProcessTypes.isSupported(varType)) {
+                String metricBody = "process_input";
+                List<Label> labels = new ArrayList<>();
+                labels.add(new Label("process_id", "\"" + processId + "\""));
+                labels.add(new Label("variable_name", "\"" + varName + "\""));
+
+                GrafanaFunction grafanaFunction = SupportedProcessTypes.getGrafanaFunction(varType)
+                        .orElseThrow(() -> new RuntimeException("Mismatch between supported Grafana DMN Types and defined functions"));
+
+                jgrafana.addPanel(PanelType.GRAPH,
+                        "Variable " + varName,
+                        grafanaFunction.render(metricBody, labels),
+                        SupportedProcessTypes.getYAxis(varType));
+            }
+        });
 
         return serialize(jgrafana);
     }

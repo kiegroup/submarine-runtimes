@@ -35,6 +35,7 @@ import org.kie.kogito.monitoring.core.common.MonitoringRegistry;
 import org.kie.kogito.monitoring.core.common.mock.DMNDecisionResultMock;
 import org.kie.kogito.monitoring.core.common.system.metrics.DMNResultMetricsBuilder;
 import org.kie.kogito.monitoring.core.common.system.metrics.dmnhandlers.DecisionConstants;
+import org.kie.kogito.monitoring.core.common.system.metrics.dmnhandlers.TypeHandler;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
@@ -144,7 +145,7 @@ public class DMNResultMetricsBuilderTest {
     // Keep aligned the mapping of types between kogito-codegen and prometheus-addon.
     @Test
     public void alighmentWithKogitoCodegenIsOk() {
-        List addonSupportedTypes = dmnResultMetricsBuilder.getHandlers().values().stream().map(x -> x.getDmnType()).collect(Collectors.toList());
+        List addonSupportedTypes = dmnResultMetricsBuilder.getHandlers().values().stream().map(TypeHandler::getDmnType).collect(Collectors.toList());
         assertTrue(addonSupportedTypes.containsAll(SupportedDecisionTypes.getSupportedDMNTypes()));
         assertTrue(SupportedDecisionTypes.getSupportedDMNTypes().containsAll(addonSupportedTypes));
     }

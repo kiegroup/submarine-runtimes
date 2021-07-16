@@ -36,12 +36,14 @@ import org.kie.kogito.codegen.core.GeneratorConfig;
 import org.kie.kogito.internal.process.runtime.KogitoWorkflowProcess;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -53,6 +55,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static org.drools.core.util.StringUtils.ucFirst;
 import static org.kie.kogito.codegen.core.CodegenUtils.interpolateTypes;
 
@@ -133,11 +136,15 @@ public class ProcessResourceGenerator {
     }
 
     protected String getRestTemplateName() {
-        boolean isReactiveGenerator = "reactive".equals(context.getApplicationProperty(GeneratorConfig.KOGITO_REST_RESOURCE_TYPE_PROP)
-                .orElse(""));
-        boolean isQuarkus = context.name().equals(QuarkusKogitoBuildContext.CONTEXT_NAME);
+        return isReactiveGenerator() ? REACTIVE_REST_TEMPLATE_NAME : REST_TEMPLATE_NAME;
+    }
 
-        return isQuarkus && isReactiveGenerator ? REACTIVE_REST_TEMPLATE_NAME : REST_TEMPLATE_NAME;
+    protected boolean isReactiveGenerator() {
+        boolean isQuarkus = context.name().equals(QuarkusKogitoBuildContext.CONTEXT_NAME);
+        boolean isReactiveGenerator = context.getApplicationProperty(GeneratorConfig.KOGITO_REST_RESOURCE_TYPE_PROP)
+                .map("reactive"::equals)
+                .orElse(false);
+        return isQuarkus && isReactiveGenerator;
     }
 
     public String generate() {
@@ -281,6 +288,10 @@ public class ProcessResourceGenerator {
         }
 
         enableValidation(template);
+        if (!isReactiveGenerator()) {
+            // monitoring injection currently doesn't work for reactive generator
+            enableMonitoring(clazz, template);
+        }
 
         template.getMembers().sort(new BodyDeclarationComparator());
         return clazz.toString();
@@ -301,6 +312,36 @@ public class ProcessResourceGenerator {
                         .stream()
                         .filter(param -> param.getTypeAsString().equals(dataClazzName + "Input"))
                         .forEach(this::insertValidationAnnotations));
+    }
+
+    private void enableMonitoring(CompilationUnit clazz, ClassOrInterfaceDeclaration template) {
+        if (!context.getAddonsConfig().useMonitoring()) {
+            return;
+        }
+
+        addMonitoringImports(clazz);
+        addMonitoringFields(template);
+        addMonitoringToMethods(template);
+    }
+
+    private void addMonitoringImports(CompilationUnit cu) {
+        cu.addImport(new ImportDeclaration(new Name("org.kie.kogito.monitoring.core.common.system.metrics.ProcessDomainMetricsCollector"), false, false));
+    }
+
+    private void addMonitoringFields(ClassOrInterfaceDeclaration template) {
+        FieldDeclaration field = template.addField("ProcessDomainMetricsCollector", "domainMetricsCollector");
+        if (context.hasDI()) {
+            context.getDependencyInjectionAnnotator().withInjection(field);
+        }
+    }
+
+    private void addMonitoringToMethods(ClassOrInterfaceDeclaration template) {
+        template.getMethods().stream()
+                .filter(m -> m.getNameAsString().startsWith("createResource_"))
+                .findFirst()
+                .filter(m -> m.getBody().isPresent())
+                .map(m -> m.getBody().get())
+                .ifPresent(body -> body.getStatements().addFirst(parseStatement("domainMetricsCollector.registerInput(resource, process.id());")));
     }
 
     private void insertValidationAnnotations(Parameter param) {
