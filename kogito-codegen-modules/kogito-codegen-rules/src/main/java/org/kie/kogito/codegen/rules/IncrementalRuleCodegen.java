@@ -154,7 +154,7 @@ public class IncrementalRuleCodegen extends AbstractGenerator {
         KnowledgeBuilderConfigurationImpl configuration =
                 new KogitoKnowledgeBuilderConfigurationImpl(context().getClassLoader());
 
-        ModelBuilderImpl<KogitoPackageSources> modelBuilder = new ModelBuilderImpl<>(KogitoPackageSources::dumpSources, configuration, dummyReleaseId, true, hotReloadMode);
+        ModelBuilderImpl<KogitoPackageSources> modelBuilder = new ModelBuilderImpl<>(KogitoPackageSources::dumpSources, configuration, dummyReleaseId, hotReloadMode);
 
         CompositeKnowledgeBuilder batch = modelBuilder.batch();
         resources.forEach(f -> addResource(batch, f));
