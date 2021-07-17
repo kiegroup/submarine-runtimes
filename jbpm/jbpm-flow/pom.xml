@@ -35,6 +35,14 @@
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-api-incubation-processes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-api-incubation-processes-services</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-api</artifactId>
     </dependency>
     <dependency>

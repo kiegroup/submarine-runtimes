@@ -49,6 +49,8 @@ public class PingPongMessageTest extends BaseRestTest {
 
     @Test
     void testPingPongBetweenProcessInstances() throws InterruptedException {
+        // make sure kafka is all set-up
+        Thread.sleep(5_000);
         CountDownLatch latch = new CountDownLatch(1);
         Flux.from(publisher)
                 .map(x -> {

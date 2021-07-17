@@ -15,40 +15,30 @@
  */
 package org.kie.kogito.process.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jbpm.process.instance.impl.humantask.HumanTaskHelper;
 import org.jbpm.process.instance.impl.humantask.HumanTaskTransition;
 import org.jbpm.util.JsonSchemaUtil;
-import org.kie.kogito.Application;
-import org.kie.kogito.MapOutput;
-import org.kie.kogito.MappableToModel;
-import org.kie.kogito.Model;
+import org.kie.kogito.*;
+import org.kie.kogito.incubation.process.workitem.impl.WorkItemServiceImpl;
+import org.kie.kogito.incubation.processes.services.workitems.WorkItemService;
+import org.kie.kogito.incubation.processes.workitem.WorkItemId;
+import org.kie.kogito.process.*;
 import org.kie.kogito.process.Process;
-import org.kie.kogito.process.ProcessConfig;
-import org.kie.kogito.process.ProcessInstance;
-import org.kie.kogito.process.ProcessInstanceReadMode;
-import org.kie.kogito.process.ProcessService;
-import org.kie.kogito.process.WorkItem;
-import org.kie.kogito.process.workitem.Attachment;
-import org.kie.kogito.process.workitem.AttachmentInfo;
-import org.kie.kogito.process.workitem.Comment;
-import org.kie.kogito.process.workitem.HumanTaskWorkItem;
-import org.kie.kogito.process.workitem.Policies;
+import org.kie.kogito.process.workitem.*;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
 
 public class ProcessServiceImpl implements ProcessService {
 
     private final Application application;
+    private final WorkItemService workItemService;
 
     public ProcessServiceImpl(Application application) {
         this.application = application;
+        this.workItemService = new WorkItemServiceImpl(application);
     }
 
     @Override
@@ -145,17 +135,10 @@ public class ProcessServiceImpl implements ProcessService {
             String user,
             List<String> groups,
             MapOutput taskModel) {
-        return UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> process
-                .instances()
-                .findById(id)
-                .map(pi -> {
-                    pi.transitionWorkItem(
-                            taskId,
-                            HumanTaskTransition.withModel(phase, taskModel, Policies.of(user, groups)));
-                    return pi;
-                })
-                .map(ProcessInstance::variables)
-                .map(MappableToModel::toModel));
+        WorkItemId workItemId = new WorkItemId(process.id(), id, taskId);
+        HumanTaskTransition transition = HumanTaskTransition.withModel(phase, taskModel, Policies.of(user, groups));
+        return workItemService.complete(workItemId, transition)
+                .map(m -> ((T) m).toModel()); // cast to be removed https://issues.redhat.com/browse/KOGITO-5448
     }
 
     @Override
@@ -166,11 +149,10 @@ public class ProcessServiceImpl implements ProcessService {
             List<String> groups,
             MapOutput model,
             Function<Map<String, Object>, R> mapper) {
-        return UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> process
-                .instances()
-                .findById(id)
-                .map(pi -> pi.updateWorkItem(taskId, wi -> HumanTaskHelper.updateContent(wi, model), Policies.of(user, groups))))
-                .map(mapper::apply);
+        WorkItemId workItemId = new WorkItemId(process.id(), id, taskId);
+        return workItemService.save(workItemId, model, Policies.of(user, groups))
+                .map(m -> mapper.apply(m.toMap()));
+
     }
 
     @Override
@@ -182,16 +164,10 @@ public class ProcessServiceImpl implements ProcessService {
             String user,
             List<String> groups,
             MapOutput model) {
-        return UnitOfWorkExecutor.executeInUnitOfWork(
-                application.unitOfWorkManager(), () -> process
-                        .instances()
-                        .findById(id)
-                        .map(pi -> {
-                            pi.transitionWorkItem(
-                                    taskId,
-                                    HumanTaskTransition.withModel(phase, model, Policies.of(user, groups)));
-                            return pi.variables().toModel();
-                        }));
+        WorkItemId workItemId = new WorkItemId(process.id(), id, taskId);
+        HumanTaskTransition transition = HumanTaskTransition.withModel(phase, model, Policies.of(user, groups));
+        return workItemService.transition(workItemId, transition)
+                .map(m -> ((T) m).toModel()); // cast to be removed https://issues.redhat.com/browse/KOGITO-5448
     }
 
     @Override
@@ -201,29 +177,22 @@ public class ProcessServiceImpl implements ProcessService {
             String user,
             List<String> groups,
             Function<WorkItem, R> mapper) {
-        return process.instances()
-                .findById(id, ProcessInstanceReadMode.READ_ONLY)
-                .map(pi -> pi.workItem(taskId, Policies.of(user, groups)))
-                .map(mapper::apply);
+        WorkItemId workItemId = new WorkItemId(process.id(), id, taskId);
+        return workItemService.get(workItemId, Policies.of(user, groups))
+                .map(mapper);
     }
 
     @Override
     public <T extends MappableToModel<R>, R> Optional<R> abortTask(Process<T> process,
-            String id,
+            String instanceId,
             String taskId,
             String phase,
             String user,
             List<String> groups) {
-        return UnitOfWorkExecutor.executeInUnitOfWork(
-                application.unitOfWorkManager(), () -> process
-                        .instances()
-                        .findById(id)
-                        .map(pi -> {
-                            pi.transitionWorkItem(taskId,
-                                    HumanTaskTransition.withoutModel(phase,
-                                            Policies.of(user, groups)));
-                            return pi.variables().toModel();
-                        }));
+        WorkItemId workItemId = new WorkItemId(process.id(), instanceId, taskId);
+        HumanTaskTransition transition = HumanTaskTransition.withoutModel(phase, Policies.of(user, groups));
+        return workItemService.abort(workItemId, transition)
+                .map(m -> ((T) m).toModel()); // cast to be removed https://issues.redhat.com/browse/KOGITO-5448
     }
 
     @Override
