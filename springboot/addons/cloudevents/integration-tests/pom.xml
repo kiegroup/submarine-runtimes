@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-bom</artifactId>
+      <artifactId>kogito-springboot-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>

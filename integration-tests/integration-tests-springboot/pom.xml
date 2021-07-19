@@ -13,7 +13,7 @@
     <!-- NOTE: don't change their scope because otherwise maven-invoker-plugin is not going to install them in localRepositoryPath  -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-bom</artifactId>
+      <artifactId>kogito-springboot-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>
