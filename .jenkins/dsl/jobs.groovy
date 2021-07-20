@@ -214,7 +214,7 @@ void setupDeployJob(String jobFolder, KogitoJobType jobType) {
 
             // Release information
             booleanParam('CREATE_PR', false, 'Should we create a PR with the changes ?')
-            stringParam('PROJECT_VERSION', '', 'Set the project version')
+            stringParam('KOGITO_VERSION', '', 'Set the project version')
         }
 
         environmentVariables {
@@ -260,9 +260,9 @@ void setupPromoteJob(String jobFolder, KogitoJobType jobType) {
             stringParam('DEPLOY_BUILD_URL', '', 'URL to jenkins deploy build to retrieve the `deployment.properties` file.')
 
             // Release information which can override `deployment.properties`
-            stringParam('PROJECT_VERSION', '', 'Override `deployment.properties`. Give the project version.')
+            stringParam('KOGITO_VERSION', '', 'Override `deployment.properties`. Give the project version.')
 
-            stringParam('GIT_TAG', '', 'Git tag to set, if different from PROJECT_VERSION')
+            stringParam('GIT_TAG', '', 'Git tag to set, if different from KOGITO_VERSION')
         }
 
         environmentVariables {

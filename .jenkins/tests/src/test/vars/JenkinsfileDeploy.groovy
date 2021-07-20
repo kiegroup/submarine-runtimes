@@ -44,11 +44,11 @@ class JenkinsfileDeploy extends JenkinsPipelineSpecification {
         output == 'BRANCH'
     }
 
-    def '[Jenkinsfile.deploy] getProjectVersion with param' () {
+    def '[Jenkinsfile.deploy] getKogitoVersion with param' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : 'VERSION'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : 'VERSION'])
         when:
-        def output = Jenkinsfile.getProjectVersion()
+        def output = Jenkinsfile.getKogitoVersion()
         then:
         output == 'VERSION'
     }
@@ -56,7 +56,7 @@ class JenkinsfileDeploy extends JenkinsPipelineSpecification {
     def '[Jenkinsfile.deploy] getBotBranch with version param' () {
         setup:
         Jenkinsfile.getBinding().setVariable('env', ['BOT_BRANCH_HASH' : 'HASH'])
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : 'VERSION'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : 'VERSION'])
         when:
         def output = Jenkinsfile.getBotBranch()
         then:

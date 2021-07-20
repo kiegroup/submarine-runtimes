@@ -110,7 +110,7 @@ class JenkinsfilePromote extends JenkinsPipelineSpecification {
 
     def '[Jenkinsfile.promote] getSnapshotVersion' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : '1.0.0'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : '1.0.0'])
         explicitlyMockPipelineVariable('util')
         getPipelineMock('util.getNextVersion')('1.0.0', 'micro') >> { return '1.0.1-SNAPSHOT' }
         when:
@@ -119,39 +119,39 @@ class JenkinsfilePromote extends JenkinsPipelineSpecification {
         value == '1.0.1-SNAPSHOT'
     }
 
-    def '[Jenkinsfile.promote] getProjectVersion: PROJECT_VERSION param' () {
+    def '[Jenkinsfile.promote] getKogitoVersion: KOGITO_VERSION param' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : 'PROJECT_VERSION'])
-        Jenkinsfile.getBinding().setVariable('deployProperties', ['project.version' : 'project.version'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : 'KOGITO_VERSION'])
+        Jenkinsfile.getBinding().setVariable('deployProperties', ['kogito.version' : 'kogito.version'])
         when:
-        def value = Jenkinsfile.getProjectVersion()
+        def value = Jenkinsfile.getKogitoVersion()
         then:
-        value == 'PROJECT_VERSION'
+        value == 'KOGITO_VERSION'
     }
 
-    def '[Jenkinsfile.promote] getProjectVersion: no PROJECT_VERSION param' () {
+    def '[Jenkinsfile.promote] getKogitoVersion: no KOGITO_VERSION param' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : ''])
-        Jenkinsfile.getBinding().setVariable('deployProperties', ['project.version' : 'project.version'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : ''])
+        Jenkinsfile.getBinding().setVariable('deployProperties', ['kogito.version' : 'kogito.version'])
         when:
-        def value = Jenkinsfile.getProjectVersion()
+        def value = Jenkinsfile.getKogitoVersion()
         then:
-        value == 'project.version'
+        value == 'kogito.version'
     }
 
-    def '[Jenkinsfile.promote] getProjectVersion: no value' () {
+    def '[Jenkinsfile.promote] getKogitoVersion: no value' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : ''])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : ''])
         Jenkinsfile.getBinding().setVariable('deployProperties', [:])
         when:
-        def value = Jenkinsfile.getProjectVersion()
+        def value = Jenkinsfile.getKogitoVersion()
         then:
         value == ''
     }
 
     def '[Jenkinsfile.promote] getGitTag: GIT_TAG param' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['GIT_TAG' : 'tag', 'PROJECT_VERSION' : 'version'])
+        Jenkinsfile.getBinding().setVariable('params', ['GIT_TAG' : 'tag', 'KOGITO_VERSION' : 'version'])
         when:
         def value = Jenkinsfile.getGitTag()
         then:
@@ -160,7 +160,7 @@ class JenkinsfilePromote extends JenkinsPipelineSpecification {
 
     def '[Jenkinsfile.promote] getGitTag: no GIT_TAG param' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['GIT_TAG' : '', 'PROJECT_VERSION' : 'version'])
+        Jenkinsfile.getBinding().setVariable('params', ['GIT_TAG' : '', 'KOGITO_VERSION' : 'version'])
         when:
         def value = Jenkinsfile.getGitTag()
         then:
@@ -232,7 +232,7 @@ class JenkinsfilePromote extends JenkinsPipelineSpecification {
 
     def '[Jenkinsfile.promote] getSnapshotBranch' () {
         setup:
-        Jenkinsfile.getBinding().setVariable('params', ['PROJECT_VERSION' : '1.0.0'])
+        Jenkinsfile.getBinding().setVariable('params', ['KOGITO_VERSION' : '1.0.0'])
         explicitlyMockPipelineVariable('util')
         getPipelineMock('util.getNextVersion')('1.0.0', 'micro') >> { return '1.0.1-SNAPSHOT' }
         Jenkinsfile.getBinding().setVariable('env', ['BOT_BRANCH_HASH' : 'anything'])

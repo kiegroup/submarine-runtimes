@@ -45,8 +45,8 @@ pipeline {
 
                     if (isRelease()) {
                         // Verify version is set and if on right release branch
-                        assert getProjectVersion()
-                        assert getBuildBranch() == util.getReleaseBranchFromVersion(getProjectVersion())
+                        assert getKogitoVersion()
+                        assert getBuildBranch() == util.getReleaseBranchFromVersion(getKogitoVersion())
                     }
                 }
             }
@@ -152,16 +152,16 @@ String getRepoName() {
     return env.REPO_NAME
 }
 
-String getProjectVersion() {
-    return getParamOrDeployProperty('PROJECT_VERSION', 'project.version')
+String getKogitoVersion() {
+    return getParamOrDeployProperty('KOGITO_VERSION', 'kogito.version')
 }
 
 String getSnapshotVersion() {
-    return util.getNextVersion(getProjectVersion(), 'micro')
+    return util.getNextVersion(getKogitoVersion(), 'micro')
 }
 
 String getGitTag() {
-    return params.GIT_TAG != '' ? params.GIT_TAG : getProjectVersion()
+    return params.GIT_TAG != '' ? params.GIT_TAG : getKogitoVersion()
 }
 
 String getBuildBranch() {
