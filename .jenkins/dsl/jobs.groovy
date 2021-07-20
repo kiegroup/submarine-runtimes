@@ -48,6 +48,10 @@ if (isMainBranch()) {
     folder(bddRuntimesPrFolder)
 
     setupDeployJob(bddRuntimesPrFolder, KogitoJobType.PR)
+
+    // Sonarcloud analysis only on main branch
+    // As we have only Community edition
+    setupSonarCloudJob(nightlyBranchFolder)
 }
 
 // Nightly jobs
@@ -59,7 +63,6 @@ if (isMainBranch()) {
     setupQuarkusJob(nightlyBranchFolder, 'main')
     setupQuarkusJob(nightlyBranchFolder, "${QUARKUS_LTS_VERSION}")
 }
-setupSonarCloudJob(nightlyBranchFolder)
 setupNativeJob(nightlyBranchFolder)
 setupDeployJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
 setupPromoteJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
