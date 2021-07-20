@@ -87,8 +87,7 @@ public class ApplicationGenerator {
 
     public List<GeneratedFile> generateComponents() {
         return generators.stream()
-                .flatMap(gen -> gen.generate().stream())
-                .filter(this::filterGeneratedFile)
+                .flatMap(generator -> generator.generate().stream().filter(f -> filterGeneratedFile(generator, f)))
                 .collect(Collectors.toList());
     }
 
@@ -104,8 +103,8 @@ public class ApplicationGenerator {
         return applicationMainGenerator.generate();
     }
 
-    private boolean filterGeneratedFile(GeneratedFile generatedFile) {
-        boolean keepFile = context.hasREST() || !REST_TYPE.equals(generatedFile.type());
+    private boolean filterGeneratedFile(Generator generator, GeneratedFile generatedFile) {
+        boolean keepFile = context.hasREST(generator) || !REST_TYPE.equals(generatedFile.type());
         if (!keepFile) {
             LOGGER.warn("Skipping file because REST is disabled: " + generatedFile.relativePath());
         }

@@ -175,7 +175,8 @@ public class IncrementalRuleCodegenTest {
                 .withMonitoring(true)
                 .build());
 
-        int expectedDashboards = contextBuilder.build().hasREST() ? 3 : 1; // The domain dashboard to monitor the RuleUnit is always generated.
+        // TODO LUCA - Grafana is not a generator
+        int expectedDashboards = 3; // The domain dashboard to monitor the RuleUnit is always generated.
 
         IncrementalRuleCodegen incrementalRuleCodegen = getIncrementalRuleCodegenFromFiles(
                 contextBuilder,

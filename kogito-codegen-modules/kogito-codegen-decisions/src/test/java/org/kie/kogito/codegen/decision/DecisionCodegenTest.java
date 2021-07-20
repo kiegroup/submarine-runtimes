@@ -61,7 +61,7 @@ public class DecisionCodegenTest {
                 "decision/TPayroll.java",
                 "org/kie/kogito/app/DecisionModelResourcesProvider.java"));
 
-        if (contextBuilder.build().hasREST()) {
+        if (contextBuilder.build().hasREST(codeGenerator)) {
             expectedResources.add("decision/VacationsResource.java");
         }
 
@@ -81,7 +81,7 @@ public class DecisionCodegenTest {
         Collection<String> expectedResources = new ArrayList<>(Arrays.asList("http_58_47_47www_46trisotech_46com_47definitions_47__4f5608e9_454d74_454c22_45a47e_45ab657257fc9c/InputSet.java",
                 "http_58_47_47www_46trisotech_46com_47definitions_47__4f5608e9_454d74_454c22_45a47e_45ab657257fc9c/OutputSet.java",
                 "org/kie/kogito/app/DecisionModelResourcesProvider.java"));
-        if (contextBuilder.build().hasREST()) {
+        if (contextBuilder.build().hasREST(codeGenerator)) {
             expectedResources.add("http_58_47_47www_46trisotech_46com_47definitions_47__4f5608e9_454d74_454c22_45a47e_45ab657257fc9c/OneOfEachTypeResource.java");
         }
 
@@ -95,7 +95,8 @@ public class DecisionCodegenTest {
     public void givenADMNModelWhenMonitoringIsActiveThenGrafanaDashboardsAreGenerated(KogitoBuildContext.Builder contextBuilder) throws Exception {
         List<GeneratedFile> dashboards = generateTestDashboards(AddonsConfig.builder().withMonitoring(true).withPrometheusMonitoring(true).build(), contextBuilder);
 
-        if (contextBuilder.build().hasREST()) {
+        // TODO LUCA
+        if (!contextBuilder.toString().equals("Java")) {
             JGrafana vacationOperationalDashboard =
                     JGrafana.parse(new String(dashboards.stream().filter(x -> x.relativePath().contains("operational-dashboard-Vacations.json")).findFirst().get().contents()));
 
@@ -114,7 +115,8 @@ public class DecisionCodegenTest {
     public void givenADMNModelWhenMonitoringAndTracingAreActiveThenTheGrafanaDashboardsContainsTheAuditUILink(KogitoBuildContext.Builder contextBuilder) throws Exception {
         List<GeneratedFile> dashboards = generateTestDashboards(AddonsConfig.builder().withMonitoring(true).withPrometheusMonitoring(true).withTracing(true).build(), contextBuilder);
 
-        if (contextBuilder.build().hasREST()) {
+        // TODO LUCA
+        if (!contextBuilder.toString().equals("Java")) {
             JGrafana vacationOperationalDashboard =
                     JGrafana.parse(new String(dashboards.stream().filter(x -> x.relativePath().contains("operational-dashboard-Vacations.json")).findFirst().get().contents()));
 
@@ -235,7 +237,7 @@ public class DecisionCodegenTest {
                 .filter(x -> x.type().equals(DashboardGeneratedFileUtils.DASHBOARD_TYPE))
                 .collect(Collectors.toList());
 
-        int expectedDashboards = contextBuilder.build().hasREST() ? 2 : 0;
+        int expectedDashboards = contextBuilder.build().hasREST(codeGenerator) ? 2 : 0;
         assertEquals(expectedDashboards, dashboards.size());
 
         return dashboards;
