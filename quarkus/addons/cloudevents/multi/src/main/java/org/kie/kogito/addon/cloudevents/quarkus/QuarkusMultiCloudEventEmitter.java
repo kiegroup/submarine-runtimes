@@ -31,6 +31,7 @@ import org.kie.kogito.addon.cloudevents.quarkus.decorators.MessageDecoratorFacto
 import org.kie.kogito.conf.ConfigBean;
 import org.kie.kogito.event.EventEmitter;
 import org.kie.kogito.event.EventMarshaller;
+import org.kie.kogito.event.OutputTriggerAware;
 import org.kie.kogito.services.event.impl.DefaultEventMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class QuarkusMultiCloudEventEmitter implements EventEmitter, ChannelRegis
     private ConfigBean configBean;
 
     @Inject
-    private ChannelResolver channelResolver;
+    private Instance<OutputTriggerAware> outputChannelsProvider;
 
     @Inject
     private Instance<EventMarshaller> marshallerInstance;
@@ -88,6 +89,6 @@ public class QuarkusMultiCloudEventEmitter implements EventEmitter, ChannelRegis
 
     @Override
     public void initialize() {
-        channelResolver.getOuputChannels().stream().map(this::emitterConf).forEach(mediatorManager::addEmitter);
+        outputChannelsProvider.stream().map(OutputTriggerAware::getOutputTrigger).distinct().map(this::emitterConf).forEach(mediatorManager::addEmitter);
     }
 }

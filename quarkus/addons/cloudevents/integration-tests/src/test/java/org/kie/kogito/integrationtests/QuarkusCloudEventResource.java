@@ -15,11 +15,13 @@
  */
 package org.kie.kogito.integrationtests;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import org.kie.kogito.addon.cloudevents.quarkus.http.AbstractQuarkusCloudEventResource;
-import org.kie.kogito.addon.cloudevents.quarkus.http.Responses;
 
 import io.cloudevents.CloudEvent;
 
@@ -27,11 +29,7 @@ import io.cloudevents.CloudEvent;
 public class QuarkusCloudEventResource extends AbstractQuarkusCloudEventResource {
 
     @Override
-    public Response cloudEventListener(CloudEvent event) {
-        try {
-            return Response.ok(this.serialize(event)).build();
-        } catch (Exception ex) {
-            return Responses.errorProcessingCloudEvent(ex);
-        }
+    public CompletionStage<Response> cloudEventListener(CloudEvent event) {
+        return CompletableFuture.completedFuture(Response.ok(this.serialize(event)).build());
     }
 }

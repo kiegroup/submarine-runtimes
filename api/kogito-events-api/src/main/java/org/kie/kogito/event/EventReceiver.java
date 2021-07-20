@@ -15,7 +15,8 @@
  */
 package org.kie.kogito.event;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 /**
  * Generic receiver for cloud events.
@@ -31,5 +32,5 @@ public interface EventReceiver {
      * @param consumer the consumer that will receive the events.
      * @param clazz the type of object the event contains
      */
-    <T> void subscribe(Consumer<T> consumer, SubscriptionInfo<T> subscription);
+    <T> void subscribe(Function<T, CompletionStage<?>> consumer, SubscriptionInfo<String, T> converter);
 }
