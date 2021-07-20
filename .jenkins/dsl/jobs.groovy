@@ -38,6 +38,9 @@ Map getMultijobPRConfig() {
                 dependsOn: 'Optaplanner',
                 repository: 'kogito-examples'
             ]
+        ],
+        extraEnv : [
+            ENABLE_SONARCLOUD: Utils.isMainBranch(this)
         ]
     ]
 }
@@ -55,6 +58,10 @@ if (Utils.isMainBranch(this)) {
     // End of old PR checks
 
     setupDeployJob(bddRuntimesPrFolder, KogitoJobType.PR)
+
+    // Sonarcloud analysis only on main branch
+    // As we have only Community edition
+    setupSonarCloudJob(nightlyBranchFolder)
 }
 
 // PR checks
@@ -69,7 +76,6 @@ if (Utils.isMainBranch(this)) {
     setupQuarkusJob(nightlyBranchFolder, 'main')
     setupQuarkusJob(nightlyBranchFolder, "${QUARKUS_LTS_VERSION}")
 }
-setupSonarCloudJob(nightlyBranchFolder)
 setupNativeJob(nightlyBranchFolder)
 setupDeployJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
 setupPromoteJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
