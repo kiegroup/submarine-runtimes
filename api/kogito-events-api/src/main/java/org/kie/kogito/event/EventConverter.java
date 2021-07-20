@@ -17,16 +17,15 @@ package org.kie.kogito.event;
 
 import java.io.IOException;
 
-public interface EventConverter<S, T> {
-
-    Class<T> getOutputClass();
+public interface EventConverter<S> {
 
     /**
      * Converts input object to output object
      * 
-     * @param input object
+     * @param input value to be converted
+     * @param outputClass type of the value getting generated
      * @return ouput object
-     * @throws IOException if conversion cannot be performed. IMPORTANT!!!! any other exception will considered unexpected, so this implementation should not willingly throw any runtime exception
+     * @throws IOException if conversion cannot be performed. IMPORTANT!!!! any other exception will be considered unexpected, so this implementation should not willingly throw any runtime exception
      */
-    T apply(S input) throws IOException;
+    <T> T apply(S input, Class<T> outputClass) throws IOException;
 }

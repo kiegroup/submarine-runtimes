@@ -25,6 +25,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.Application;
 import org.kie.kogito.conf.ConfigBean;
+import org.kie.kogito.event.EventConverter;
 import org.kie.kogito.event.EventReceiver;
 import org.kie.kogito.event.KogitoEventExecutor;
 import org.kie.kogito.event.impl.DefaultEventConsumerFactory;
@@ -44,7 +45,7 @@ public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $Data
     Application application;
 
     @javax.inject.Inject
-    ObjectMapper objectMapper;
+    EventConverter<String> eventConverter;
 
     @javax.inject.Inject
     @javax.inject.Named("$ProcessName$")
@@ -71,11 +72,12 @@ public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $Data
                 "$Trigger$",
                 new DefaultEventConsumerFactory(),
                 eventReceiver,
-                new JsonStringToObject(objectMapper, $DataType$.class),
-                new JsonStringToObject(objectMapper, $DataEventType$.class),
+                $DataType$.class,
+                $DataEventType$.class,
                 configBean.useCloudEvents(),
                 processService,
-                executorService);
+                executorService,
+                eventConverter);
 
     }
 

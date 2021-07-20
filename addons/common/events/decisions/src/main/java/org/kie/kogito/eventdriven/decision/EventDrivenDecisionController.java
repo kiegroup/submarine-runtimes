@@ -76,8 +76,8 @@ public class EventDrivenDecisionController {
     }
 
     protected void setup() {
-        eventReceiver.subscribe(this::handleRequest, new SubscriptionInfo<>(new JsonStringToObject<>(CloudEventUtils.Mapper.mapper(),
-                CloudEvent.class)));
+        eventReceiver.subscribe(this::handleRequest, new SubscriptionInfo<>(new JsonStringToObject(CloudEventUtils.Mapper.mapper()),
+                CloudEvent.class));
     }
 
     void handleEvent(String event) {

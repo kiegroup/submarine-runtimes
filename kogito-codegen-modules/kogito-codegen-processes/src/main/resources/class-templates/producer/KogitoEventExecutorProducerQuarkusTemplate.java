@@ -18,6 +18,7 @@ package $Package$;
 import java.util.concurrent.ExecutorService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
@@ -37,10 +38,13 @@ public class KogitoEventExecutorProducer {
     @ConfigProperty(name = KogitoEventExecutor.QUEUE_SIZE_PROPERTY, defaultValue = KogitoEventExecutor.DEFAULT_QUEUE_SIZE)
     int queueSize;
 
-
     @Produces
     @Named(KogitoEventExecutor.BEAN_NAME)
-    public ExecutorService getExecutorService(){
+    public ExecutorService getExecutorService() {
         return KogitoEventExecutor.getEventExecutor(numThreads, queueSize);
+    }
+
+    public void close(@Disposes ExecutorService executor) {
+        executor.shutdownNow();
     }
 }

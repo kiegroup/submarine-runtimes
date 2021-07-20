@@ -17,23 +17,23 @@ package $Package$;
 
 import java.util.concurrent.ExecutorService;
 
+import org.kie.kogito.event.EventConverter;
 import org.kie.kogito.event.KogitoEventExecutor;
-
+import org.kie.kogito.services.event.impl.JsonStringToObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class KogitoEventExecutorProducer {
-    
-    
-    @org.springframework.beans.factory.annotation.Value("${"+KogitoEventExecutor.MAX_THREADS_PROPERTY+":#{"+KogitoEventExecutor.DEFAULT_MAX_THREADS_INT+"}}")
-    int numThreads;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-    @org.springframework.beans.factory.annotation.Value("${"+KogitoEventExecutor.QUEUE_SIZE_PROPERTY+":#{"+KogitoEventExecutor.DEFAULT_QUEUE_SIZE_INT+"}}")
-    int queueSize;
-    
-    @Bean(KogitoEventExecutor.BEAN_NAME)
-    public ExecutorService getExecutorService() {
-        return KogitoEventExecutor.getEventExecutor(numThreads, queueSize);
+@Configuration
+public class EventConverterProducer {
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Bean
+    public EventConverter<String> getEventConverter() {
+        return new JsonStringToObject(objectMapper);
     }
 }

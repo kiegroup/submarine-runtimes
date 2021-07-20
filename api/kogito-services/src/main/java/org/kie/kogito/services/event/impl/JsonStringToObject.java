@@ -22,30 +22,18 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonStringToObject<T> implements EventConverter<String, T> {
+public class JsonStringToObject implements EventConverter<String> {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonStringToObject.class);
-    private final Class<T> clazz;
     private final ObjectMapper objectMapper;
 
-    public JsonStringToObject(ObjectMapper objectMapper, Class<T> clazz) {
+    public JsonStringToObject(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.clazz = clazz;
     }
 
     @Override
-    public T apply(String value) throws JsonProcessingException {
+    public <T> T apply(String value, Class<T> clazz) throws JsonProcessingException {
         logger.debug("Converting event with payload {} to class {} ", value, clazz);
         return objectMapper.readValue(value, clazz);
-    }
-
-    @Override
-    public String toString() {
-        return "JsonStringToObject [clazz=" + clazz + "]";
-    }
-
-    @Override
-    public Class<T> getOutputClass() {
-        return clazz;
     }
 }

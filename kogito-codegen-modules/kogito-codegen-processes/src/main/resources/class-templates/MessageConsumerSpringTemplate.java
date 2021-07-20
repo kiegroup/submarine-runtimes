@@ -24,10 +24,10 @@ import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessService;
 import org.kie.kogito.services.event.impl.AbstractMessageConsumer;
 import org.kie.kogito.services.event.impl.JsonStringToObject;
+import org.kie.kogito.event.EventConverter;
 import org.kie.kogito.event.EventReceiver;
 import org.kie.kogito.event.KogitoEventExecutor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @org.springframework.stereotype.Component()
 public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $DataType$, $DataEventType$> {
@@ -38,19 +38,20 @@ public class $Type$MessageConsumer extends AbstractMessageConsumer<$Type$, $Data
             @org.springframework.beans.factory.annotation.Qualifier("$ProcessName$") Process<$Type$> process,
             ConfigBean configBean,
             EventReceiver eventReceiver,
-            ObjectMapper objectMapper,
             ProcessService processService,
-            @org.springframework.beans.factory.annotation.Qualifier(KogitoEventExecutor.BEAN_NAME) ExecutorService executorService) {
+            @org.springframework.beans.factory.annotation.Qualifier(KogitoEventExecutor.BEAN_NAME) ExecutorService executorService,
+            EventConverter<String> eventConverter) {
         super(application,
               process,
               "$Trigger$",
               new DefaultEventConsumerFactory(),
               eventReceiver,
-              new JsonStringToObject (objectMapper, $DataType$.class),
-              new JsonStringToObject (objectMapper, $DataEventType$.class),
+              $DataType$.class,
+              $DataEventType$.class,
               configBean.useCloudEvents(),
               processService,
-              executorService);
+              executorService,
+              eventConverter);
     }
 
     protected $Type$ eventToModel($DataType$ event) {

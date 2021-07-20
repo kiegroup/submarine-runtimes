@@ -43,8 +43,8 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
     private Application application;
     private String trigger;
     private EventConsumer<M> eventConsumer;
-
-    private EventConverter<String, ? extends Object> eventConverter;
+    private Class<?> outputClass;
+    private EventConverter<String> eventConverter;
 
     // in general we should favor the non-empty constructor
     // but there is an issue with Quarkus https://github.com/quarkusio/quarkus/issues/2949#issuecomment-513017781
@@ -57,12 +57,13 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
             String trigger,
             EventConsumerFactory eventConsumerFactory,
             EventReceiver eventReceiver,
-            EventConverter<String, D> dataEventConverter,
-            EventConverter<String, T> cloudEventConverter,
+            Class<D> dataEventConverter,
+            Class<T> cloudEventConverter,
             boolean useCloudEvents,
             ProcessService processService,
-            ExecutorService executorService) {
-        init(application, process, trigger, eventConsumerFactory, eventReceiver, dataEventConverter, cloudEventConverter, useCloudEvents, processService, executorService);
+            ExecutorService executorService,
+            EventConverter<String> eventConverter) {
+        init(application, process, trigger, eventConsumerFactory, eventReceiver, dataEventConverter, cloudEventConverter, useCloudEvents, processService, executorService, eventConverter);
     }
 
     public void init(Application application,
@@ -70,21 +71,23 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
             String trigger,
             EventConsumerFactory eventConsumerFactory,
             EventReceiver eventReceiver,
-            EventConverter<String, D> dataEventConverter,
-            EventConverter<String, T> cloudEventConverter,
+            Class<D> dataEventClass,
+            Class<T> cloudEventClass,
             boolean useCloudEvents,
             ProcessService processService,
-            ExecutorService executorService) {
+            ExecutorService executorService,
+            EventConverter<String> eventConverter) {
         this.process = process;
         this.application = application;
         this.trigger = trigger;
+        this.eventConverter = eventConverter;
         this.eventConsumer = eventConsumerFactory.get(processService, executorService, this::eventToModel, useCloudEvents);
         if (useCloudEvents) {
-            eventConverter = cloudEventConverter;
-            eventReceiver.subscribe(this::consumeCloud, new SubscriptionInfo<>(cloudEventConverter, Optional.of(trigger)));
+            this.outputClass = cloudEventClass;
+            eventReceiver.subscribe(this::consumeCloud, new SubscriptionInfo<>(eventConverter, cloudEventClass, Optional.of(trigger)));
         } else {
-            eventConverter = dataEventConverter;
-            eventReceiver.subscribe(this::consumeNotCloud, new SubscriptionInfo<>(dataEventConverter, Optional.of(trigger)));
+            this.outputClass = dataEventClass;
+            eventReceiver.subscribe(this::consumeNotCloud, new SubscriptionInfo<>(eventConverter, dataEventClass, Optional.of(trigger)));
         }
         logger.info("Consumer for {} started", trigger);
     }
@@ -109,17 +112,10 @@ public abstract class AbstractMessageConsumer<M extends Model, D, T extends Abst
 
     protected CompletionStage<?> consumePayload(String payload) {
         try {
-            return consume(eventConverter.apply(payload));
+            return consume(eventConverter.apply(payload, outputClass));
         } catch (IOException io) {
-            return failedFuture(io);
+            return CompletableFuture.failedFuture(io);
         }
-    }
-
-    private CompletionStage<?> failedFuture(Throwable ex) {
-        // TODO since in Java 8 there is no CompletableFuture.failedFuture
-        CompletableFuture<?> future = new CompletableFuture<>();
-        future.completeExceptionally(ex);
-        return future;
     }
 
     @Override
