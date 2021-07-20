@@ -116,19 +116,19 @@ public class ApplicationGeneratorTest {
     public void filterRestIfDisabled(KogitoBuildContext.Builder contextBuilder) {
         final KogitoBuildContext context = contextBuilder.build();
         final ApplicationGenerator appGenerator = new ApplicationGenerator(context);
-        final MockGenerator restGenerator = new MockGenerator(context, true, true);
+        final MockGenerator restGenerator = new MockGenerator(context, true);
 
         assertThat(appGenerator.registerGeneratorIfEnabled(restGenerator))
                 .isNotEmpty();
         assertThat(appGenerator.getGenerators()).hasSize(1);
 
-        if (context.hasREST()) {
+        if (context.hasREST(restGenerator)) {
             // disable REST
-            context.setApplicationProperty(KogitoBuildContext.KOGITO_GENERATE_REST, "false");
+            context.setApplicationProperty(KogitoBuildContext.generateRESTConfigurationKey(restGenerator.name()), "false");
             assertThat(appGenerator.generateComponents()).isEmpty();
 
             // enable REST
-            context.setApplicationProperty(KogitoBuildContext.KOGITO_GENERATE_REST, "true");
+            context.setApplicationProperty(KogitoBuildContext.generateRESTConfigurationKey(restGenerator.name()), "true");
             assertThat(appGenerator.generateComponents())
                     .isNotEmpty()
                     .hasSize(1)
@@ -187,16 +187,10 @@ public class ApplicationGeneratorTest {
     static class MockGenerator extends AbstractGenerator {
 
         private final boolean enabled;
-        private final boolean produceREST;
 
         protected MockGenerator(KogitoBuildContext context, boolean enabled) {
-            this(context, enabled, false);
-        }
-
-        protected MockGenerator(KogitoBuildContext context, boolean enabled, boolean produceREST) {
             super(context, "mockGenerator");
             this.enabled = enabled;
-            this.produceREST = produceREST;
         }
 
         @Override
@@ -206,11 +200,7 @@ public class ApplicationGeneratorTest {
 
         @Override
         public Collection<GeneratedFile> generate() {
-            if (produceREST) {
-                return Collections.singleton(new GeneratedFile(REST_TYPE, "my/path", ""));
-            } else {
-                return Collections.emptyList();
-            }
+            return Collections.singleton(new GeneratedFile(REST_TYPE, "my/path", ""));
         }
 
         @Override
