@@ -53,6 +53,7 @@ import org.kie.kogito.codegen.core.AbstractGenerator;
 import org.kie.kogito.codegen.core.DashboardGeneratedFileUtils;
 import org.kie.kogito.codegen.core.io.CollectedResourceProducer;
 import org.kie.kogito.codegen.decision.config.DecisionConfigGenerator;
+import org.kie.kogito.codegen.decision.events.DecisionCloudEventMetaFactoryGenerator;
 import org.kie.kogito.grafana.GrafanaConfigurationWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,10 +124,10 @@ public class DecisionCodegen extends AbstractGenerator {
 
     private void generateAndStoreRestResources() {
         List<DecisionRestResourceGenerator> rgs = new ArrayList<>(); // REST resources
+        List<DMNModel> models = resources.stream().map(DMNResource::getDmnModel).collect(Collectors.toList());
 
         DMNOASResult oasResult = null;
         try {
-            List<DMNModel> models = resources.stream().map(DMNResource::getDmnModel).collect(Collectors.toList());
             oasResult = DMNOASGeneratorFactory.generator(models).build();
             String jsonContent = new ObjectMapper().writeValueAsString(oasResult.getJsonSchemaNode());
             storeFile(GeneratedFileType.RESOURCE, "META-INF/resources/dmnDefinitions.json", jsonContent);
@@ -134,8 +135,7 @@ public class DecisionCodegen extends AbstractGenerator {
             LOGGER.error("Error while trying to generate OpenAPI specification for the DMN models", e);
         }
 
-        for (DMNResource resource : resources) {
-            DMNModel model = resource.getDmnModel();
+        for (DMNModel model : models) {
             if (model.getName() == null || model.getName().isEmpty()) {
                 throw new RuntimeException("Model name should not be empty");
             }
@@ -179,6 +179,11 @@ public class DecisionCodegen extends AbstractGenerator {
             }
             String relativePath = CodegenStringUtil.escapeIdentifier(model.getNamespace()).replace(".", "/") + "/" + CodegenStringUtil.escapeIdentifier(model.getName()) + ".dmn_nologic";
             storeFile(GeneratedFileType.RESOURCE, relativePath, marshaller.marshal(definitions));
+        }
+
+        if (context().getAddonsConfig().useCloudEvents()) {
+            final DecisionCloudEventMetaFactoryGenerator ceMetaFactoryGenerator = new DecisionCloudEventMetaFactoryGenerator(context(), models);
+            storeFile(REST_TYPE, ceMetaFactoryGenerator.generatedFilePath(), ceMetaFactoryGenerator.generate());
         }
     }
 
