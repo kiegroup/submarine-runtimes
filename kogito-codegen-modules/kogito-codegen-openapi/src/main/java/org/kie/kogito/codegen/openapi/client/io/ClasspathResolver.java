@@ -15,6 +15,10 @@
  */
 package org.kie.kogito.codegen.openapi.client.io;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+
 import org.kie.kogito.codegen.api.context.KogitoBuildContext;
 import org.kie.kogito.codegen.openapi.client.OpenApiSpecDescriptor;
 import org.kie.kogito.codegen.openapi.client.OpenApiUtils;
@@ -40,11 +44,21 @@ public class ClasspathResolver extends AbstractPathResolver {
         if (PathResolverFactory.CLASSPATH.equals(descriptor.getURI().getScheme())) {
             resourceUri = descriptor.getURI().getHost() + resourceUri;
         }
-        final String classpathPath = requireNonNull(this.context.getClassLoader().getResource(resourceUri), "Resource URI can't be found. Descriptor: " + descriptor).getPath();
+        URI uriPath = toURI(resourceUri, descriptor);
+        // use URI with Paths.get to avoid errors with Windows paths (https://stackoverflow.com/a/43973911)
+        final String classpathPath = Paths.get(uriPath).toString();
         // OpenApi generator tool doesn't have access to the application build classpath, so we save to a temp location (/target) where it can be accessed
         if (classpathPath.contains(CLASSPATH_SEP)) {
             return this.saveFileToTempLocation(descriptor, this.context.getClassLoader().getResourceAsStream(resourceUri));
         }
         return classpathPath;
+    }
+
+    private URI toURI(String resource, OpenApiSpecDescriptor descriptor) {
+        try {
+            return requireNonNull(this.context.getClassLoader().getResource(resource), "Resource URI can't be found. Descriptor: " + descriptor).toURI();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid resource " + resource, e);
+        }
     }
 }

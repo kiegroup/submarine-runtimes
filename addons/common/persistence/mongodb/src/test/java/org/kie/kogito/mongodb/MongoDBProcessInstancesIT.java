@@ -61,7 +61,7 @@ import static org.kie.kogito.internal.process.runtime.KogitoProcessInstance.STAT
 import static org.kie.kogito.internal.process.runtime.KogitoProcessInstance.STATE_ERROR;
 import static org.kie.kogito.mongodb.utils.DocumentConstants.DOCUMENT_ID;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class MongoDBProcessInstancesIT {
 
     private SecurityPolicy securityPolicy = SecurityPolicy.of(new StaticIdentityProvider("john"));

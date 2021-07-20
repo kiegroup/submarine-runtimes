@@ -48,7 +48,7 @@ import com.mongodb.client.model.Filters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public class MongoDBTransactionManagerIT {
 
     static class TestTransactionManager extends MongoDBTransactionManager {

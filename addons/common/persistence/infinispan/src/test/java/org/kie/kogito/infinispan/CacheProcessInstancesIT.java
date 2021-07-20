@@ -50,7 +50,7 @@ import static org.kie.kogito.internal.process.runtime.KogitoProcessInstance.STAT
 import static org.kie.kogito.internal.process.runtime.KogitoProcessInstance.STATE_COMPLETED;
 import static org.kie.kogito.internal.process.runtime.KogitoProcessInstance.STATE_ERROR;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class CacheProcessInstancesIT {
 
     @Container

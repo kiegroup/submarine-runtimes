@@ -54,7 +54,7 @@ import static org.kie.kogito.persistence.kafka.KafkaPersistenceUtils.createTopol
 import static org.kie.kogito.process.ProcessInstance.STATE_COMPLETED;
 import static org.kie.kogito.process.ProcessInstance.STATE_ERROR;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public class KafkaProcessInstancesIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProcessInstancesIT.class);

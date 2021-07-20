@@ -46,7 +46,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class PostgreProcessInstancesIT {
 
     @Container

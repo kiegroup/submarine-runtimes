@@ -37,7 +37,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.mockito.Mockito.spy;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public class TestHelper {
 
     @Container

@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class CacheProcessInstancesWithLockIT {
 
     private static final String TEST_ID = "02ac3854-46ee-42b7-8b63-5186c9889d96";

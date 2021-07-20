@@ -1417,7 +1417,7 @@ limitations under the License.
       </build>
     </profile>
     <profile>
-      <!-- Performs the quick test: only formatting validation and unit tests enabled -->
+      <!-- Performs the quick test: only code formatting and unit tests enabled -->
       <id>quick-test</id>
       <activation>
         <property>
@@ -1425,9 +1425,6 @@ limitations under the License.
         </property>
       </activation>
       <properties>
-        <formatter.skip>false</formatter.skip>
-        <formatter.goal>validate</formatter.goal>
-        <impsort.goal>check</impsort.goal>
         <skipITs>true</skipITs>
         <invoker.skip>true</invoker.skip>
         <archetype.test.skip>true</archetype.test.skip>
